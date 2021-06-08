@@ -1,0 +1,61 @@
+% ---------------------------------------------------------------------    
+% creates a simple plot of the "basis" waveform to be transmitted in fers
+% ---------------------------------------------------------------------  
+
+hdf5_file_name_tx = "pulse_dab_symbols.h5";
+hdf5_file_name_rx = "response.h5"
+
+%sampling frequency
+fs = 2.048e6;
+%the dab mode used
+dab_mode = load_dab_constants(1);
+
+%reading data from hdf5
+pulse_tx = loadfersHDF5_iq(hdf5_file_name_tx);
+response = loadfersHDF5_cmplx(hdf5_file_name_rx);
+
+%% REVELEVANT SIMULATION PARAMTERS
+
+prf = 10;
+pulse_length = length(pulse_tx);
+runtime = 0.55;
+
+%% CREATING TRANSMITTED WAVEFORM
+
+PRI = 1/prf;
+PRI_samples = PRI*fs;
+required_zeros = PRI_samples - pulse_length;
+transmitted_pulses = (runtime*prf)
+transmitted_integer_pulses = floor(runtime*prf)
+transmitted_remainder_pulses = transmitted_pulses - transmitted_integer_pulses;
+
+additional_zeros = zeros(1,required_zeros);
+pulse = [pulses_tx additional_zeros];
+
+pulses = repmat(pulse,transmitted_integer_pulses);
+
+pulses = pulses(:).';
+% 
+% pulses = [pulses pulse_tx zeros(1, ceil(required_zeros*transmitted_remainder_pulses))];
+% response = response(1: length(pulses));
+% 
+% 
+% %% PLOTTING
+% 
+% %time axis
+% time = (1:1:length(response))*(1/fs);
+% 
+% 
+% %plotting time domain envelope of frame
+% figure
+% plot(time,response)
+% hold on
+% plot(time,pulses)
+% 
+% %plot labels
+% xlabel("Time (seconds)");
+% ylabel("Amplitude (over 1 ohm resistor) (voltage)")
+% title("Time domaon envelope of DAB frame isolated from an hdf5 file");
+% 
+
+

@@ -1,5 +1,5 @@
 % ---------------------------------------------------------------------    
-% Creates a simple plot of the received signal from fer
+% Creates a simple plot of the received signal from fers
 % ---------------------------------------------------------------------  
 
 hdf5_file_name = "response.h5"

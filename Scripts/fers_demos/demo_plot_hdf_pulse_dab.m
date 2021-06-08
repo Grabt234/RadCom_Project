@@ -1,5 +1,5 @@
 % ---------------------------------------------------------------------    
-% creates a simple plot of the waveform to be transmitted in fers
+% creates a simple plot of the "basis" waveform to be transmitted in fers
 % ---------------------------------------------------------------------  
 
 hdf5_file_name = "pulse_dab_symbols.h5";
