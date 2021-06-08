@@ -1,10 +1,8 @@
 % ---------------------------------------------------------------------    
-% demo_plot_hdf_pulse_dab: reads an plots (as a verification) the pulse
-% created in "create_hdf_pulse_dab"
+% Creates a simple plot of the received signal from fer
 % ---------------------------------------------------------------------  
 
-%hdf5_file_name = "chirp.h5"
-hdf5_file_name = "monostatic.h5"
+hdf5_file_name = "response.h5"
 
 %sampling frequency
 fs = 2.048e6;
@@ -18,7 +16,7 @@ cmplx_data = loadfersHDF5_cmplx(hdf5_file_name);
 %%
 
 %time axis
-time = (1:1:length(cmplx_data))*(1/10e6);
+time = (1:1:length(cmplx_data))*(1/fs);
 
 
 %plotting time domain envelope of frame

@@ -1,7 +1,7 @@
 % ---------------------------------------------------------------------    
 % create_fers_pulse_dab: isolates a single frame from a standard DAB 
 %                    recording and saves as an hdf file which can be 
-%                    used into be used in fers
+%                    used in fers
 % ---------------------------------------------------------------------  
 
 %%  EXTRACTING FRAME
@@ -65,8 +65,8 @@ file_name = name + ".h5"
 %hdf5 heirarchy
 hdf5_heirarchy = "/" + name
 
-I = real(dab_frame);
-Q = imag(dab_frame);
+I = real(dab_symbols);
+Q = imag(dab_symbols);
 
 
 h5create(file_name,'/I/value',length(I));
