@@ -49,7 +49,7 @@ l = 1:1:dab_mode.L;
 
 %plotting all symbols in frame
 surf(f,l,dab_symbols)
-title("absolute values FFT applied symbols contained in a DAB frame displayed  cube of ")
+title("absolute values FFT applied to symbols contained in a DAB frame")
 xlabel('Sub-carrier index') 
 ylabel('Symbol Number L')
 
