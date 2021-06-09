@@ -6,7 +6,7 @@ hdf5_file_name_tx = "pulse_dab_symbols.h5";
 hdf5_file_name_rx = "response.h5";
 
 %sampling frequency
-fs = 2.0e6;
+fs = 2.048e6;
 %the dab mode used
 dab_mode = load_dab_constants(1);
 
@@ -20,7 +20,7 @@ size(response,2)
 
 prf = 10;
 pulse_length = length(pulse_tx);
-runtime = 0.55;
+runtime = 0.25;
 
 %% CREATING TRANSMITTED WAVEFORM
 

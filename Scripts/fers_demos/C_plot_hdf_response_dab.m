@@ -8,7 +8,7 @@ hdf5_file_name = "response.h5"
 %sampling frequency
 fs = 2.048e6;
 %the dab mode used
-dab_mode = load_dab_constants(1)
+dab_mode = load_dab_constants(1);
 
 
 %reading data from hdf5
@@ -25,7 +25,7 @@ plot(time,real(cmplx_data))
 
 %plot labels
 xlabel("Time (seconds)");
-ylabel("Amplitude")
+ylabel("Amplitude");
 
 
 

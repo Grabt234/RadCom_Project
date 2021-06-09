@@ -31,7 +31,7 @@ time_response = (1:1:length(cmplx_data_response))*(1/fs);
 %0.01 is an arbitrary rescaling to make plot clearer
 plot(time_emission,0.01*real(cmplx_data_emission));
 hold on
-plot(time_response,real(cmplx_data_response))
+% plot(time_response,real(cmplx_data_response))
 
 %plot labels
 xlabel("Time (seconds)");
