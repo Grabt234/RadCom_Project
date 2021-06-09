@@ -6,7 +6,7 @@
   <parameters>
     <starttime>0</starttime>
     <endtime>0.55</endtime>
-    <rate>2.048e6</rate>
+    <rate>1.54e6</rate>
     <export binary="true" csvbinary="false" xml="false"/>
   </parameters>
 
@@ -16,7 +16,7 @@
   </pulse>
 
   <timing name="clock">
-  <frequency>5e9</frequency>
+  <frequency>2.048e6</frequency>
   </timing>
 
   <antenna name="isotropic" pattern="isotropic">
@@ -41,8 +41,8 @@
     </fixedrotation>
 
     <monostatic name="monostatic" type="pulsed" antenna="isotropic" pulse="pulse_dab" timing="clock">
-      <window_skip>0</window_skip>
-      <window_length>98e-3</window_length>
+      <window_skip>1246e-6</window_skip>
+      <window_length>0.1</window_length>
       <prf>10</prf>
       <noise_temp>5e-3</noise_temp>
     </monostatic>

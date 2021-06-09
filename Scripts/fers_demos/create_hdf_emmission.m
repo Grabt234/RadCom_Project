@@ -3,7 +3,7 @@
 % ---------------------------------------------------------------------  
 
 hdf5_file_name_tx = "pulse_dab_symbols.h5";
-hdf5_file_name_rx = "response.h5"
+hdf5_file_name_rx = "response.h5";
 
 %sampling frequency
 fs = 2.0e6;
@@ -14,11 +14,13 @@ dab_mode = load_dab_constants(1);
 pulse_tx = loadfersHDF5_iq(hdf5_file_name_tx);
 response = loadfersHDF5_cmplx(hdf5_file_name_rx);
 
+size(response,2)
+
 %% REVELEVANT SIMULATION PARAMTERS
 
 prf = 10;
 pulse_length = length(pulse_tx);
-runtime = 0.6;
+runtime = 0.55;
 
 %% CREATING TRANSMITTED WAVEFORM
 
@@ -30,17 +32,15 @@ transmitted_integer_pulses = floor(runtime*prf)
 transmitted_remainder_pulses = transmitted_pulses - transmitted_integer_pulses;
 
 additional_zeros = zeros(1,required_zeros);
-size(additional_zeros)
 pulse = [pulse_tx additional_zeros];
 
 
 pulses = repmat(pulse,1,transmitted_integer_pulses);
 
-
 pulses = [pulses pulse_tx zeros(1, ceil(required_zeros*transmitted_remainder_pulses))];
 
-size(pulses)
-size(response,2)*1/fs
+
+
 
 
 %% PLOTTING

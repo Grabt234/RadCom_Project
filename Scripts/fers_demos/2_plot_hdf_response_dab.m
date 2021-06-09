@@ -1,5 +1,6 @@
 % ---------------------------------------------------------------------    
 % Creates a simple plot of the received signal from fers
+% NOTE: BOFORE RUNNING THIS SCRIPT RUN THE FERS SIM AND RENAME OUTPUT
 % ---------------------------------------------------------------------  
 
 hdf5_file_name = "response.h5"
