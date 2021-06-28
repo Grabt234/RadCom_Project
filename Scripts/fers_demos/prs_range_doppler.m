@@ -24,24 +24,68 @@ dab_mode = load_dab_constants(1);
 cmplx_data_emission = loadfersHDF5_iq(hdf5_file_name_emission); 
 cmplx_data_response = loadfersHDF5_cmplx(hdf5_file_name_response);
 
-cmplx_data_emission = [cmplx_data_emission zeros(1,(1/prf)*fs-win_skip )];
-%three is hard coded
-cmplx_data_emission = repmat(cmplx_data_emission,1,3);
 
-%time axis
-time_emission = (1:1:length(cmplx_data_emission))*(1/fs);
-time_response = (1:1:length(cmplx_data_response))*(1/fs);
+%only working with a single recieved pulse
+cmplx_data_response = cmplx_data_response(1:(1/prf)*fs);
+%showing single pulse
+figure
+plot((1:1:length(cmplx_data_response))*(1/fs), cmplx_data_response)
+
+%cutting into range bins (hardcoded number of bins)
+range_bins = range_bins(win_skip:end)
+range_bins = reshape(cmplx_data_response,100,[]);
+range_bins = range_bins(1:99)
+a=19
+range_bins = cmplx_data_response(1+2048*a:2048*(a+1));
+
+%creating matched filter
+matched_filter = conj(fliplr(cmplx_data_emission));
+
+% %preallocating memory
+% range_response = zeros(1,100);
+% 
+% for i = 1:100
+%     
+%     range_response(1,i) = max(abs(conv(matched_filter, range_bins(i,:))));
+%     
+% end
+
+figure
+
+plot(1:1:length(range_bins),range_bins)
 
 
-%plotting time domain envelope of frame
-%0.01 is an arbitrary rescaling to make plot clearer
-plot(time_emission,real(cmplx_data_emission));
-hold on
-plot(time_response,real(cmplx_data_response));
 
-%plot labels
-xlabel("Time (seconds)");
-ylabel("Amplitude");
-title("Plot showing first emiited pulse v.s all recieved pulses");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
