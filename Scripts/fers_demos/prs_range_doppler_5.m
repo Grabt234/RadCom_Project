@@ -85,7 +85,7 @@ plot((1:1:length(squeeze(range_bins(1,prs_pos,:)))),squeeze(range_bins(1,prs_pos
 matched_filter = conj(fliplr(cmplx_data_emission));
 
 %plottng matched response with prs from range bin
-prs_bin_response = abs(conv(matched_filter, temp(prs_pos,:)));
+prs_bin_response = abs(conv(matched_filter,squeeze(range_bins(1,prs_pos,:))));
 subplot(2,2,4)
 plot(1:1:length( prs_bin_response), prs_bin_response)
 
@@ -103,9 +103,10 @@ for i = 1:3
     
 end
 
+figure
 range_response = fft(range_response,[],1);
 
-range_response = range_response/max(range_response,[], 'all')
+range_response = range_response/max(range_response,[], 'all');
 
 imagesc(10*log10(abs(range_response)))
 
