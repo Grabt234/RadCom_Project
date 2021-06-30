@@ -17,7 +17,7 @@ run_time = 0.02;
 %sampling frequency
 fs = 20.48e6;
 %window skip (time steos)
-win_skip = ceil(249.2e-6*fs);
+win_skip = dab_mode.Ts*(dab_mode.L-1)+dab_mode.Tnull;
 %pulse repetition frequency
 prf = 400;
 %the dab mode used
@@ -70,7 +70,7 @@ end
 
 
 subplot(2,2,3)
-prs_pos = 1;
+prs_pos = 5;
 plot((1:1:length(squeeze(range_bins(1,prs_pos,:)))),squeeze(range_bins(1,prs_pos,:)))
 
 %% MATCHING
