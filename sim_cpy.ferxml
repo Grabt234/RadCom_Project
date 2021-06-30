@@ -5,18 +5,18 @@
 <simulation name="sim_mono">
   <parameters>
     <starttime>0</starttime>
-    <endtime>0.25</endtime>
-    <rate>2.048e6</rate>
+    <endtime>0.05</endtime>
+    <rate>20.48e6</rate>
     <export binary="true" csvbinary="false" xml="false"/>
   </parameters>
 
-  <pulse name="pulse_dab" type="file" filename="pulse_dab_symbols.h5">
+  <pulse name="pulse_dab" type="file" filename="emission.h5">
     <power>10e3</power>
-    <carrier>2.048e6</carrier> 
+    <carrier>20.48e6</carrier> 
   </pulse>
 
   <timing name="clock">
-  <frequency>2.048e6</frequency>
+  <frequency>20.48e6</frequency>
   </timing>
 
   <antenna name="isotropic" pattern="isotropic">
@@ -41,9 +41,9 @@
     </fixedrotation>
 
     <monostatic name="monostatic" type="pulsed" antenna="isotropic" pulse="pulse_dab" timing="clock">
-      <window_skip>1246e-6</window_skip>
-      <window_length>0.1</window_length>
-      <prf>10</prf>
+      <window_skip>374e-6</window_skip>
+      <window_length>0.0005</window_length>
+      <prf>2e3</prf>
       <noise_temp>5e-3</noise_temp>
     </monostatic>
   </platform>
