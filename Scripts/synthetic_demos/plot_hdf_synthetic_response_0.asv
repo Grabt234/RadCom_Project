@@ -67,22 +67,22 @@ plot(1:1:length( prs_bin_response), prs_bin_response)
 title("MATCHED RESPONSE")
 
 %preallocating memory
-range_response = zeros(ceil(run_time*prf),length(conv(matched_filter,slow_time(1,:))));
+range_response = zeros(ceil(run_time*prf),size(conv(), 1));
 
 for j = 1:i
     
-    range_response(j,:) = conv(matched_filter,slow_time(j,:));
+    
     
 end
-
-%% PLOTTING FIGURE
-figure
-range_response = fft(range_response,[],1);
-
-range_response = range_response/max(range_response,[], 'all');
-
-imagesc((1:1:size(range_response,2))*win_skip*(1/fs)*(3e8/(2*1000)) ,  (1:1:size(range_response,1))*(prf/size(range_response,1))*(1/fs)*(3e8/2) ,10*log10(abs(range_response)))
-xlabel("Range (Km)")
-xlabel("Velocity (m/s)")
-
-%
+% 
+% %% PLOTTING FIGURE
+% figure
+% range_response = fft(range_response,[],1);
+% 
+% range_response = range_response/max(range_response,[], 'all');
+% 
+% imagesc((1:1:size(range_response,2))*win_skip*(1/fs)*(3e8/(2*1000)) ,  (1:1:size(range_response,1))*(prf/size(range_response,1))*(1/fs)*(3e8/2) ,10*log10(abs(range_response)))
+% xlabel("Range (Km)")
+% xlabel("Velocity (m/s)")
+% 
+% %
