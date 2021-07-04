@@ -4,6 +4,8 @@
 % VELOCITY:     0   M/S
 % ---------------------------------------------------------------------  
 
+close all
+
 %file name
 hdf5_file_name_emission = "synthetic_emission.h5"
 hdf5_file_name_response = "synthetic_response_2.h5"
@@ -60,29 +62,57 @@ title("SINGLE RECEIVED PULSE")
 %creating matched filter (there is a size mismatch)
 matched_filter = conj(fliplr(cmplx_data_emission));
 
-%plottng matched response with prs from range bin
-prs_bin_response = abs(conv(matched_filter,squeeze(range_bins(1,prs_pos,:))));
-subplot(2,2,4)
-plot(1:1:length( prs_bin_response), prs_bin_response)
-title("MATCHED RESPONSE")
+% %plottng matched response with prs from range bin
+% prs_bin_response = abs(conv(matched_filter,squeeze(range_bins(1,prs_pos,:))));
+% subplot(2,2,4)
+% plot(1:1:length( prs_bin_response), prs_bin_response)
+% title("MATCHED RESPONSE")
 
 %preallocating memory
-range_response = zeros(ceil(run_time*prf),size(conv(), 1));
+range_response = zeros(ceil(run_time*prf),length(conv(matched_filter,slow_time(1,:))));
 
 for j = 1:i
     
-    
+    range_response(j,:) = conv(matched_filter,slow_time(j,:));
     
 end
-% 
-% %% PLOTTING FIGURE
-% figure
-% range_response = fft(range_response,[],1);
-% 
-% range_response = range_response/max(range_response,[], 'all');
-% 
-% imagesc((1:1:size(range_response,2))*win_skip*(1/fs)*(3e8/(2*1000)) ,  (1:1:size(range_response,1))*(prf/size(range_response,1))*(1/fs)*(3e8/2) ,10*log10(abs(range_response)))
-% xlabel("Range (Km)")
-% xlabel("Velocity (m/s)")
-% 
-% %
+
+%% PLOTTING FIGURE
+figure
+range_response = fftshift(fft(range_response,[],1),1);
+
+range_response = range_response/max(range_response,[], 'all');
+
+%range axis
+r_axis = (1:1:size(range_response,2))*(1/fs)*(3e8/(2*1000));
+
+%velocity axis
+v_axis = -1*flip((-size(range_response,1)/2:1:size(range_response,1)/2),2)*(prf/size(range_response,1))*(1/fs)*(3e8/2);
+
+%plotting
+im = imagesc(flip(10*log10(abs(range_response)),1));
+im.XData = r_axis
+im.YData =
+xlabel("Range (Km)")
+ylabel("Velocity (m/s)")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
