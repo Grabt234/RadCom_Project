@@ -31,7 +31,7 @@ function radar_performance(mode, T)
     
     band_width = carriers*dab_frequency_spacing
   
-    range_resolution = 3e8/(2*band_width)
+    range_resolution
     
     
     

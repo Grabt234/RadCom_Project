@@ -25,10 +25,10 @@
 % Configurations
 %===========================================================
 
-f0 = 20.48*10^6;
+f0 = 2.048*10^9;
 T = 1/f0;
 
-dab_mode = load_dab_rad_constants(3);
+dab_mode = load_dab_rad_constants(4);
 
 a = dab_mode.Tu+dab_mode.Tg;
 b = dab_mode.Tu;
