@@ -1,14 +1,14 @@
 % ---------------------------------------------------------------------    
 % FERS SIM
-% TARGET RANGE: 228 KM
+% TARGET RANGE: 
 % VELOCITY:     0   M/S
 % ---------------------------------------------------------------------  
 
 close all
 
 %file name
-hdf5_file_name_emission = "synthetic_emission.h5"
-hdf5_file_name_response = "synthetic_response_2.h5"
+hdf5_file_name_emission = "shf_emission.h5"
+hdf5_file_name_response = "shf_response.h5"
 
 
 %reading data from hdf5
@@ -16,17 +16,17 @@ cmplx_data_emission = loadfersHDF5_iq(hdf5_file_name_emission);
 cmplx_data_response = loadfersHDF5_cmplx(hdf5_file_name_response);
 
 %%
-dab_mode = load_dab_rad_constants(3);
+dab_mode = load_dab_rad_constants(5);
 %runtime of simulation (seconds)
-run_time = 0.5;
+run_time = 0.02;
 %sampling frequency
-fs = 20.48e6;
+fs = 8.19e8;
 %window skip (time steos)
 win_skip = dab_mode.Ts*(dab_mode.L-1)+dab_mode.Tnull;
 %pulse repetition frequency
-prf = 400;
+prf = 10000;
 %the dab mode used
-
+    
 
 %% PLOTTING  READ DATA
 
@@ -90,9 +90,7 @@ r_axis = (1:1:size(range_response,2))*(1/fs)*(3e8/(2*1000));
 v_axis = -1*flip((-size(range_response,1)/2:1:size(range_response,1)/2),2)*(prf/size(range_response,1))*(1/fs)*(3e8/2);
 
 %plotting
-im = imagesc(flip(10*log10(abs(range_response)),1));
-im.XData = r_axis
-im.YData =
+imagesc(r_axis , v_axis  ,10*log10(abs(range_response)))
 xlabel("Range (Km)")
 ylabel("Velocity (m/s)")
 

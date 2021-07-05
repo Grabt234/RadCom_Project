@@ -20,10 +20,6 @@ function s = gen_symbol(t, l , Tu , Ts ,Tg, N, w, a)
     %
     % ---------------------------------------------------------------------
 
-   s = gen_all_sub_carriers(t,l , Tu , Ts ,Tg, N);
-   s = apply_freq_weights(s,w);
-   s = apply_phase_weights(s,a);
-   %generating time domain complex envelope
-   s = sum(s);
-
+   s = gen_all_sub_carriers(t,l , Tu , Ts ,Tg, N, w, a);
+    
 end
