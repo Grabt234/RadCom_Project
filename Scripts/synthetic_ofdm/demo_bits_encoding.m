@@ -51,13 +51,13 @@ L_encode = add_prs_A_cube(L_encode, dab_mode);
 %converting to phase cube
 A_cubes = symbols_to_A_cubes(L_encode,dab_mode);
 
-%% UNSUSED
+%% 
 
-% %coverting phases to differential encoding
-% A_cube = convert_phase_cube_dpsk(A_cube);
-% 
-% %inserting off carrier
-% A_cube = insert_central_carrier(A_cube,L,N,F);
+%coverting phases to differential encoding
+A_cubes = convert_phase_cube_dpsk(A_cubes);
+
+%inserting off carrier
+A_cubes = insert_central_carrier(A_cubes,dab_mode);
 %=========================================== =====
 %================================================
 
