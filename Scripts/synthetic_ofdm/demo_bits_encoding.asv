@@ -40,11 +40,16 @@ A = convert_phase_to_complex(A);
 
 %% PHASE CODES TO SYMBOLS
 
-%returns F frames, dependant on size of input data
-%reshaping data into cube (without null or prs)
+%converting phase codes to set of symbols
 L_encode = convert_vector_symbols(A,dab_mode);
 
-%% P
+%% SYMBOLS TO FRAME
+
+%adding in prs
+siz
+A_cube = add_prs_A_cube(L_encode, dab_mode);
+
+%% UNSUSED
 
 % %coverting phases to differential encoding
 % A_cube = convert_phase_cube_dpsk(A_cube);

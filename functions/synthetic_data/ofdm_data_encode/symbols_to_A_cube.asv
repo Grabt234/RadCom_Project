@@ -1,0 +1,36 @@
+function A_cube = symbols_to_A_cube(L_encode,dab_mode)
+    % ---------------------------------------------------------------------    
+    % add_prs_A_cube: Adding in prs then reshaping into cube without
+    %                       null symbol
+    %                           
+    % ---------------------------------------------------------------------
+    % Usage:
+    %  Inputs
+    %  > L_encode - n vectors of length L phase codes
+    %  > dab_mode - describtion of DAB modulation parameters
+    %
+    %  Outputs
+    %  > 
+    %
+    % ---------------------------------------------------------------------
+    
+    
+    
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

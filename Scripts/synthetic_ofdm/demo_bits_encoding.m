@@ -16,7 +16,7 @@
 % Definitions
 %================================================
 n = 2;
-bits = '010110100010110101010101010111100001010101010110101010101111110000111110101011000';
+bits = '01011010001001101010111111000101110010010101011110111110101011000';
 
 dab_mode = load_dab_rad_constants(2);
 
@@ -40,12 +40,16 @@ A = convert_phase_to_complex(A);
 
 %% PHASE CODES TO SYMBOLS
 
-%returns F frames, dependant on size of input data
-%reshaping data into cube (without null or prs)
+%converting phase codes to set of symbols
 L_encode = convert_vector_symbols(A,dab_mode);
 
 %% SYMBOLS TO FRAME
 
+%adding in prs
+L_encode = add_prs_A_cube(L_encode, dab_mode);
+
+%converting to phase cube
+A_cubes = symbols_to_A_cubes(L_encode,dab_mode);
 
 %% UNSUSED
 

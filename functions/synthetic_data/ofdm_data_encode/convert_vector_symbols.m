@@ -10,7 +10,7 @@ function L_encode = convert_vector_symbols(A,dab_mode)
     %  > dab_mode - describtion of DAB modulation parameters
     %
     %  Outputs
-    %  > return n vectors of length L
+    %  > return n vectors of length L phase codes
     %
     % ---------------------------------------------------------------------
     %% ASSIGNING CONSTANTS  
