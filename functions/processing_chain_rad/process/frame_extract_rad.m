@@ -18,13 +18,16 @@ function dab_frame = frame_extract_rad(iq_data, prs_index, dab_mode)
     start_idx = prs_index - dab_mode.Tg - dab_mode.Tnull;
 
     % If gone too far back, pad the front of the returned frame with zeros
+    length(iq_data)
     if (start_idx < 1)
         % start_idx is negative, so (1-start_idx) is positive
         dab_frame = zeros(1,1 - start_idx);
+        (dab_mode.Tf)*dab_mode.F_intra +dab_mode.T_intra*(dab_mode.F_intra-1)+start_idx-1
+        
         dab_frame = [dab_frame  iq_data(1:(dab_mode.Tf)*dab_mode.F_intra +dab_mode.T_intra*(dab_mode.F_intra-1)+start_idx-1)];
     else
         % Otherwise simply extract the frame
-        dab_frame = iq_data(start_idx:start_idx+(dab_mode.Tf)*dab_mode.F_intra +dab_mode.T_intra*(dab_mode.F_intra-1) -1);
+        dab_frame = iq_data(start_idx:start_idx+(dab_mode.Tf)*dab_mode.F_intra +dab_mode.T_intra*(dab_mode.F_intra-2) -1);
     end
 
 end
