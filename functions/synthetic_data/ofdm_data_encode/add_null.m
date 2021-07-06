@@ -12,12 +12,12 @@ function A_cube = add_null(A_cube)
     %
     % ---------------------------------------------------------------------
     
-    
+    %generating null phase codes
     null_symbols = zeros(size(A_cube,1), 1, size(A_cube,3));
     
-    A_cube = cat(2,null_symbols, A_cube)
+    %oncatnating null symbol
+    A_cube = cat(2,null_symbols, A_cube);
     
-    size(A_cube)
 end
 
 

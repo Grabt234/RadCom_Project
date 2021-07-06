@@ -27,11 +27,12 @@ function S = gen_all_pulses(time,F, L , Tu , Ts ,Tg, N,W_cube,A_cube)
     
     for f = 1:F
         
-        %extracting frequency weights for current frame
+        %extracting frequency weights for current pulse
         W = W_cube(:,:,f);
         
-        %extracting frequency weights for current frame
-        A = A_cube(:,:,f);
+        %extracting phase weights for current pulse
+        A = A_cube(f,:,:);
+        A = shiftdim(A,1);
         
         %generating frame
         S(f,:) = gen_pulse(time,L , Tu , Ts ,Tg, N,W,A);
