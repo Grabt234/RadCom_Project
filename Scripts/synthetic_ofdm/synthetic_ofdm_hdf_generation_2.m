@@ -88,8 +88,9 @@ length(S)
 length(tot_time)
 plot(tot_time, S)
 
+%% WRITTING TO FILES
 
-
+create_hdf5('synthetic_encoded_data',S);
 
 
 

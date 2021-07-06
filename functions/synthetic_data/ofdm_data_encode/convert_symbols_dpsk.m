@@ -1,6 +1,6 @@
-function A_cube = convert_phase_cube_dpsk(A_cube)
+function L_encode = convert_symbols_dpsk(L_encode)
     % ---------------------------------------------------------------------    
-    % convert_phase_cube_qdpsk: Takes a phase cube and alters it to form a 
+    % convert_symbols_dpsk: Takes a phase cube and alters it to form a 
     %                           differential phase cube where original
     %                           phases are encoded in the difference
     %                           between previous and current symbol. z =
@@ -8,18 +8,18 @@ function A_cube = convert_phase_cube_dpsk(A_cube)
     % ---------------------------------------------------------------------
     % Usage:
     %  Inputs
-    %  > A_cube - A standard phase cube in the form ((LxN)xF)
+    %  > L_encode - (n x (Lxk)) symbols that will be transmitted
     %            
     %  Outputs
-    %  > A_cube - A converted dpsk cube
+    %  > L_encode - dpsk symbols
     %
     % ---------------------------------------------------------------------
    
     %running through all rows wihtout altering prs
-    for i = 2:size(A_cube,1)
+    for i = 2:size(L_encode,1)
     
         %applying dpsk z(i) = z(i-1)*y(i)
-        A_cube(i,:,:) = A_cube(i,:,:).*A_cube(i-1,:,:); 
+        L_encode(i,:,:) = L_encode(i,:).*L_encode(i-1,:); 
         
     end
 end

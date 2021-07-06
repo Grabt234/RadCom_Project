@@ -26,6 +26,7 @@ function A_cube = add_prs_A_cube(L_encode,dab_mode)
     %prepending prs
     A_cube = [prs ; L_encode];
     
+    
 end
 
 

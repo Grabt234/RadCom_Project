@@ -1,4 +1,4 @@
-function [F,A_cubes] = bits_to_phase_cube(bits, n, dab_mode)
+function [F,A_pulses] = bits_to_phase_cube(bits, n, dab_mode)
     % ---------------------------------------------------------------------    
     % bits_to_phase_cube: uses a map generated with an alphabet size of 2^n
     %                       to convert a binary number to a phase cube 
@@ -42,21 +42,35 @@ function [F,A_cubes] = bits_to_phase_cube(bits, n, dab_mode)
 
     %adding in prs
     L_encode = add_prs_A_cube(L_encode, dab_mode);
+    
+    %filling in to round pulse numbers
+    L_encode = fill_A_pulses(L_encode, dab_mode);
+    
+    %coverting phases to differential encoding
+    L_encode = convert_symbols_dpsk(L_encode);
 
-    %converting to phase cube
-    A_cubes = symbols_to_A_cubes(L_encode,dab_mode);
+    %converting to phase codes for each PULSE (multiple in frame)
+    A_pulses = symbols_to_A_pulses(L_encode,dab_mode);
 
     %% QPSK, CENTRAL CARRIER AND NULL
-
-    %coverting phases to differential encoding
-    A_cubes = convert_phase_cube_dpsk(A_cubes);
     
-    A_cubes = add_null(A_cubes);
+    %each pulse must begin with a null symbol
+    A_pulses = add_null(A_pulses);
     
-    %inserting off carrier
-    A_cubes = insert_central_carrier(A_cubes,dab_mode);
+    %inserting CENTRAL off carrier 
+    A_pulses = insert_central_carrier(A_pulses,dab_mode);
     
-    %number of pulses required to be transmitted
-    F = size(A_cubes,1);
+    %number of PULSES required to be transmitted
+    F = size(A_pulses,1);
    
 end
+
+
+
+
+
+
+
+
+
+

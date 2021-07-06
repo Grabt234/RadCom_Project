@@ -34,7 +34,7 @@ function L_encode = convert_vector_symbols(A,dab_mode)
     
     %does not include null symbol or prs
     L_encode = reshape(A,[],K);
-   
+    
 end
 
 
