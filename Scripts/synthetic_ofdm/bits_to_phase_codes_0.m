@@ -1,13 +1,10 @@
 %=================================
 % Key 
 %=================================
-% n    - Number of bits encoded in a single letter
+% n    - Number of bits encoded in a single alphabet letter
 % bits - The bit stream to be converted to phase codes 
-%
-% L    - Number of symbols in a frame
-% N    - Number of sub carriers in a symbol
-%
 % map  - The alphabet mapping
+% dab_mode - dab_mode to be modulated with
 %================================================
 %================================================
 
@@ -51,17 +48,17 @@ L_encode = add_prs_A_cube(L_encode, dab_mode);
 %converting to phase cube
 A_cubes = symbols_to_A_cubes(L_encode,dab_mode);
 
-%% 
+%% QPSK AND CENTRAL INSERTION
 
 %coverting phases to differential encoding
 A_cubes = convert_phase_cube_dpsk(A_cubes);
 
+A_cubes = add_null(A_cubes);
+
 %inserting off carrier
 A_cubes = insert_central_carrier(A_cubes,dab_mode);
-%=========================================== =====
-%================================================
 
-
+%%  NOTES
 %================================================
 % Note
 %================================================

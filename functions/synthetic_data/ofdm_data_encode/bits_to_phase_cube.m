@@ -1,4 +1,4 @@
-function [F,A_cube] = bits_to_phase_cube(bits, n, L, N)
+function [F,A_cubes] = bits_to_phase_cube(bits, n, dab_mode)
     % ---------------------------------------------------------------------    
     % bits_to_phase_cube: uses a map generated with an alphabet size of 2^n
     %                       to convert a binary number to a phase cube 
@@ -19,25 +19,44 @@ function [F,A_cube] = bits_to_phase_cube(bits, n, L, N)
     %
     % ---------------------------------------------------------------------
    
+    %% CLEAVING BIT STREAM
     map = define_alphabet_map(n);
 
     %breaking bitstream into n sized strings
-    B = cleave_bitstream(bits,n);
+    cleaved_bit_stream = cleave_bitstream(bits,n);
+
+    %% BIT STREAM TO PHASE CODE
 
     %encoding strings in phases
-    A = bitstream_to_phase(map,B);
+    A = bitstream_to_phase(map,cleaved_bit_stream);
 
-    %converting phases to unity magnitude complex numebers
+    %convverting phases to unity magnitude complex numebers
     A = convert_phase_to_complex(A);
 
-    %returns F frames, dependant on size of input data
-    %reshaping data into cube
-    [F,A_cube] = convert_vector_to_cube(A,L,N);
-    
+    %% PHASE CODES TO SYMBOLS
+
+    %converting phase codes to set of symbols
+    L_encode = convert_vector_symbols(A,dab_mode);
+
+    %% SYMBOLS TO FRAME
+
+    %adding in prs
+    L_encode = add_prs_A_cube(L_encode, dab_mode);
+
+    %converting to phase cube
+    A_cubes = symbols_to_A_cubes(L_encode,dab_mode);
+
+    %% QPSK, CENTRAL CARRIER AND NULL
+
     %coverting phases to differential encoding
-    A_cube = convert_phase_cube_dpsk(A_cube);
+    A_cubes = convert_phase_cube_dpsk(A_cubes);
     
-    %now adding in central "off" carrier
-    A_cube = insert_central_carrier(A_cube, L, N, F);
+    A_cubes = add_null(A_cubes);
+    
+    %inserting off carrier
+    A_cubes = insert_central_carrier(A_cubes,dab_mode);
+    
+    %number of pulses required to be transmitted
+    F = size(A_cubes,1);
    
 end

@@ -12,16 +12,15 @@ function A_cube = insert_central_carrier(A_cube, dab_mode)
     %
     % ---------------------------------------------------------------------
     
-    K = dab_mode.K
+    %assigning consants from dab_mode
+    K = dab_mode.K;
     F = size(A_cube, 1);
-    L = size(A_cube,2)
-    size(A_cube)
+    L = size(A_cube,2);
+  
     %storing first half of matrix
     A_cube_half_left = A_cube( : , :, 1:K/2 );
-    size(A_cube_half_left)
     %storing second half of matrix
     A_cube_half_right = A_cube( : , : ,K/2+1:end);
-    size(A_cube_half_right)
     %creatting central "off" carrier phase codes
     A_cube_zero_centre = zeros(F,L,1);
     
