@@ -26,11 +26,11 @@ function dab_mode = load_dab_rad_constants(transmission_mode)
     elseif (transmission_mode == 2)
         dab_mode.K         = 20;
         dab_mode.L         = 3;
-        dab_mode.Tnull     = 2656;
+        dab_mode.Tnull     = 2552;
         dab_mode.Tu        = 2048;
         dab_mode.Tg        = 504;
         dab_mode.Ts        = dab_mode.Tu + dab_mode.Tg;
-        dab_mode.Tf        = dab_mode.Tnull + dab_mode.L * dab_mode.Ts;
+        dab_mode.Tf        = dab_mode.Tnull + (dab_mode.L-1) * dab_mode.Ts;
         dab_mode.mask      = [dab_mode.Tu/2-dab_mode.K/2 -1:dab_mode.Tu/2,...
                                     dab_mode.Tu/2 + 2:dab_mode.Tu/2+2 +dab_mode.K/2 -1];
         dab_mode.F_intra   = 1;
@@ -44,7 +44,7 @@ function dab_mode = load_dab_rad_constants(transmission_mode)
         dab_mode.Tu        = 2048;
         dab_mode.Tg        = 504;
         dab_mode.Ts        = dab_mode.Tu + dab_mode.Tg;
-        dab_mode.Tf        = dab_mode.Tnull + dab_mode.L * dab_mode.Ts;
+        dab_mode.Tf        = dab_mode.Tnull +(dab_mode.L-1)* dab_mode.Ts;
         dab_mode.mask      = [dab_mode.Tu/2-dab_mode.K/2 -1:dab_mode.Tu/2,...
                                     dab_mode.Tu/2 + 2:dab_mode.Tu/2+2 +dab_mode.K/2 -1];
         dab_mode.F_intra   = 1;
@@ -57,7 +57,7 @@ function dab_mode = load_dab_rad_constants(transmission_mode)
         dab_mode.Tu        = 20480;
         dab_mode.Tg        = 5040;
         dab_mode.Ts        = dab_mode.Tu + dab_mode.Tg;
-        dab_mode.Tf        = dab_mode.Tnull + dab_mode.L * dab_mode.Ts;
+        dab_mode.Tf        = dab_mode.Tnull + (dab_mode.L-1) * dab_mode.Ts;
         dab_mode.mask      = [dab_mode.Tu/2-dab_mode.K/2 -1:dab_mode.Tu/2,...
                                     dab_mode.Tu/2 + 2:dab_mode.Tu/2+2 +dab_mode.K/2 -1];
         dab_mode.F_intra   = 1;
@@ -70,7 +70,7 @@ function dab_mode = load_dab_rad_constants(transmission_mode)
         dab_mode.Tu        = 20480*0.4;
         dab_mode.Tg        = 5040*0.4;
         dab_mode.Ts        = dab_mode.Tu + dab_mode.Tg;
-        dab_mode.Tf        = dab_mode.Tnull + dab_mode.L * dab_mode.Ts;
+        dab_mode.Tf        = dab_mode.Tnull + (dab_mode.L-1)* dab_mode.Ts;
         dab_mode.mask      = [dab_mode.Tu/2-dab_mode.K/2 -1:dab_mode.Tu/2,...
                                     dab_mode.Tu/2 + 2:dab_mode.Tu/2+2 +dab_mode.K/2 -1];
         dab_mode.F_intra   = 1;
@@ -83,7 +83,7 @@ function dab_mode = load_dab_rad_constants(transmission_mode)
         dab_mode.Tu        = 20480*0.6;
         dab_mode.Tg        = 5040*0.6;
         dab_mode.Ts        = dab_mode.Tu + dab_mode.Tg;
-        dab_mode.Tf        = dab_mode.Tnull + dab_mode.L * dab_mode.Ts;
+        dab_mode.Tf        = dab_mode.Tnull + (dab_mode.L-1) * dab_mode.Ts;
         dab_mode.mask      = [dab_mode.Tu/2-dab_mode.K/2 -1:dab_mode.Tu/2,...
                                     dab_mode.Tu/2 + 2:dab_mode.Tu/2+2 +dab_mode.K/2 -1];
         dab_mode.F_intra   = 1;

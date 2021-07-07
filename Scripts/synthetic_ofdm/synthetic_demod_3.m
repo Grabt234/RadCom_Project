@@ -25,7 +25,7 @@ prs = build_prs_custom(dab_mode);
 frame_count = 0;
 
 %% PULSE EXTRACTION
-
+%move into a function eventually
 while(1)
 
     %checking for a prs in symbol
@@ -58,3 +58,9 @@ end
 
 %removing zeros
 dab_frames = dab_frames(1:frame_count,:,:);
+
+size(dab_frames)
+db = dab_frames(1,:);
+
+figure
+plot(1:1:length(db),db)
