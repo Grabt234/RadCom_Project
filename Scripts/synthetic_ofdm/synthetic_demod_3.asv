@@ -69,9 +69,9 @@ plot(1:1:length(dab_frame),dab_frame)
 
 [dab_data, dab_carriers] = demodulate_rad(dab_frame, dab_mode);
 
-dab_data = dab_data(:,dab_mode.mask);
+codes = dac_carre
 
-dab_data(2,:)
+
 
 
 

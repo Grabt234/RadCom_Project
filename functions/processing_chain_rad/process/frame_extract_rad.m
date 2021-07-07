@@ -22,7 +22,7 @@ function dab_frame = frame_extract_rad(iq_data, prs_index, dab_mode)
     
         % start_idx is negative, so (1-start_idx) is positive
         dab_frame = zeros(1,1 - start_idx);   
-        dab_frame = [dab_frame  iq_data(1:(dab_mode.Tf)*dab_mode.F_intra +dab_mode.T_intra*(dab_mode.F_intra-1)+start_idx-1)];
+        dab_frame = [dab_frame  iq_data(1:dab_mode.Tf+start_idx-1)];
         
     else
         % Otherwise simply extract the frame

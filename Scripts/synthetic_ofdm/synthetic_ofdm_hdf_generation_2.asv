@@ -78,12 +78,15 @@ S = insert_inter_frame_time(S, F, tif_time);
 
 
 %% PLOTTING
-    
+
 %converting rows to columns
 S = S';
 %stacking all columns the transposing
 S = S(:)';
 
+
+
+length(tot_time)
 plot(1:1:length(S), S)
 
 %% WRITTING TO FILES

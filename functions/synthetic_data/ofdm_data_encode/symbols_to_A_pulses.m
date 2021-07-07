@@ -18,7 +18,7 @@ function A_pulses = symbols_to_A_pulses(L_encode,dab_mode)
     %not including null symbol
     %each pulse must consistently have same number of symbols 
     %(even if filled with noise)
-    A_pulses = reshape(L_encode,[],dab_mode.L-1,dab_mode.K);
+    A_pulses = reshape(L_encode,[],dab_mode.L,dab_mode.K);
     
 end
 
