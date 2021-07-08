@@ -5,13 +5,15 @@
 %=================================
 
 %% LOADING IN INFORMATION
-
+close all
 hdf5_file_name = "synthetic_encoded_data.h5"
 iq_data = loadfersHDF5_iq(hdf5_file_name);
 
 dab_mode = load_dab_rad_constants(2);
 
-f0 = 2.048*10^8;
+f0 = 2.048*10^6;
+
+n = 2;
 
 %% PLOTTING
 
@@ -59,7 +61,6 @@ end
 %removing zeros
 dab_frames = dab_frames(1:frame_count,:,:);
 
-size(dab_frames)
 dab_frame = dab_frames(1,:);
 
 figure
@@ -71,10 +72,29 @@ plot(1:1:length(dab_frame),dab_frame)
 
 dab_data = dab_data(:,dab_mode.mask);
 
-dab_data(2,:)
+y = dab_data;
 
+y = wrapTo360(rad2deg(angle(dab_data())));
 
+y = round(y) + 45;
 
+y((y==360.0000))=0
+
+map = define_inverse_alphabet_map(n);
+
+b = y(1,:);
+
+c = '';
+
+for p = 1:numel(b)
+   
+    c = [c map(b(1,p))];
+    
+end
+    
+c
+
+close all
 
 
 

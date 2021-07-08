@@ -19,7 +19,7 @@ function A = bitstream_to_phase(alphabet_map, B)
     for b = 1:length(B)
         
         A(b) = convert_bin_to_phase(alphabet_map,B(b));
-    
+        
     end
     
 end

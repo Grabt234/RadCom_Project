@@ -26,10 +26,11 @@
 %% WAVEFORM PARAMETERS
 n = 2;
 %bits = '000000000000000000000000000000000000000';
-bits =  '110110100110110110111111110001';
-%bits = '111100010101010101100111000111000111001';
+bits =  '1111111111111111111111111111111111111111'
+% bits =  '110110100110110110111111110001';
+% %bits = '111100010101010101100111000111000111001';
 
-f0 = 2.048*10^8;
+f0 = 2.048*10^6;
 T = 1/f0;
 
 dab_mode = load_dab_rad_constants(2);
@@ -41,7 +42,7 @@ dab_mode = load_dab_rad_constants(2);
 L = dab_mode.L;
 L_0 = L + 1;
 %carriers no center
-K = dab_mode.K ;
+K = dab_mode.K ;    
 %carriers incl. center
 K_0 = dab_mode.K + 1;
 %integration period
@@ -57,40 +58,40 @@ T_intra = dab_mode.T_intra;
 
 [F, A_pulses] = bits_to_phase_cube(bits,n,dab_mode);
 %frames need to be third dimenson, therefore shift
-
-%Frequency weights ()
-W_cube = ones(L_0,K_0,F);
-W_cube = rescale_cube_to_unity_weights(W_cube,F);
-
-%% GENERATING WAVEFORM
-
-%time per symbol
-symbol_time = linspace(T,Ts,Ts);
-
-%generating all envelopes of frames
-S = gen_all_pulses(symbol_time, F, L_0, Tu, Ts, Tg, K,W_cube,A_pulses);
-
-%interframe time
-tif_time = linspace(T,T_intra,T_intra);
-
-%adding in interframe time periods
-S = insert_inter_frame_time(S, F, tif_time);
-
-
-%% PLOTTING
-    
-%converting rows to columns
-S = S';
-%stacking all columns the transposing
-S = S(:)';
-
-plot(1:1:length(S), S)
-
-%% WRITTING TO FILES
-
-create_hdf5('synthetic_encoded_data',S);
-
-
+((squeeze(A_pulses(1,3,:))).')./((squeeze(A_pulses(1,2,:))).')
+% %Frequency weights ()
+% W_cube = ones(L_0,K_0,F);
+% W_cube = rescale_cube_to_unity_weights(W_cube,F);
+% 
+% %% GENERATING WAVEFORM
+% 
+% %time per symbol
+% symbol_time = linspace(T,Ts,Ts);
+% 
+% %generating all envelopes of frames
+% S = gen_all_pulses(symbol_time, F, L_0, Tu, Ts, Tg, K,W_cube,A_pulses);
+% 
+% %interframe time
+% tif_time = linspace(T,T_intra,T_intra);
+% 
+% %adding in interframe time periods
+% S = insert_inter_frame_time(S, F, tif_time);
+% 
+% 
+% %% PLOTTING
+%     
+% %converting rows to columns
+% S = S';
+% %stacking all columns the transposing
+% S = S(:)';
+% 
+% plot(1:1:length(S), S)
+% 
+% %% WRITTING TO FILES
+% 
+% create_hdf5('synthetic_encoded_data',S);
+% 
+% 
 
 
 

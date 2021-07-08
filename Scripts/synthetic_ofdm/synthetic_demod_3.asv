@@ -5,13 +5,15 @@
 %=================================
 
 %% LOADING IN INFORMATION
-
+close all
 hdf5_file_name = "synthetic_encoded_data.h5"
 iq_data = loadfersHDF5_iq(hdf5_file_name);
 
 dab_mode = load_dab_rad_constants(2);
 
-f0 = 2.048*10^8;
+f0 = 2.048*10^6;
+
+n = 2;
 
 %% PLOTTING
 
@@ -59,7 +61,6 @@ end
 %removing zeros
 dab_frames = dab_frames(1:frame_count,:,:);
 
-size(dab_frames)
 dab_frame = dab_frames(1,:);
 
 figure
@@ -69,12 +70,30 @@ plot(1:1:length(dab_frame),dab_frame)
 
 [dab_data, dab_carriers] = demodulate_rad(dab_frame, dab_mode);
 
-codes = dac_carre
+dab_data = dab_data(:,dab_mode.mask);
+
+y = dab_data;
+
+y = wrapTo360(rad2deg(angle(dab_data())));
+
+y = round(y) + 45;
+
+y((y==360.0000))=0
+
+map = define_inverse_alphabet_map(n);
+
+b = y(1,:);
 
 
+for p = 1:numel(b)
+   
+    map(b(p));
+    
+end
+    
+b    
 
-
-
+close all
 
 
 

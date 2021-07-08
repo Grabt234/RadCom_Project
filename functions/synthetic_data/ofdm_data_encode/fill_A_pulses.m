@@ -18,7 +18,7 @@ function L_encode = fill_A_pulses(L_encode,dab_mode)
     
     %additional symbols requires to make integer number of frames
     %only single prs per frame
-    required_symbols = (1-(number_pulses-floor(number_pulses)))*(dab_mode.L);
+    required_symbols = ((number_pulses-floor(number_pulses)))*(dab_mode.L);
     
     %see below
     additional = ones(required_symbols, dab_mode.K);

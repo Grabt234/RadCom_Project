@@ -33,7 +33,7 @@ function [dab_data, dab_carriers] = demodulate_rad(dab_frame, dab_mode)
     dab_data_deinterleaved = dab_data_raw; 
     
     %% DQPSK SNAP
-    dab_data_snapped = dqpsk_snap(dab_data_deinterleaved);
+    dab_data_snapped = dqpsk_snap(dab_data_deinterleaved)
     
     %% ERROR CORRECTION (Not yet implemented)
     dab_data = error_correct(dab_data_snapped);

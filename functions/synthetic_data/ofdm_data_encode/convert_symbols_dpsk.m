@@ -1,4 +1,4 @@
-function L_encode = convert_symbols_dpsk(L_encode)
+ function L_encode = convert_symbols_dpsk(L_encode)
     % ---------------------------------------------------------------------    
     % convert_symbols_dpsk: Takes a phase cube and alters it to form a 
     %                           differential phase cube where original
