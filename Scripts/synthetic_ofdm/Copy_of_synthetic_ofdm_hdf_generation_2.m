@@ -23,10 +23,11 @@
 %================================================
 
 
+
 %% WAVEFORM PARAMETERS
 n = 2;
-%bits = '0000000000000000000000000000000000000000';
-bits =  '1111111111111111111111111111111111111111'
+bits = '0000000000000000000000000000000000000000';
+%bits =  '1111111111111111111111111111111111111111'
 %bits =  '1010101010101010101010101010101010101010'
 % bits =  '110110100110110110111111110001';
 % %bits = '111100010101010101100111000111000111001';
@@ -85,8 +86,73 @@ S = S';
 %stacking all columns the transposing
 S = S(:)';
 
-plot(1:1:length(S), S)
+% plot(1:1:length(S), S)
 
 %% WRITTING TO FILES
+% 
+create_hdf5('synthetic_encoded_data',S);
 
-%create_hdf5('synthetic_encoded_data_10',S);
+%%
+
+%ns
+% figure
+% ns = S(1:dab_mode.Tnull);
+% plot(1:1:length(ns),ns)
+
+%prs
+figure
+prs = S( dab_mode.Tnull + dab_mode.Tg + 1: dab_mode.Tnull + dab_mode.Tg + 1 +dab_mode.Tu-1);
+% plot(1:1:length(prs),prs)
+
+%symbol
+% figure
+% ss = S(1+dab_mode.Tnull+dab_mode.Ts:dab_mode.Tnull+2*dab_mode.Ts);
+% plot(1:1:length(ss),ss)
+
+%Tu symbol
+% figure
+sss = S(dab_mode.Tnull + dab_mode.Tg + 1 + dab_mode.Ts:dab_mode.Ts+ dab_mode.Tnull + dab_mode.Tg + 1 +dab_mode.Tu-1);
+length(prs)
+
+%  plot(1:1:length(prs), abs(imag(prs)))
+% 
+PRS = fftshift(fft(prs));
+SSS = fftshift(fft(sss));
+
+% figure
+% plot(1:1:length(SSS),abs(SSS))
+% 
+% figure
+% plot(1:1:length(PRS),abs(PRS))
+
+a = SSS./PRS;
+% a = PRS;
+% 
+% length(prs)
+rad2deg(angle(a(dab_mode.mask)))
+
+
+% a = a(dab_mode.mask);
+% 
+% wrapTo360(rad2deg(angle(a)))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

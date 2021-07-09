@@ -22,7 +22,7 @@ function A_cube = add_prs_A_cube(L_encode,dab_mode)
     prs_right = prs((length(prs)+1)/2+1:end);
     
     prs = [prs_left prs_right];
-    
+
     %prepending prs
     A_cube = [prs ; L_encode];
     

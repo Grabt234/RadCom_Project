@@ -21,22 +21,29 @@ function [dab_data, dab_carriers] = demodulate_rad(dab_frame, dab_mode)
     %% SYMBOLS UNPACK
     dab_symbols = symbols_unpack(dab_frame, dab_mode);
 
+    length(imag(dab_symbols(1,:)))
+    wrapTo360(angle(dab_symbols(1,dab_mode.mask)));
+    a = (rad2deg(angle(dab_symbols(1,dab_mode.mask))))
+
     %% OFDM MUX
     dab_carriers = ofdm_demux(dab_symbols);
     
-    %% DQPSK DEMAP 
-    dab_data_raw = dqpsk_demap(dab_carriers, dab_mode);
 
-    %% FREQ DEINTERLEAVE   (Not yet correctly implemented)
-%     map = build_interleave_map();
-%     dab_data_deinterleaved = freq_deinterleave(dab_data_raw, map);
-    dab_data_deinterleaved = dab_data_raw; 
+%     b = wrapTo360(deg2rad(angle(dab_carriers(2,dab_mode.mask))))
     
-    %% DQPSK SNAP
-    dab_data_snapped = dqpsk_snap(dab_data_deinterleaved);
-    
-    %% ERROR CORRECTION (Not yet implemented)
-    dab_data = error_correct(dab_data_snapped);
-    
-    dab_data(1, dab_mode.mask)
+%     %% DQPSK DEMAP 
+%     dab_data_raw = dqpsk_demap(dab_carriers, dab_mode);
+% 
+%     %% FREQ DEINTERLEAVE   (Not yet correctly implemented)
+% %     map = build_interleave_map();
+% %     dab_data_deinterleaved = freq_deinterleave(dab_data_raw, map);
+%     dab_data_deinterleaved = dab_data_raw; 
+%     
+%     %% DQPSK SNAP
+%     dab_data_snapped = dqpsk_snap(dab_data_deinterleaved);
+%     
+%     
+%     %% ERROR CORRECTION (Not yet implemented)
+%     dab_data = error_correct(dab_data_snapped);
+
 end

@@ -5,7 +5,7 @@
 %=================================
 
 %% LOADING IN INFORMATION
-close all
+
 hdf5_file_name = "synthetic_encoded_data.h5"
 iq_data = loadfersHDF5_iq(hdf5_file_name);
 
@@ -17,7 +17,7 @@ n = 2;
 
 %% PLOTTING
 
-plot((1:1:length(iq_data)),iq_data)
+% plot((1:1:length(iq_data)),iq_data)
 
 %% PRS DETECT
 
@@ -31,7 +31,7 @@ frame_count = 0;
 while(1)
 
     %checking for a prs in symbol
-    prs_idx = prs_detect_rad(iq_data,prs,dab_mode)
+    prs_idx = prs_detect_rad(iq_data,prs,dab_mode);
 
     %if run through data and found no prs
     if(prs_idx == -1)
@@ -60,41 +60,46 @@ end
 
 %removing zeros
 dab_frames = dab_frames(1:frame_count,:,:);
+%% IGNORE
 
 dab_frame = dab_frames(1,:);
+% 
+% ns = dab_frame(1:dab_mode.Tnull);
+% %prs
+% prs = dab_frame(1+dab_mode.Tnull:dab_mode.Tnull+dab_mode.Ts);
+% 
+% 
+% %symbol
+% ss = dab_frame(1+dab_mode.Tnull+dab_mode.Ts:dab_mode.Tnull+2*dab_mode.Ts);
+% 
+% sss = ss(dab_mode.Tg:dab_mode.Ts);
+% prs = prs(dab_mode.Tg:dab_mode.Ts);
+% plot(1:1:length(sss), sss)
+% 
+% PRS = fftshift(fft(prs));
+% SSS = fftshift(fft(sss));
+% 
+% figure
+% plot(1:1:length(SSS),abs(SSS))
+% 
+% figure
+% plot(1:1:length(PRS),abs(PRS))
+% 
+% a = SSS./PRS;
+% 
+% a = a(dab_mode.mask);
+% 
+% wrapTo360(rad2deg(angle(a)))
 
-figure
-plot(1:1:length(dab_frame),dab_frame)
+
+% figure
+% plot(1:1:length(dab_frame),dab_frame)
 
 %% WOHOO
 
 [dab_data, dab_carriers] = demodulate_rad(dab_frame, dab_mode);
 
-dab_data = dab_data(:,dab_mode.mask);
 
-y = dab_data;
-
-y = wrapTo360(rad2deg(angle(dab_data())));
-
-y = round(y) + 45;
-
-y((y==360.0000))=0
-
-map = define_inverse_alphabet_map(n);
-
-b = y(1,:);
-
-c = '';
-
-for p = 1:numel(b)
-   
-    c = [c map(b(1,p))];
-    
-end
-    
-c
-
-close all
 
 
 

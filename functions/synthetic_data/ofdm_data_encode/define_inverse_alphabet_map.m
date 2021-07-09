@@ -27,7 +27,7 @@ function map = define_inverse_alphabet_map(n)
             
             %alphabet size 2^2
             valueSet = {'00','01','10','11'};
-            keySet = [0 90  180 270];
+            keySet = [45 135  225 315];
             map = containers.Map(keySet,valueSet);
                       
         otherwise 

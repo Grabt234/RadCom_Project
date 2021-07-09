@@ -15,6 +15,8 @@ function dab_data_raw = dqpsk_demap(dab_carriers, dab_mode)
 
     % Pre-allocation
     dab_data_raw = zeros(dab_mode.L-1,dab_mode.Tu);
+    
+    dab_carriers(2,1013:1030)
     % First carrier is phase reference symbol => start at index 2
     for l = 2:dab_mode.L
         % Extract DQPSK by dividing current symbol by previous symbol
@@ -24,6 +26,8 @@ function dab_data_raw = dqpsk_demap(dab_carriers, dab_mode)
          
         dab_data_raw(l-1,dab_mode.mask) = dab_carriers(l,dab_mode.mask) ...
                                         ./ dab_carriers(l-1,dab_mode.mask);
-        angle(dab_data_raw(l-1,:))
+        
+        
     end
+
 end
