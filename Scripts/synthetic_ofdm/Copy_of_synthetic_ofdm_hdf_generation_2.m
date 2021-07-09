@@ -26,11 +26,12 @@
 
 %% WAVEFORM PARAMETERS
 n = 2;
-bits = '0000000000000000000000000000000000000000';
+%bits = '0000000000000000000000000000000000000000';
 %bits =  '1111111111111111111111111111111111111111'
 %bits =  '1010101010101010101010101010101010101010'
 % bits =  '110110100110110110111111110001';
-% %bits = '111100010101010101100111000111000111001';
+bits = '111111111111111111111111111111111111111111111111111111111111111111111111111111';
+        
 
 f0 = 2.048*10^6;
 T = 1/f0;
@@ -86,7 +87,8 @@ S = S';
 %stacking all columns the transposing
 S = S(:)';
 
-% plot(1:1:length(S), S)
+figure
+plot(1:1:length(S), S)
 
 %% WRITTING TO FILES
 % 
@@ -100,7 +102,7 @@ create_hdf5('synthetic_encoded_data',S);
 % plot(1:1:length(ns),ns)
 
 %prs
-figure
+
 prs = S( dab_mode.Tnull + dab_mode.Tg + 1: dab_mode.Tnull + dab_mode.Tg + 1 +dab_mode.Tu-1);
 % plot(1:1:length(prs),prs)
 

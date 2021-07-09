@@ -6,7 +6,7 @@
 
 %% LOADING IN INFORMATION
 
-hdf5_file_name = "synthetic_encoded_data.h5"
+hdf5_file_name = "synthetic_encoded_data_0.h5"
 iq_data = loadfersHDF5_iq(hdf5_file_name);
 
 dab_mode = load_dab_rad_constants(2);
@@ -100,7 +100,21 @@ dab_frame = dab_frames(1,:);
 [dab_data, dab_carriers] = demodulate_rad(dab_frame, dab_mode);
 
 
+mapper = define_inverse_alphabet_map(2);
 
+dd = dab_data(dab_mode.mask);
+
+dd = round(wrapTo360(rad2deg(angle(dd))))
+
+x = ''
+
+for z = 1:numel(dd)
+    
+   x = [x  mapper(dd(z))];
+   
+end
+
+x
 
 
 

@@ -38,5 +38,4 @@ function [dab_data, dab_carriers] = demodulate_rad(dab_frame, dab_mode)
     %% ERROR CORRECTION (Not yet implemented)
     dab_data = error_correct(dab_data_snapped);
     
-    dab_data(1, dab_mode.mask)
 end
