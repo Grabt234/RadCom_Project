@@ -49,10 +49,10 @@ while(1)
     dab_frames(frame_count,:) = dab_pulse;
 
     %removing extracted data from data stream
-    iq_data = iq_data(prs_idx + (dab_mode.Tf+ dab_mode.T_intra)*dab_mode.F_intra - dab_mode.Tnull:end);
+    iq_data = iq_data(prs_idx + dab_mode.Tf - dab_mode.Tnull:end);
 
     % check if we are at the end if iq_data
-    if(length(iq_data) < (dab_mode.Tf+ dab_mode.T_intra)*dab_mode.F_intra || frame_count  >= frame_count_max)
+    if(length(iq_data) < dab_mode.Tf || frame_count  >= frame_count_max)
         break 
     end
 
