@@ -69,7 +69,7 @@ plot(1:1:length(dab_frame),dab_frame)
 %preallocating memory for pulses
 dab_pulses = zeros(dab_mode.p_intra, dab_mode.Tp);
 
-%+1 accounts for the array pos starting at 1
+%+1 accounts for the 
 pulse_idx = dab_mode.T_intra+1;
 
 %iterating through every pulse WITHIN A COHERENT FRAME
@@ -80,9 +80,6 @@ for pulse = 1:dab_mode.p_intra
     pulse_idx =  pulse_idx + dab_mode.Tp + dab_mode.T_intra;
 
 end
-
-%% working with pulses
-
 % 
 % figure
 % plot(1:1:length(dab_frame),dab_frame)
