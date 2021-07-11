@@ -81,20 +81,38 @@ for pulse = 1:dab_mode.p_intra
 
 end
 
-%% working with pulses
+figure
+plot(1:1:length( dab_pulses(1,:)),  dab_pulses(pulse,:))
+title("pulse")
 
+%% CONCATNATING 2+ PULSES
+
+concatnated_pulses = dab_pulses(1,:);
+
+for pulse = 2:dab_mode.p_intra
+       
+    concatnated_pulses = [concatnated_pulses dab_pulses(pulse,dab_mode.Tnull:end)];
+
+end
+
+figure
+plot(1:1:length(concatnated_pulses),  concatnated_pulses)
+title("concatnated pulses")
+
+% %% working with pulses
 % 
-% figure
-% plot(1:1:length(dab_frame),dab_frame)
+% % 
+% % figure
+% % plot(1:1:length(dab_frame),dab_frame)
+% % 
+% % %% demodding symbols
+% % 
+[dab_data, dab_carriers] = demodulate_rad(concatnated_pulses, dab_mode);
 % 
-% %% demodding symbols
 % 
-% [dab_data, dab_carriers] = demodulate_rad(dab_frame, dab_mode);
-
-
-
-
-
+% 
+% 
+% 
 
 
 
