@@ -1,4 +1,4 @@
-function dab_data_raw = dqpsk_demap(dab_carriers, dab_mode)
+function dab_data_raw = dqpsk_demap_rad(dab_carriers, dab_mode)
     % ---------------------------------------------------------------------    
     % DQPSK_DEMAP: Demap DQPSK data from DAB carriers
     % ---------------------------------------------------------------------
@@ -14,10 +14,11 @@ function dab_data_raw = dqpsk_demap(dab_carriers, dab_mode)
     % ---------------------------------------------------------------------
 
     % Pre-allocation
-    dab_data_raw = zeros(dab_mode.L-1,dab_mode.Tu);
+    frame_symbols = dab_mode.L*dab_mode.p_intra-1
+    dab_data_raw = zeros(frame_symbols,dab_mode.Tu);
 
     % First carrier is phase reference symbol => start at index 2
-    for l = 2:dab_mode.L
+    for l = 2:frame_symbols
         % Extract DQPSK by dividing current symbol by previous symbol
         % Note: Use the dab_mode.mask so that only the symbols at the OFDM
         % carrier frequencies are calculated

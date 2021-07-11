@@ -6,7 +6,7 @@
 
 %% LOADING IN INFORMATION
 
-hdf5_file_name = "synthetic_encoded_data_multi.h5"
+hdf5_file_name = "synthetic_encoded_data.h5"
 iq_data = loadfersHDF5_iq(hdf5_file_name);
 
 dab_mode = load_dab_rad_constants(2);
@@ -81,17 +81,18 @@ for pulse = 1:dab_mode.p_intra
 
 end
 
+close all
 figure
-plot(1:1:length( dab_pulses(1,:)),  dab_pulses(pulse,:))
+plot(1:1:length( dab_pulses(1,:)),  dab_pulses(2,:))
 title("pulse")
-
+    
 %% CONCATNATING 2+ PULSES
 
 concatnated_pulses = dab_pulses(1,:);
 
 for pulse = 2:dab_mode.p_intra
-       
-    concatnated_pulses = [concatnated_pulses dab_pulses(pulse,dab_mode.Tnull:end)];
+      
+   concatnated_pulses = [concatnated_pulses dab_pulses(pulse,1+dab_mode.Tnull:end)];
 
 end
 
@@ -109,9 +110,17 @@ title("concatnated pulses")
 % % 
 [dab_data, dab_carriers] = demodulate_rad(concatnated_pulses, dab_mode);
 
-mapper = define_inverse_alphabet_map(2);
+size(dab_data)
 
-phase_codes = dab_data(dab_mode.mask);
+phase_codes = dab_data(1,dab_mode.mask)
+
+for dd = 2:size(dab_data,1)
+   dd
+    phase_codes = [phase_codes dab_data(dd,dab_mode.mask)];
+    
+end
+
+mapper = define_inverse_alphabet_map(2);
 
 phase_codes = round(wrapTo360(rad2deg(angle(phase_codes))))
 
@@ -127,8 +136,8 @@ transmitted_bits
 
 
 
-
-
+% 
+% 
 
 
 
