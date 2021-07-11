@@ -1,4 +1,4 @@
-function dab_symbols = symbols_unpack(dab_frame, dab_mode)
+function dab_symbols = symbols_unpack_rad(dab_frame, dab_mode)
     % ---------------------------------------------------------------------    
     % symvols_extract: Unpack frame into dab_mode.L x symbols
     % ---------------------------------------------------------------------
@@ -14,14 +14,16 @@ function dab_symbols = symbols_unpack(dab_frame, dab_mode)
     %
     % ---------------------------------------------------------------------    
     % Read symbols from each frame
-    dab_symbols = zeros(dab_mode.L, dab_mode.Tu);
+    symbol_count = dab_mode.L*dab_mode.p_intra;
+    
+    dab_symbols = zeros(symbol_count, dab_mode.Tu);
     
     % Start after null & first guard interval
     % Note: If misaligned _earlier_ is okay, but cannot be later! (Because
     % of cyclic guard interval with cyclic prefix)
     idx = dab_mode.Tnull + dab_mode.Tg + 1;
     
-    for l = 1:dab_mode.L % In total, read L symbols
+    for l = 1:symbol_count % In total, read L symbols
         % Read symbol
         dab_symbols(l,:) = dab_frame(idx:idx+dab_mode.Tu-1);
         % Jump ahead 1 symbol, incl. guard

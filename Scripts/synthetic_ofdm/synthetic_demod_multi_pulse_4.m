@@ -108,12 +108,22 @@ title("concatnated pulses")
 % % %% demodding symbols
 % % 
 [dab_data, dab_carriers] = demodulate_rad(concatnated_pulses, dab_mode);
-% 
-% 
-% 
-% 
-% 
 
+mapper = define_inverse_alphabet_map(2);
+
+phase_codes = dab_data(dab_mode.mask);
+
+phase_codes = round(wrapTo360(rad2deg(angle(phase_codes))))
+
+transmitted_bits = '';
+
+for z = 1:numel(phase_codes)
+    
+   transmitted_bits = [transmitted_bits  mapper(phase_codes(z))];
+   
+end
+
+transmitted_bits
 
 
 
