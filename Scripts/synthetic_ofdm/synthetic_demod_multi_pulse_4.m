@@ -60,10 +60,14 @@ end
 
 %removing zeros
 dab_frames = dab_frames(1:frame_count,:,:);
-%% IGNORE
 
 dab_frame = dab_frames(1,:);
-plot(1:1:length(dab_frame),dab_frame)
+
+%verifying frame extraction
+figure
+plot(1:1:length(dab_frame), dab_frame)
+title("DAB frame plot")
+
 %%  PULSE EXTRACTION
 
 %preallocating memory for pulses
@@ -74,18 +78,25 @@ pulse_idx = dab_mode.T_intra+1;
 
 %iterating through every pulse WITHIN A COHERENT FRAME
 for pulse = 1:dab_mode.p_intra
-       
+    
+    pulse
+    size(dab_frame(1,pulse_idx :(pulse_idx+dab_mode.Tp-1)))
     dab_pulses(pulse,:) = dab_frame(1,pulse_idx :(pulse_idx+dab_mode.Tp-1));
     
     pulse_idx =  pulse_idx + dab_mode.Tp + dab_mode.T_intra;
 
 end
 
-close all
+%verifing pulse extraction
 figure
-plot(1:1:length( dab_pulses(1,:)),  dab_pulses(2,:))
-title("pulse")
-    
+subplot(2,1,1)
+plot(1:1:length( dab_pulses(1,:)),  dab_pulses(1,:))
+title("pulse 1")
+subplot(2,1,2)
+plot(1:1:length( dab_pulses(2,:)),  dab_pulses(2,:))
+title("pulse 2")
+
+
 %% CONCATNATING 2+ PULSES
 
 concatnated_pulses = dab_pulses(1,:);
@@ -100,29 +111,28 @@ figure
 plot(1:1:length(concatnated_pulses),  concatnated_pulses)
 title("concatnated pulses")
 
-% %% working with pulses
-% 
-% % 
-% % figure
-% % plot(1:1:length(dab_frame),dab_frame)
-% % 
-% % %% demodding symbols
-% % 
+
+%% DEMODULATING CONCATNATED PULSES
+
 [dab_data, dab_carriers] = demodulate_rad(concatnated_pulses, dab_mode);
+ 
+% rad2deg(angle(dab_data(1, dab_mode.mask)))
+% rad2deg(angle(dab_data(2, dab_mode.mask)))
+% rad2deg(angle(dab_data(3, dab_mode.mask)))
 
-size(dab_data)
+%% CONVERTING PHASES TO BITS
 
-phase_codes = dab_data(1,dab_mode.mask)
+phase_codes = dab_data(1,dab_mode.mask);
 
 for dd = 2:size(dab_data,1)
-   dd
+    
     phase_codes = [phase_codes dab_data(dd,dab_mode.mask)];
     
 end
 
 mapper = define_inverse_alphabet_map(2);
 
-phase_codes = round(wrapTo360(rad2deg(angle(phase_codes))))
+phase_codes = round(wrapTo360(rad2deg(angle(phase_codes))));
 
 transmitted_bits = '';
 
@@ -133,12 +143,6 @@ for z = 1:numel(phase_codes)
 end
 
 transmitted_bits
-
-
-
-% 
-% 
-
 
 
 
