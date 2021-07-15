@@ -1,4 +1,4 @@
- function L_encode = convert_symbols_dpsk(L_encode)
+ function L_dqpsk = convert_symbols_dpsk(L_encode)
     % ---------------------------------------------------------------------    
     % convert_symbols_dpsk: Takes a phase cube and alters it to form a 
     %                           differential phase cube where original
@@ -14,12 +14,17 @@
     %  > L_encode - dpsk symbols
     %
     % ---------------------------------------------------------------------
-   
+    
+    L_dqpsk = zeros(size(L_encode));
+    
+    %assigning prs
+    L_dqpsk(1,:) = L_encode(1,:);
+    
     %running through all rows wihtout altering prs
     for i = 2:size(L_encode,1)
     
         %applying dpsk z(i) = z(i-1)*y(i)
-        L_encode(i,:,:) = L_encode(i,:).*L_encode(i-1,:); 
+        L_dqpsk(i,:) = L_encode(i,:).*L_dqpsk(i-1,:);
         
     end
 end

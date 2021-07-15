@@ -22,11 +22,12 @@ function [dab_data, dab_carriers] = demodulate_rad(dab_frame, dab_mode)
     dab_symbols = symbols_unpack_rad(dab_frame, dab_mode);
     
     %% OFDM MUX
-    dab_carriers = ofdm_demux(dab_symbols); 
+    dab_carriers = ofdm_demux(dab_symbols);     
+    round(rad2deg(angle(dab_carriers(1,dab_mode.mask))))
     
     %% DQPSK DEMAP 
     dab_data_raw = dqpsk_demap_rad(dab_carriers, dab_mode);   
-    
+
     %% FREQ DEINTERLEAVE   (Not yet correctly implemented)
 %     map = build_interleave_map();
 %     dab_data_deinterleaved = freq_deinterleave(dab_data_raw, map);

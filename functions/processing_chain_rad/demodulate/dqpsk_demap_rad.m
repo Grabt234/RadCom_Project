@@ -14,7 +14,7 @@ function dab_data_raw = dqpsk_demap_rad(dab_carriers, dab_mode)
     % ---------------------------------------------------------------------
 
     % Pre-allocation
-    frame_symbols = dab_mode.L*dab_mode.p_intra-1
+    frame_symbols = dab_mode.L*dab_mode.p_intra-1;
     dab_data_raw = zeros(frame_symbols,dab_mode.Tu);
 
     % First carrier is phase reference symbol => start at index 2

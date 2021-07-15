@@ -26,7 +26,7 @@ function map = define_alphabet_map(n)
             
             %alphabet size 2^2
             keySet = {'00','01','10','11'};
-            valueSet = [0*pi 0.5*pi 1*pi 1.5*pi];
+            valueSet = [0.25*pi 0.75*pi 1.25*pi 1.75*pi];
             map = containers.Map(keySet,valueSet);
             
             

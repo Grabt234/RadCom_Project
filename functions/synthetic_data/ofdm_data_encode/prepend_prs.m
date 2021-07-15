@@ -1,4 +1,4 @@
-function A_cube = add_prs_A_cube(L_encode,dab_mode)
+function A_cube = prepend_prs(L_encode,dab_mode)
     % ---------------------------------------------------------------------    
     % add_prs_A_cube: Adding in prs then reshaping into cube without
     %                       null symbol

@@ -43,18 +43,18 @@ function [F,A_pulses] = bits_to_phase_cube(bits, n, dab_mode)
     %% SYMBOLS TO FRAME
     
     %adding in prs
-    L_encode = add_prs_A_cube(L_encode, dab_mode);
+    L_encode = prepend_prs(L_encode, dab_mode);
     
     %filling in to round pulse numbers
-    L_encode = fill_A_pulses(L_encode, dab_mode);
+    L_encode = fill_symbols(L_encode, dab_mode);
     
     %coverting phases to differential encoding
     L_encode = convert_symbols_dpsk(L_encode);
     
-    L_encode(2,:)
+    rad2deg(angle(L_encode(1,:)))
     
     %converting to phase codes for each PULSE (multiple in frame)
-    A_pulses = symbols_to_A_pulses(L_encode,dab_mode);
+    A_pulses = symbols_to_A_pulses(L_encode,dab_mode);    
     
     %% QPSK, CENTRAL CARRIER AND NULL
     

@@ -1,6 +1,6 @@
-function L_encode = fill_A_pulses(L_encode,dab_mode)
+function L_encode = fill_symbols(L_encode,dab_mode)
     % ---------------------------------------------------------------------    
-    % fill_A_pulses: fills up remaining pulses with 1's
+    % fill_symbols: fills up remaining pulses with 1's
     %                           
     % ---------------------------------------------------------------------
     % Usage:

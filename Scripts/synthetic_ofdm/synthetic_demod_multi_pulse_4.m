@@ -79,7 +79,6 @@ pulse_idx = dab_mode.T_intra+1;
 %iterating through every pulse WITHIN A COHERENT FRAME
 for pulse = 1:dab_mode.p_intra
     
-    pulse
     size(dab_frame(1,pulse_idx :(pulse_idx+dab_mode.Tp-1)))
     dab_pulses(pulse,:) = dab_frame(1,pulse_idx :(pulse_idx+dab_mode.Tp-1));
     
@@ -116,8 +115,8 @@ title("concatnated pulses")
 
 [dab_data, dab_carriers] = demodulate_rad(concatnated_pulses, dab_mode);
  
-% rad2deg(angle(dab_data(1, dab_mode.mask)))
-% rad2deg(angle(dab_data(2, dab_mode.mask)))
+% wrapTo360(rad2deg(angle(dab_data(1, dab_mode.mask))))
+% wrapTo360(rad2deg(angle(dab_data(2, dab_mode.mask))))
 % rad2deg(angle(dab_data(3, dab_mode.mask)))
 
 %% CONVERTING PHASES TO BITS

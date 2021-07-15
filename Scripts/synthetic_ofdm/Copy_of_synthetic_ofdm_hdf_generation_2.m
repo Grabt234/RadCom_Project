@@ -26,11 +26,12 @@
 
 %% WAVEFORM PARAMETERS
 n = 2;
+%1111111111
 %bits = '0000000000000000000000000000000000000000';
 %bits =  '1111111111111111111111111111111111111111'
 %bits =  '1010101010101010101010101010101010101010'
 % bits =  '110110100110110110111111110001';
-bits = '111111111111111111111111111111111111111111111111111111111111111111111111111111';
+bits = '111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111';
         
 
 f0 = 2.048*10^6;
@@ -87,8 +88,8 @@ S = S';
 %stacking all columns the transposing
 S = S(:)';
 
-%% WRITTING TO FILES
-% 
+% WRITTING TO FILES
+
 create_hdf5('synthetic_encoded_data',S);
 
 %%
@@ -96,139 +97,121 @@ create_hdf5('synthetic_encoded_data',S);
 %plotting whole wave
 figure
 plot(1:1:length(S),S)
-
-
-%%
-
-%plotting first null
-idx_start = 1
-idx_end = dab_mode.Tnull
-
-figure
-ns = S(idx_start:idx_end);
-plot(1:1:length(ns),ns)
-
-ns = ns(dab_mode.Tg:end);
-
-%%
-
-%plotting prs
-idx_start = idx_end+1
-idx_end = idx_start + dab_mode.Ts-1
-figure
-prs = S(idx_start:idx_end);
-
-prs = prs(dab_mode.Tg+1:end);
-
-
-plot(1:1:length(prs),prs)
-
-
-
-%%
-
-%plotting first data symbol
-
-idx_start = idx_end+1;
-idx_end = idx_start + dab_mode.Ts-1;
-
-figure
-s1 = S(idx_start:idx_end);
-s1 = s1(dab_mode.Tg+1:end)
-plot(1:1:length(s1),s1)
-
-
-
-%%
-
-% should getthe second null
-
-idx_start = idx_end+1;
-idx_end = idx_start +dab_mode.Ts-1;
-
-figure
-ns2 = S(idx_start:idx_end);
-plot(1:1:length(ns2),ns2)
-
-%%
-
-% symbol 2
-
-idx_start = idx_end+1;
-idx_end = idx_start +dab_mode.Ts-1;
-
-figure
-s2 = S(idx_start:idx_end);
-plot(1:1:length(s2),s2)
-
-%%
-
-% symbol 3
-
-idx_start = idx_end+1;
-idx_end = idx_start +dab_mode.Ts-1;
-
-figure
-s3 = S(idx_start:idx_end);
-plot(1:1:length(s3),s3)
-
-
-
-%%
-%prs
-
-prs = S( dab_mode.Tnull + dab_mode.Tg + 1: dab_mode.Tnull + dab_mode.Tg + 1 +dab_mode.Tu-1);
+% 
+% 
+% %%
+% 
+% %plotting first null
+% idx_start = 1
+% idx_end = dab_mode.Tnull
+% 
+% figure
+% ns = S(idx_start:idx_end);
+% plot(1:1:length(ns),ns)
+% 
+% ns = ns(dab_mode.Tg:end);
+% 
+% %%
+% 
+% %plotting prs
+% idx_start = idx_end+1
+% idx_end = idx_start + dab_mode.Ts-1
+% figure
+% prs = S(idx_start:idx_end);
+% 
+% prs = prs(dab_mode.Tg+1:end);
+% 
+% 
 % plot(1:1:length(prs),prs)
-
-%symbol
-% figure
-% ss = S(1+dab_mode.Tnull+dab_mode.Ts:dab_mode.Tnull+2*dab_mode.Ts);
-% plot(1:1:length(ss),ss)
-
-%Tu symbol
-% figure
-sss = S(dab_mode.Tnull + dab_mode.Tg + 1 + dab_mode.Ts:dab_mode.Ts+ dab_mode.Tnull + dab_mode.Tg + 1 +dab_mode.Tu-1);
-length(prs)
-
-%  plot(1:1:length(prs), abs(imag(prs)))
 % 
-PRS = fftshift(fft(prs));
-SSS = fftshift(fft(sss));
-
-% figure
-% plot(1:1:length(SSS),abs(SSS))
+% 
+% 
+% %%
+% 
+% %plotting first data symbol
+% 
+% idx_start = idx_end+1;
+% idx_end = idx_start + dab_mode.Ts-1;
 % 
 % figure
-% plot(1:1:length(PRS),abs(PRS))
-
-a = SSS./PRS;
-% a = PRS;
+% s1 = S(idx_start:idx_end);
+% s1 = s1(dab_mode.Tg+1:end)
+% plot(1:1:length(s1),s1)
 % 
+% 
+% 
+% %%
+% 
+% % should getthe second null
+% 
+% idx_start = idx_end+1;
+% idx_end = idx_start +dab_mode.Ts-1;
+% 
+% figure
+% ns2 = S(idx_start:idx_end);
+% plot(1:1:length(ns2),ns2)
+% 
+% %%
+% 
+% % symbol 2
+% 
+% idx_start = idx_end+1;
+% idx_end = idx_start +dab_mode.Ts-1;
+% 
+% figure
+% s2 = S(idx_start:idx_end);
+% plot(1:1:length(s2),s2)
+% 
+% %%
+% 
+% % symbol 3
+% 
+% idx_start = idx_end+1;
+% idx_end = idx_start +dab_mode.Ts-1;
+% 
+% figure
+% s3 = S(idx_start:idx_end);
+% plot(1:1:length(s3),s3)
+% 
+% 
+% 
+% %%
+% %prs
+% 
+% prs = S( dab_mode.Tnull + dab_mode.Tg + 1: dab_mode.Tnull + dab_mode.Tg + 1 +dab_mode.Tu-1);
+% % plot(1:1:length(prs),prs)
+% 
+% %symbol
+% % figure
+% % ss = S(1+dab_mode.Tnull+dab_mode.Ts:dab_mode.Tnull+2*dab_mode.Ts);
+% % plot(1:1:length(ss),ss)
+% 
+% %Tu symbol
+% % figure
+% sss = S(dab_mode.Tnull + dab_mode.Tg + 1 + dab_mode.Ts:dab_mode.Ts+ dab_mode.Tnull + dab_mode.Tg + 1 +dab_mode.Tu-1);
 % length(prs)
-rad2deg(angle(a(dab_mode.mask)))
-
-
-% a = a(dab_mode.mask);
 % 
-% wrapTo360(rad2deg(angle(a)))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+% %  plot(1:1:length(prs), abs(imag(prs)))
+% % 
+% PRS = fftshift(fft(prs));
+% SSS = fftshift(fft(sss));
+% 
+% % figure
+% % plot(1:1:length(SSS),abs(SSS))
+% % 
+% % figure
+% % plot(1:1:length(PRS),abs(PRS))
+% 
+% a = SSS./PRS;
+% % a = PRS;
+% % 
+% % length(prs)
+% rad2deg(angle(a(dab_mode.mask)))
+% 
+% 
+% % a = a(dab_mode.mask);
+% % 
+% % wrapTo360(rad2deg(angle(a)))
+% 
+% 
+% 
