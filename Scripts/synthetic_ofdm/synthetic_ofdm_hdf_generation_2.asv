@@ -27,7 +27,7 @@
 n = 2;
 %bits = '0000000000000000000000000000000000000000';
 %bits =  '11111111111111111111111111111111111111111111111111111111111111111111111111111111';
-bits =  '1111111111111111111111111111111111111111';
+bits =  '111111111111111111111111111111111111111111111111111111111111111111111111111111111';
 %bits =  '1010101010101010101010101010101010101010'
 % bits =  '110110100110110110111111110001';
 % %bits = '111100010101010101100111000111000111001';
@@ -66,7 +66,7 @@ W_cube = rescale_cube_to_unity_weights(W_cube,F);
 
 %% GENERATING WAVEFORM
 
-% %time per symbol
+%time per symbol
 symbol_time = linspace(T,Ts,Ts);
 
 %generating all envelopes of frames
@@ -87,26 +87,7 @@ S = S';
 S = S(:)';
 
 plot(1:1:length(S), S)
-% 
-% % WRITTING TO FILES
-% 
-% create_hdf5('synthetic_encoded_data',S);
 
+%% WRITTING TO FILES
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+%create_hdf5('synthetic_encoded_data_10',S);

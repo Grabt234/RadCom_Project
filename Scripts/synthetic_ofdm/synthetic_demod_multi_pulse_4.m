@@ -79,7 +79,6 @@ pulse_idx = dab_mode.T_intra+1;
 %iterating through every pulse WITHIN A COHERENT FRAME
 for pulse = 1:dab_mode.p_intra
     
-    size(dab_frame(1,pulse_idx :(pulse_idx+dab_mode.Tp-1)))
     dab_pulses(pulse,:) = dab_frame(1,pulse_idx :(pulse_idx+dab_mode.Tp-1));
     
     pulse_idx =  pulse_idx + dab_mode.Tp + dab_mode.T_intra;
@@ -87,13 +86,13 @@ for pulse = 1:dab_mode.p_intra
 end
 
 %verifing pulse extraction
-figure
-subplot(2,1,1)
-plot(1:1:length( dab_pulses(1,:)),  dab_pulses(1,:))
-title("pulse 1")
-subplot(2,1,2)
-plot(1:1:length( dab_pulses(2,:)),  dab_pulses(2,:))
-title("pulse 2")
+% figure
+% subplot(2,1,1)
+% plot(1:1:length( dab_pulses(1,:)),  dab_pulses(1,:))
+% title("pulse 1")
+% subplot(2,1,2)
+% plot(1:1:length( dab_pulses(2,:)),  dab_pulses(2,:))
+% title("pulse 2")
 
 
 %% CONCATNATING 2+ PULSES
@@ -106,9 +105,9 @@ for pulse = 2:dab_mode.p_intra
 
 end
 
-figure
-plot(1:1:length(concatnated_pulses),  concatnated_pulses)
-title("concatnated pulses")
+% figure
+% plot(1:1:length(concatnated_pulses),  concatnated_pulses)
+% title("concatnated pulses")
 
 
 %% DEMODULATING CONCATNATED PULSES
@@ -142,12 +141,6 @@ for z = 1:numel(phase_codes)
 end
 
 transmitted_bits
-
-
-
-
-
-
 
 
 

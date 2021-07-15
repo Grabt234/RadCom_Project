@@ -24,6 +24,9 @@ function [dab_data, dab_carriers] = demodulate_rad(dab_frame, dab_mode)
     %% OFDM MUX
     dab_carriers = ofdm_demux(dab_symbols);     
     round(rad2deg(angle(dab_carriers(1,dab_mode.mask))))
+    round(rad2deg(angle(dab_carriers(2,dab_mode.mask))))
+    round(rad2deg(angle(dab_carriers(3,dab_mode.mask))))
+    round(rad2deg(angle(dab_carriers(4,dab_mode.mask))))
     
     %% DQPSK DEMAP 
     dab_data_raw = dqpsk_demap_rad(dab_carriers, dab_mode);   
