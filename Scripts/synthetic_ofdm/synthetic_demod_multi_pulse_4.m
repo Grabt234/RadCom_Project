@@ -11,7 +11,7 @@ iq_data = loadfersHDF5_iq(hdf5_file_name);
 
 dab_mode = load_dab_rad_constants(2);
 
-f0 = 2.048*10^6;
+f0 = 2.048*10^9;
 
 %bits per per code
 n = 2;
@@ -117,7 +117,7 @@ end
  
 % wrapTo360(rad2deg(angle(dab_data(1, dab_mode.mask))))
 % wrapTo360(rad2deg(angle(dab_data(2, dab_mode.mask))))
-% rad2deg(angle(dab_data(3, dab_mode.mask)))
+%rad2deg(angle(dab_data(3, dab_mode.mask)))
 
 %% CONVERTING PHASES TO BITS
 

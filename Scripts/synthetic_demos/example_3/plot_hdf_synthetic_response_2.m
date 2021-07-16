@@ -7,8 +7,8 @@
 close all
 
 %file name
-hdf5_file_name_emission = "shf_emission.h5"
-hdf5_file_name_response = "shf_response.h5"
+hdf5_file_name_emission = "_emission.h5"
+hdf5_file_name_response = "_response.h5"
 
 
 %reading data from hdf5
@@ -16,15 +16,15 @@ cmplx_data_emission = loadfersHDF5_iq(hdf5_file_name_emission);
 cmplx_data_response = loadfersHDF5_cmplx(hdf5_file_name_response);
 
 %%
-dab_mode = load_dab_rad_constants(5);
+dab_mode = load_dab_rad_constants(6);
 %runtime of simulation (seconds)
-run_time = 0.02;
+run_time = 0.002;
 %sampling frequency
-fs = 8.19e8;
+fs = 2.048e9;
 %window skip (time steos)
 win_skip = dab_mode.Ts*(dab_mode.L-1)+dab_mode.Tnull;
 %pulse repetition frequency
-prf = 10000;
+prf = 70000;
 %the dab mode used
     
 
@@ -38,7 +38,8 @@ title("PLOT SHOWING RECEIVED PULSE TRAIN")
 %% CUTTING INTO SLOW TIME SAMPLES
 
 %preallocating memory
-slow_time = zeros(ceil(run_time*prf), (1/prf)*fs);
+
+slow_time = zeros(ceil(run_time*prf), floor((1/prf)*fs));
 
 i=0;
 
