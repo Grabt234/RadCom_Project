@@ -13,7 +13,7 @@ dab_mode = load_dab_rad_constants(2);
 
 f0 = 2.048*10^6;
 
-%bits per per code
+%bits o
 n = 2;
 
 %% PLOTTING
@@ -142,58 +142,6 @@ for z = 1:numel(phase_codes)
 end
 
 transmitted_bits
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

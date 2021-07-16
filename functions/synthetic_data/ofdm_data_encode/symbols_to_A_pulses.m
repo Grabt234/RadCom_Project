@@ -19,9 +19,12 @@ function A_pulses = symbols_to_A_pulses(L_encode,dab_mode)
     %each pulse must consistently have same number of symbols 
     %(even if filled with noise)
     
-    %pulses - symbols - elements
-    A_pulses = zeros(size(L_encode,1), dab_mode.L ,size(L_encode,2));
+    %should be integer at this point
+    number_pulses = size(L_encode,1)/dab_mode.L;
     
+    %pulses - symbols - elements
+    A_pulses = zeros(number_pulses, dab_mode.L ,size(L_encode,2));
+
     for i = 1:size(L_encode,1)
         
         pulse_number = ceil(i/dab_mode.L);

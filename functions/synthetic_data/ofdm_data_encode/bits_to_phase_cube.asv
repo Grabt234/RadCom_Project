@@ -51,7 +51,8 @@ function [F,A_pulses] = bits_to_phase_cube(bits, n, dab_mode)
     
     %converting to phase codes for each PULSE (multiple in frame)
     A_pulses = symbols_to_A_pulses(L_encode,dab_mode);    
-    
+
+    rad2dA_pulses(2,2,:)./A_pulses(2,1,:)
     %% QPSK, CENTRAL CARRIER AND NULL
     
     %each pulse must begin with a null symbol

@@ -27,7 +27,8 @@
 n = 2;
 %bits = '0000000000000000000000000000000000000000';
 %bits =  '11111111111111111111111111111111111111111111111111111111111111111111111111111111';
-bits =  '1111111111111111111111111111111111111111';
+%bits =  '11111111111111111111';
+bits =  '111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111';
 %bits =  '1010101010101010101010101010101010101010'
 % bits =  '110110100110110110111111110001';
 % %bits = '111100010101010101100111000111000111001';
@@ -60,36 +61,37 @@ T_intra = dab_mode.T_intra;
 % 
 [F, A_pulses] = bits_to_phase_cube(bits,n,dab_mode);
 
+
 %Frequency weights ()
 W_cube = ones(L_0,K_0,F);
 W_cube = rescale_cube_to_unity_weights(W_cube,F);
 
 %% GENERATING WAVEFORM
-
-% %time per symbol
-symbol_time = linspace(T,Ts,Ts);
-
-%generating all envelopes of frames
-S = gen_all_pulses(symbol_time, F, L_0, Tu, Ts, Tg, K,W_cube,A_pulses);
-
-%interframe time
-tif_time = linspace(T,T_intra,T_intra);
-
-%adding in interframe time periods
-S = insert_inter_frame_time(S, F, tif_time);
-
-
-%% PLOTTING
-    
-%converting rows to columns
-S = S';
-%stacking all columns the transposing
-S = S(:)';
-
-plot(1:1:length(S), S)
 % 
-% % WRITTING TO FILES
+% % %time per symbol
+% symbol_time = linspace(T,Ts,Ts);
 % 
+% %generating all envelopes of frames
+% S = gen_all_pulses(symbol_time, F, L_0, Tu, Ts, Tg, K,W_cube,A_pulses);
+% 
+% %interframe time
+% tif_time = linspace(T,T_intra,T_intra);
+% 
+% %adding in interframe time periods
+% S = insert_inter_frame_time(S, F, tif_time);
+% 
+% 
+% %% PLOTTING
+%     
+% %converting rows to columns
+% S = S';
+% %stacking all columns the transposing
+% S = S(:)';
+% 
+% plot(1:1:length(S), S)
+% % 
+% % % WRITTING TO FILES
+% % 
 % create_hdf5('synthetic_encoded_data',S);
 
 

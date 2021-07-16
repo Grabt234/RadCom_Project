@@ -15,7 +15,8 @@
     %
     % ---------------------------------------------------------------------
     
-    L_dqpsk = zeros(size(L_encode));
+    %creating zeros size of L_encode
+    L_dqpsk = zeros(size(L_encode,1),size(L_encode,2));
     
     %assigning prs
     L_dqpsk(1,:) = L_encode(1,:);
@@ -27,4 +28,5 @@
         L_dqpsk(i,:) = L_encode(i,:).*L_dqpsk(i-1,:);
         
     end
+    
 end
