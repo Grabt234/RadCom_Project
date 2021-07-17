@@ -40,7 +40,7 @@ f0 = 2.048*10^9;
 T = 1/f0;
 
 dab_mode = load_dab_rad_constants(6);
-radar_performance()
+
 %% EXTRACTING DAB_CONSTANTS
 
 %symbols

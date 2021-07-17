@@ -33,6 +33,5 @@ function dab_data_raw = dqpsk_demap_rad(dab_carriers, dab_mode)
                                     
         dab_carriers(l,dab_mode.mask)./ dab_carriers(l-1,dab_mode.mask)
     end
-    
-    dab_data_raw(3,dab_mode.mask)
+
 end

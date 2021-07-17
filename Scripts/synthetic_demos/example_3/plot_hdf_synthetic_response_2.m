@@ -18,13 +18,13 @@ cmplx_data_response = loadfersHDF5_cmplx(hdf5_file_name_response);
 %%
 dab_mode = load_dab_rad_constants(6);
 %runtime of simulation (seconds)
-run_time = 0.002;
+run_time = 0.003;
 %sampling frequency
 fs = 2.048e9;
 %window skip (time steos)
 win_skip = dab_mode.Ts*(dab_mode.L-1)+dab_mode.Tnull;
 %pulse repetition frequency
-prf = 70000;
+prf = 40000;
 %the dab mode used
     
 
@@ -84,11 +84,17 @@ range_response = fftshift(fft(range_response,[],1),1);
 
 range_response = range_response/max(range_response,[], 'all');
 
+
+fast_time = size(range_response,2);
+slow_time = size(range_response,1);
+
 %range axis
-r_axis = (1:1:size(range_response,2))*(1/fs)*(3e8/(2*1000));
+r_axis = (1:1:fast_time)*(1/fs)*(3e8/(2*1000));
 
 %velocity axis
-v_axis = -1*flip((-size(range_response,1)/2:1:size(range_response,1)/2),2)*(prf/size(range_response,1))*(1/fs)*(3e8/2);
+%SIMPLIFY THIS AXIS
+
+v_axis = (-slow_time/2:1:slow_time/2)*(prf/slow_time)*(1/fs)*(3e8/2);
 
 %plotting
 imagesc(r_axis , v_axis  ,10*log10(abs(range_response)))
