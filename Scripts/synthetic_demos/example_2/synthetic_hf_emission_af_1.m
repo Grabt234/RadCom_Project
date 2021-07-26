@@ -7,16 +7,15 @@
 close all
 
 %file name
-hdf5_file_name_emission = "synthetic_hf_emission.h5"
-hdf5_file_name_response = "synthetic_hf_response.h5"
+hdf5_file_name_emission = "emission_8.h5"
+hdf5_file_name_response = "response_2.h5"
 
 
 %reading data from hdf5
 cmplx_data_emission = loadfersHDF5_iq(hdf5_file_name_emission);
-cmplx_data_response = loadfersHDF5_cmplx(hdf5_file_name_response);
-
+cmplx_data_emission = awgn (cmplx_data_emission,25);
 %%
-dab_mode = load_dab_rad_constants(4);
+dab_mode = load_dab_rad_constants(8);
 %runtime of simulation (seconds)
 run_time = 0.005;
 %sampling frequency
@@ -37,7 +36,7 @@ sig_length = length(cmplx_data_emission);
 L = dab_mode.L;
 Ts = dab_mode.Ts;
 
-ambiguity_function_V4_2(cmplx_data_emission,T,f0,sig_length,1,1000,L,Ts)
+ambiguity_function_V4_2(cmplx_data_emission,T,f0,sig_length,1,100,L,Ts)
 
 
 %%
