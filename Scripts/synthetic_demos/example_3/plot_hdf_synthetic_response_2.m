@@ -16,7 +16,7 @@ cmplx_data_emission = loadfersHDF5_iq(hdf5_file_name_emission);
 cmplx_data_response = loadfersHDF5_cmplx(hdf5_file_name_response);
 
 %%
-dab_mode = load_dab_rad_constants(6);
+dab_mode = load_dab_rad_constants(7);
 %runtime of simulation (seconds)
 run_time = 0.003;
 %sampling frequency
