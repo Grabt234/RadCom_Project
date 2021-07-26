@@ -91,7 +91,7 @@ function dab_mode = load_dab_rad_constants(transmission_mode)
         dab_mode.Tf        = (dab_mode.Tp + dab_mode.T_intra)*dab_mode.p_intra;
     elseif (transmission_mode == 7)
         %no defined fc
-        dab_mode.K         = 30;
+        dab_mode.K         = 40;
         dab_mode.L         = 2;
         dab_mode.Tnull     = 2552;
         dab_mode.Tu        = 2048;
@@ -100,8 +100,36 @@ function dab_mode = load_dab_rad_constants(transmission_mode)
         dab_mode.Tp        = dab_mode.Tnull + (dab_mode.L)*dab_mode.Ts;
         dab_mode.mask      = [ (dab_mode.Tu/2-dab_mode.K/2 +1):(dab_mode.Tu/2), ...
                                         (dab_mode.Tu/2+2):(dab_mode.Tu/2+dab_mode.K/2 +1) ];
-        dab_mode.p_intra   = 2;
-        dab_mode.T_intra   = dab_mode.Tp;
+        dab_mode.p_intra   = 1;
+        dab_mode.T_intra   = 0;
+        dab_mode.Tf        = (dab_mode.Tp + dab_mode.T_intra)*dab_mode.p_intra;
+    elseif (transmission_mode == 8)
+        %no defined fc
+        dab_mode.K         = 40*2;
+        dab_mode.L         = 2;
+        dab_mode.Tnull     = 2552*2;
+        dab_mode.Tu        = 2048*2;
+        dab_mode.Tg        = 504*2;
+        dab_mode.Ts        = dab_mode.Tu + dab_mode.Tg;
+        dab_mode.Tp        = dab_mode.Tnull + (dab_mode.L)*dab_mode.Ts;
+        dab_mode.mask      = [ (dab_mode.Tu/2-dab_mode.K/2 +1):(dab_mode.Tu/2), ...
+                                        (dab_mode.Tu/2+2):(dab_mode.Tu/2+dab_mode.K/2 +1) ];
+        dab_mode.p_intra   = 1;
+        dab_mode.T_intra   = 0;
+        dab_mode.Tf        = (dab_mode.Tp + dab_mode.T_intra)*dab_mode.p_intra;
+    elseif (transmission_mode == 9)
+        %no defined fc
+        dab_mode.K         = 10;
+        dab_mode.L         = 2;
+        dab_mode.Tnull     = 2552;
+        dab_mode.Tu        = 2048;
+        dab_mode.Tg        = 504;
+        dab_mode.Ts        = dab_mode.Tu + dab_mode.Tg;
+        dab_mode.Tp        = dab_mode.Tnull + (dab_mode.L)*dab_mode.Ts;
+        dab_mode.mask      = [ (dab_mode.Tu/2-dab_mode.K/2 +1):(dab_mode.Tu/2), ...
+                                        (dab_mode.Tu/2+2):(dab_mode.Tu/2+dab_mode.K/2 +1) ];
+        dab_mode.p_intra   = 1;
+        dab_mode.T_intra   = 0;
         dab_mode.Tf        = (dab_mode.Tp + dab_mode.T_intra)*dab_mode.p_intra;
     else
         fprintf("Transmission Mode %d is either invalid or has not yet been implemented.\n", ...
