@@ -58,7 +58,7 @@ function X = ambiguity_function_V4(S,T,osf, tot_time, prf)
   %taking magnitude and normalizing
   X = abs(X);
   X = normalize_matrix(X);
-  %X = 10*log(X);
+  X = 10*log10(X);
 
   %rescaling axes to standard AF axes
   delay_axis = delay_axis/length(S);
@@ -66,9 +66,9 @@ function X = ambiguity_function_V4(S,T,osf, tot_time, prf)
   
   %plotting
   figure;
-  n = size(delay_axis)
+  n = size(delay_axis);
   m = size(doppler_axis);
-  o = size(X)
+  o = size(X);
   AF = surf((delay_axis),doppler_axis,X);
   AF.EdgeColor = 'none';
   grid off

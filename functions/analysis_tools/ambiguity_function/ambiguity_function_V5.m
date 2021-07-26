@@ -59,7 +59,7 @@ function X = ambiguity_function_V5(S,T,osf, tot_time, prf, prf_multiple, prt_bou
   %taking magnitude and normalizing
   X = abs(X);
   X = normalize_matrix(X);
-  X = 10*log(X);
+  X = 10*log10(X);
 
   %rescaling axes to standard AF axes
   delay_axis = delay_axis/length(S);

@@ -61,7 +61,7 @@ function X = ambiguity_function_V4_2(S,T, fc, pulse_length, ...
   %taking magnitude and normalizing
   X = abs(X);
   X = normalize_matrix(X);
-  X = 10*log(X);
+  X = 10*log10(X);
     
   %shifting delay axis to center around zero
   %removing zero padding as well
