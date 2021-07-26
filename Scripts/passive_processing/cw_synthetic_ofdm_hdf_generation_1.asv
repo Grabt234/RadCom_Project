@@ -51,7 +51,7 @@ dab_mode = load_dab_rad_constants(3);
 
 %symbols
 L = dab_mode.L;
-L_0 = L;
+L_0 = L+1;
 %carriers no center
 K = dab_mode.K ;    
 %carriers incl. center
@@ -68,6 +68,10 @@ T_intra = dab_mode.T_intra;
 %% ENCODING BITS
 % 
 [F, A_pulses] = bits_to_phase_cube(bits,n,dab_mode);
+A_pulses = A_pulses(:,2:end,:);
+
+%for a cw case removing the null sysmbol
+A_pulses = ones(size(A_pulses,1),size(A_pulses,2),size(A_pulses,3));
 
 %Frequency weights ()
 W_cube = ones(L_0,K_0,F);
@@ -103,4 +107,19 @@ create_hdf5(output_file_name,S);
 
 
 
-% 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

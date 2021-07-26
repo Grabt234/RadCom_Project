@@ -53,10 +53,10 @@ function [F,A_pulses] = bits_to_phase_cube(bits, n, dab_mode)
     A_pulses = symbols_to_A_pulses(L_encode,dab_mode);    
     
     %% QPSK, CENTRAL CARRIER AND NULL
-    
+
     %each pulse must begin with a null symbol
     A_pulses = add_null(A_pulses);
-    
+
     %inserting CENTRAL off carrier 
     A_pulses = insert_central_carrier(A_pulses,dab_mode);
 
