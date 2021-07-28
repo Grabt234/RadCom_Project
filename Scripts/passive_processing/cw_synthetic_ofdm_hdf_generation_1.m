@@ -25,24 +25,17 @@
 
 %% WAVEFORM PARAMETERS
 n = 2;
-%bits =  '10101010101010101011010101010101010101101010101010101010110101010101010101011010101010101010101';
-%bits = '0000000000000000000000000000000000000000';
-%bits =  '111111111111111111111111111111111111111';
-%bits =  '111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111';
-%bits = '101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010'
-%bits =   '1010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010'
-%bits = '101010101010101010101010101010101010100010001010101011111110101010101011000110101010101010111111101010101010110001101010101010110010111010000101100101110100010101010';
 
-output_file_name = "output_file_name";
+output_file_name = "base_emission";
 
-onez = 100;
-zeroz = 100;
+onez = 380;
+zeroz = 380;
 bits = [ones(1,onez), zeros(1,zeroz)];
 bits = bits(randperm(numel(bits)));
 bits = num2str(bits,'%i');
 
 
-f0 = 2.048*10^9;
+f0 = 2.048e6;
 T = 1/f0;
 
 dab_mode = load_dab_rad_constants(3);
@@ -54,7 +47,7 @@ L = dab_mode.L;
 L_0 = L;
 %carriers no center
 K = dab_mode.K ;    
-%carriers incl. center
+%carriers incl. centerf0
 K_0 = dab_mode.K + 1;
 %integration period
 Tu = dab_mode.Tu;
@@ -68,6 +61,9 @@ T_intra = dab_mode.T_intra;
 %% ENCODING BITS
 % 
 [F, A_pulses] = bits_to_phase_cube(bits,n,dab_mode);
+
+%removing null symbol to make a CW wave
+A_pulses = A_pulses(:,2:end,:);
 
 %Frequency weights ()
 W_cube = ones(L_0,K_0,F);
@@ -96,11 +92,25 @@ S = S(:)';
 
 figure
 plot(1:1:length(S), S)
-% 
-% % WRITTING TO FILES
-% 
+ 
+%% WRITTING TO FILES
+
 create_hdf5(output_file_name,S);
+%cw emission
+cw = repmat(S,1,100);
+
+create_hdf5("cw_emission",cw);
 
 
 
-% 
+
+
+
+
+
+
+
+
+
+
+

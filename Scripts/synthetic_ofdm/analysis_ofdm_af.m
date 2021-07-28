@@ -23,14 +23,14 @@
 %================================================
 % Definitions
 %================================================
-f0 = 100*10^6;
+f0 = 2.048*10^5;
 T = 1/f0;
 
 a = 50;
 b = 10;
 d = 0;
 
-N = 4; %must be even
+N = 10; %must be even
 N_0 = N+1; % including 0th subcarrier
 L = 7;
 Ts  = a*T;
@@ -72,13 +72,13 @@ A_cube = ones(L,N_0,F);
 symbol_time = linspace(T,Ts,a*osf);
 
 %generating all envelopes of frames
-S = gen_all_frames(symbol_time, F, L, Tu, Ts, Tg, N,W_cube,A_cube);
+S = gen_all_pulses(symbol_time, F, L, Tu, Ts, Tg, N,W_cube,A_cube);
 
 %interframe time
 tif_time = linspace(T,Tif,d*osf);
 
 %adding in interframe time periods
-S = insert_inter_frame_time(S, F, tif_time);
+S = insert_inter_pulse_time(S, F, tif_time);
 
 %converting rows to columns
 S = S';
@@ -136,7 +136,7 @@ prf = 1/prt;
 %================================================
 L = 1:length(S);
 plot(L,S)
-ambiguity_function_V4(S, T, osf, tot_time,prf)
+% ambiguity_function_V4(S, T, osf, tot_time,prf)
 
 
 clear
