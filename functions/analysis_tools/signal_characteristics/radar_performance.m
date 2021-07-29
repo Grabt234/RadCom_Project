@@ -33,10 +33,7 @@ function radar_performance(mode, T)
   
     range_resolution = 3e8/(2*band_width)
     
-    frame_time = dab_mode.Tf*T
-    
-    
-    
+    frame_time = dab_mode.Tf*T    
     
     
 end

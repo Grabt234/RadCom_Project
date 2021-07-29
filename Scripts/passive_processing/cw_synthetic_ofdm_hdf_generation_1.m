@@ -28,14 +28,14 @@ n = 2;
 
 output_file_name = "base_emission";
 
-onez = 380;
-zeroz = 380;
+onez = (dab_mode.L*dab_mode.p_intra*dab_mode.K-dab_mode.K);
+zeroz = (dab_mode.L*dab_mode.p_intra*dab_mode.K-dab_mode.K);
 bits = [ones(1,onez), zeros(1,zeroz)];
 bits = bits(randperm(numel(bits)));
 bits = num2str(bits,'%i');
 
 
-f0 = 2.048e6;
+f0 = 2.048e9;
 T = 1/f0;
 
 dab_mode = load_dab_rad_constants(3);
