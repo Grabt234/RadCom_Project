@@ -1,5 +1,5 @@
 function X = ambiguity_function_V4_2(S,T, fc, pulse_length, ...
-                                        pad_multiplier, doppler_bound,L,tb)
+                                        pad_multiplier, doppler_bound)
 
 
     % ---------------------------------------------------------------------    
@@ -36,10 +36,6 @@ function X = ambiguity_function_V4_2(S,T, fc, pulse_length, ...
   delay_samples = (delay_upper_bound-delay_lower_bound);
   delay_axis = linspace(delay_lower_bound, delay_upper_bound, delay_samples);
   
-
-   %resolution to be used later
-   f_res = (1/(T))/(length(S));
-  
   doppler_upper_bound = doppler_bound;
   doppler_lower_bound = -doppler_upper_bound;  
   doppler_axis = linspace(doppler_lower_bound, doppler_upper_bound,2*doppler_upper_bound+1);
@@ -61,7 +57,7 @@ function X = ambiguity_function_V4_2(S,T, fc, pulse_length, ...
   %taking magnitude and normalizing
   X = abs(X);
   X = normalize_matrix(X);
-  X = 10*log10(X);
+  %X = 10*log10(X);
     
   %shifting delay axis to center around zero
   %removing zero padding as well
@@ -70,22 +66,26 @@ function X = ambiguity_function_V4_2(S,T, fc, pulse_length, ...
   %cutting negative delay
   delay_axis = delay_axis(length(delay_axis)/2:end-original_length*pad_multiplier/2)-1;
   
+   %resolution of fft
+   f_res = (1/(T*length(S)));
+
   %rescaling axes to standard AF axes
-  delay_axis = delay_axis*T/tb;
+  delay_axis = delay_axis*f_res/1000;
   
   %removing negative delay from AF
   X = X(:,length(X)/2:end-original_length*pad_multiplier/2);
   
   % rescaling doppler axis from discrete shifts to VT
-  doppler_axis = (L*tb)*doppler_axis*(f_res*3e8/(2*fc));
+  doppler_axis = doppler_axis*(f_res*3e8/(2*fc));
   
   %plotting
+  %imagesc((delay_axis),doppler_axis,X)
   AF = surf((delay_axis),doppler_axis,X);
   AF.EdgeColor = 'none';
   grid off
-  
+   
   %Labeling figure
-  xlabel('{\tau}/{t_{b}}') 
-  ylabel('vMt_{b}')
+  xlabel('Km') 
+  ylabel('KHz')
   
 end
