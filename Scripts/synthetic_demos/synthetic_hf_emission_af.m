@@ -77,7 +77,7 @@ end
 % mesh(20*log10(abs(AFmatrix./max(max(AFmatrix))))) % Plot whole spectrum
 colorbar
 colormap hsv
-title(name)
+
 ylabel('Doppler [Hz]')
 xlabel('Time [ms]')
 zlabel('Power [dB]')

@@ -1,7 +1,5 @@
 % ---------------------------------------------------------------------    
-% FERS SIM
-% TARGET RANGE: 
-% VELOCITY:    
+% DAB_MODE  7
 % ---------------------------------------------------------------------  
 
 close all
@@ -18,13 +16,14 @@ cmplx_data_response = loadfersHDF5_cmplx(hdf5_file_name_response);
 %%
 dab_mode = load_dab_rad_constants(7);
 %runtime of simulation (seconds)
-run_time = 0.005;
+run_time = 0.002;
 %sampling frequency
 fs = 2.048e9;
-%window skip (time steos)
-win_skip = dab_mode.Ts*(dab_mode.L-1)+dab_mode.Tnull;
+fc = 2.048e9;
+%window skip (time steos), no null in ths mode
+win_skip = dab_mode.Tf;
 %pulse repetition frequency
-prf = 100000;
+prf = 25000;
 %the dab mode used
     
 
@@ -89,7 +88,7 @@ fast_time = size(range_response,2);
 slow_time = size(range_response,1);
 
 %range axis
-r_axis = (1:1:fast_time)*(1/fs)*(3e8/(2*1000));
+r_axis = (1:1:fast_time)*(1/fc)*(3e8/(2*1000));
 
 %velocity axis
 %SIMPLIFY THIS AXIS
