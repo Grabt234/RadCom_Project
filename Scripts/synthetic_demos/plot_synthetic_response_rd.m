@@ -5,8 +5,8 @@
 close all
 
 %file name
-hdf5_file_name_emission = "sym_emission.h5"
-hdf5_file_name_response = "sym_response.h5"
+hdf5_file_name_emission = "_emission.h5"
+hdf5_file_name_response = "_response.h5"
 
 
 %reading data from hdf5
@@ -16,7 +16,7 @@ cmplx_data_response = loadfersHDF5_cmplx(hdf5_file_name_response);
 %%
 dab_mode = load_dab_rad_constants(7);
 %runtime of simulation (seconds)
-run_time = 0.002;
+run_time = 0.02;
 %sampling frequency
 fs = 2.048e9;
 fc = 2.048e9;

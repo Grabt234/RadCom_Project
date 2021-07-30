@@ -30,8 +30,7 @@ function dab_data_raw = dqpsk_demap_rad(dab_carriers, dab_mode)
         % e.g. for mode 1, only the 1536 carriers, not all 2048 bins
         dab_data_raw(l-1,dab_mode.mask) = dab_carriers(l,dab_mode.mask) ...
                                         ./ dab_carriers(l-1,dab_mode.mask);
-                                    
-        dab_carriers(l,dab_mode.mask)./ dab_carriers(l-1,dab_mode.mask)
+                                
     end
 
 end

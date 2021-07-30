@@ -3,17 +3,17 @@
 % running iq data that was synthetically though (hopefully generalised) 
 % DAB processing chain
 %
-%encoded bits = 00101111000011101010100100000100001110010011110110111111101000011000010110101101
+%encoded bits = 11001011000100011001111111100011110100101011111100001000010100100001010010011011
+           
 %=================================
 
 %% LOADING IN INFORMATION
 
-hdf5_file_name = "emission.h5"
-iq_data = loadfersHDF5_iq(hdf5_file_name);
+hdf5_file_name = "_response.h5"
+iq_data = loadfersHDF5_cmplx(hdf5_file_name);
 
 dab_mode = load_dab_rad_constants(7);
 
-iq_data = [zeros(1,5000) iq_data zeros(1,5000)]
 f0 = 2.048*10^9;
 
 %bits per per code
@@ -29,7 +29,7 @@ title("RECEIVED SIGNAL")
 
 prs = build_prs_custom(dab_mode);
 
-frame_count_max = 10;
+frame_count_max = 3;
 dab_frames = zeros(frame_count_max, dab_mode.Tf);
 %frames currently extracted
 frame_count = 0;
@@ -121,11 +121,13 @@ for dd = 2:size(dab_data,1)
     
 end
 
-mapper = define_inverse_alphabet_map(2);
+
 
 phase_codes = round(wrapTo360(rad2deg(angle(phase_codes))));
 
 transmitted_bits = '';
+
+mapper = define_inverse_alphabet_map(2);
 
 for z = 1:numel(phase_codes)
     

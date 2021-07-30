@@ -33,7 +33,14 @@ function L_encode = convert_vector_symbols(A,dab_mode)
     %% SPLITTING INTO INDEPENDANT SYMBOLS
     
     %does not include null symbol or prs
-    L_encode = reshape(A,[],K);
+    L_encode = zeros(n,K);
+
+    for i = 1:n
+    
+        L_encode(i,:) = A(1:K);
+        A = A(K:end);
+        
+    end
     
 end
 
