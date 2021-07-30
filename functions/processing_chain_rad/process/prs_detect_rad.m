@@ -31,8 +31,8 @@ function prs_idx = prs_detect_rad(iq_data, prs, dab_mode)
         % Bring back to time
         mf_out = abs(ifft(MF_out));
         % Find max value of mf_out
-        [peak_val,peak_idx] = max(mf_out);
-        
+        [peak_val,peak_idx] = max(mf_out)   
+        mean(abs(mf_out))
         % Check if a peak truly exists by comparing the max to the mean
         % AND if it is in the first half of the window
         if ( (peak_val > 5*mean(abs(mf_out))) && (peak_idx < dab_mode.Tu/2) )

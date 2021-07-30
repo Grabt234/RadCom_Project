@@ -5,8 +5,8 @@
 close all
 
 %file name
-hdf5_file_name_emission = "__emission.h5"
-hdf5_file_name_response = "__response.h5"
+hdf5_file_name_emission = "sym_emission.h5"
+hdf5_file_name_response = "sym_response.h5"
 
 
 %reading data from hdf5

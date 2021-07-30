@@ -25,29 +25,34 @@
 
 %% WAVEFORM PARAMETERS
 n = 2;
-
-output_file_name = "emission";
+%bits =  '10101010101010101011010101010101010101101010101010101010110101010101010101011010101010101010101';
+%bits = '0000000000000000000000000000000000000000';
+%bits =  '111111111111111111111111111111111111111';
+%bits =  '111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111';
+%bits = '101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010'
+%bits =   '1010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010'
+%bits = '101010101010101010101010101010101010100010001010101011111110101010101011000110101010101010111111101010101010110001101010101010110010111010000101100101110100010101010';
 
 onez = (dab_mode.L*dab_mode.p_intra*dab_mode.K-dab_mode.K);
 zeroz = (dab_mode.L*dab_mode.p_intra*dab_mode.K-dab_mode.K);
 bits = [ones(1,onez), zeros(1,zeroz)];
 bits = bits(randperm(numel(bits)));
-bits = num2str(bits,'%i');
+bits = num2str(bits,'%i')
 
-
-f0 = 2.048e9;
+f0 = 2.048*10^6;
 T = 1/f0;
 
-dab_mode = load_dab_rad_constants(3);
+%CHOOSE NEW CONSTANT
+dab_mode = load_dab_rad_constants(7);
 
 %% EXTRACTING DAB_CONSTANTS
 
 %symbols
 L = dab_mode.L;
-L_0 = L;
+L_0 = L ;
 %carriers no center
 K = dab_mode.K ;    
-%carriers incl. centerf0
+%carriers incl. center
 K_0 = dab_mode.K + 1;
 %integration period
 Tu = dab_mode.Tu;
@@ -62,7 +67,7 @@ T_intra = dab_mode.T_intra;
 % 
 [F, A_pulses] = bits_to_phase_cube(bits,n,dab_mode);
 
-%removing null symbol to make a CW wave
+%removing null o make basic pulse wave
 A_pulses = A_pulses(:,2:end,:);
 
 %Frequency weights ()
@@ -73,15 +78,16 @@ W_cube = rescale_cube_to_unity_weights(W_cube,F);
 
 % %time per symbol
 symbol_time = linspace(T,Ts,Ts);
-size(symbol_time)
+
 %generating all envelopes of frames
 S = gen_all_pulses(symbol_time, F, L_0, Tu, Ts, Tg, K,W_cube,A_pulses);
 
 %interframe time
 tif_time = linspace(T,T_intra,T_intra);
-size(tif_time)
+
 %adding in interframe time periods
 S = insert_inter_frame_time(S, F, tif_time);
+
 
 %% PLOTTING
     
@@ -90,12 +96,16 @@ S = S';
 %stacking all columns the transposing
 S = S(:)';
 
-figure
 plot(1:1:length(S), S)
- 
-%% WRITTING TO FILES
+% 
+% % WRITTING TO FILES
+% 
 
-create_hdf5(output_file_name,S);
+create_hdf5('emission',S);
+
+
+
+
 
 
 

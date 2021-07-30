@@ -2,7 +2,7 @@
 %% Plot the ambiguity function of any arbitrary waveform
 
 %file name
-hdf5_file_name_emission = "__emission.h5"
+hdf5_file_name_emission = "syn_emission.h5"
 
 %reading data from hdf5
 cmplx_data_emission = loadfersHDF5_iq(hdf5_file_name_emission);
