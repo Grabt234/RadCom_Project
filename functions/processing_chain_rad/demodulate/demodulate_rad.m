@@ -25,11 +25,11 @@ function [dab_data, dab_carriers] = demodulate_rad(dab_frame, dab_mode)
     dab_carriers = ofdm_demux(dab_symbols);    
     
     %% DQPSK DEMAP 
-    dab_data_raw = dqpsk_demap_rad(dab_carriers, dab_mode);   
+    dab_data_raw = dqpsk_demap_rad(dab_carriers, dab_mode);
 
     %% FREQ DEINTERLEAVE   (Not yet correctly implemented)
-%     map = build_interleave_map();
-%     dab_data_deinterleaved = freq_deinterleave(dab_data_raw, map);
+%   map = build_interleave_map();
+%   dab_data_deinterleaved = freq_deinterleave(dab_data_raw, map);
     dab_data_deinterleaved = dab_data_raw; 
     
     %% DQPSK SNAP

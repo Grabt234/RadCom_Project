@@ -26,7 +26,7 @@
 %% WAVEFORM PARAMETERS
 n = 2;
 
-output_file_name = "emission";
+output_file_name = "cw_emission";
 
 onez = (dab_mode.L*dab_mode.p_intra*dab_mode.K-dab_mode.K);
 zeroz = (dab_mode.L*dab_mode.p_intra*dab_mode.K-dab_mode.K);

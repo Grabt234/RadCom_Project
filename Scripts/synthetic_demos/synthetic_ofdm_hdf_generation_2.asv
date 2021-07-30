@@ -84,6 +84,8 @@ T_intra = dab_mode.T_intra;
 % 
 [F, A_pulses] = bits_to_phase_cube(bits,n,dab_mode);
 
+A_pulses(1,:,)./A_pulses(1,:,1)
+
 %removing null o make basic pulse wave
 A_pulses = A_pulses(:,2:end,:);
 

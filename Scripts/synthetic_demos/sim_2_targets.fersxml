@@ -5,7 +5,7 @@
 <simulation name="sim_mono">
   <parameters>
     <starttime>0</starttime>
-    <endtime>0.005</endtime>
+    <endtime>0.02</endtime>
     <rate>2.048e9</rate>
     <export binary="true" csvbinary="false" xml="false"/>
   </parameters>

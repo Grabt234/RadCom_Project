@@ -2,15 +2,18 @@
 %=================================
 % running iq data that was synthetically though (hopefully generalised) 
 % DAB processing chain
+%
+%encoded bits = 00101111000011101010100100000100001110010011110110111111101000011000010110101101
 %=================================
 
 %% LOADING IN INFORMATION
 
-hdf5_file_name = "sym_response.h5"
-iq_data = loadfersHDF5_cmplx(hdf5_file_name);
+hdf5_file_name = "emission.h5"
+iq_data = loadfersHDF5_iq(hdf5_file_name);
 
-dab_mode = load_dab_rad_constants(9);
+dab_mode = load_dab_rad_constants(7);
 
+iq_data = [zeros(1,5000) iq_data zeros(1,5000)]
 f0 = 2.048*10^9;
 
 %bits per per code
@@ -26,7 +29,7 @@ title("RECEIVED SIGNAL")
 
 prs = build_prs_custom(dab_mode);
 
-frame_count_max = 2;
+frame_count_max = 10;
 dab_frames = zeros(frame_count_max, dab_mode.Tf);
 %frames currently extracted
 frame_count = 0;
@@ -74,37 +77,39 @@ subplot(2,2,2)
 plot(1:1:length(dab_frame), dab_frame)
 title("SINGLE FRAME")
 
-%%  PULSE EXTRACTION
-% ONLY MAKES A DIFFERENCES WHEN FRAME HAS INTRA PULSE TIMES
+% %%  PULSE EXTRACTION
+% % ONLY MAKES A DIFFERENCES WHEN FRAME HAS INTRA PULSE TIMES
+% 
+% %preallocating memory for pulses
+% dab_pulses = zeros(dab_mode.p_intra, dab_mode.Tp);
+% 
+% %+1 accounts for the array pos starting at 1
+% pulse_idx = dab_mode.T_intra+1;
+% 
+% %iterating through every pulse WITHIN A COHERENT FRAME
+% for pulse = 1:dab_mode.p_intra
+%     
+%     dab_pulses(pulse,:) = dab_frame(1,pulse_idx :(pulse_idx+dab_mode.Tp-1));
+%     
+%     pulse_idx =  pulse_idx + dab_mode.Tp + dab_mode.T_intra;
+% 
+% end
 
-%preallocating memory for pulses
-dab_pulses = zeros(dab_mode.p_intra, dab_mode.Tp);
+%%
 
-%+1 accounts for the array pos starting at 1
-pulse_idx = dab_mode.T_intra+1;
-
-%iterating through every pulse WITHIN A COHERENT FRAME
-for pulse = 1:dab_mode.p_intra
-    
-    dab_pulses(pulse,:) = dab_frame(1,pulse_idx :(pulse_idx+dab_mode.Tp-1));
-    
-    pulse_idx =  pulse_idx + dab_mode.Tp + dab_mode.T_intra;
-
-end
-
-%% CONCATNATING 2+ PULSES
-
-concatnated_pulses = dab_pulses(1,:);
-
-for pulse = 2:dab_mode.p_intra
-      
-   concatnated_pulses = [concatnated_pulses dab_pulses(pulse,1+dab_mode.Tnull:end)];
-
-end
+% %% CONCATNATING 2+ PULSES
+% 
+% concatnated_pulses = dab_pulses(1,:);
+% 
+% for pulse = 2:dab_mode.p_intra
+%       
+%    concatnated_pulses = [concatnated_pulses dab_pulses(pulse,1+dab_mode.Tnull:end)];
+% 
+% end
 
 %% DEMODULATING CONCATNATED PULSES
 
-[dab_data, dab_carriers] = demodulate_rad(concatnated_pulses, dab_mode);
+[dab_data, dab_carriers] = demodulate_rad(dab_frame, dab_mode);
 
 %% CONVERTING PHASES TO BITS
 

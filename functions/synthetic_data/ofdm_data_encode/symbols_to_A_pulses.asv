@@ -27,9 +27,9 @@ function A_pulses = symbols_to_A_pulses(L_encode,dab_mode)
 
     for i = 1:size(L_encode,1)
         
-        pulse_number = ceil(i/dab_mode.L)
+        pulse_number = ceil(i/dab_mode.L);
         
-        symbol_number = i - (pulse_number-1)*(i/dab_mode.L)
+        symbol_number = i - pulse_number - (i/dab_mode.L)
         
         A_pulses(pulse_number, symbol_number, :) =  shiftdim(L_encode(i,:),1);
         
