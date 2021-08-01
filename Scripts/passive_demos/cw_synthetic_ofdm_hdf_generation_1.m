@@ -95,6 +95,9 @@ plot(1:1:length(S), S)
  
 %% WRITTING TO FILES
 
+p = path();
+path(p);
+
 create_hdf5(output_file_name,S);
 
 

@@ -1,5 +1,5 @@
 
-hinfo = hdf5info("cw_response.h5");
+hinfo = hdf5info('emission.h5');
 count = round(size(hinfo.GroupHierarchy.Datasets,2)/2);
 numelements = hinfo.GroupHierarchy.Datasets(1).Dims;
 
@@ -20,12 +20,16 @@ end
 
 cmpx_data = cmpx_data.';
    
+data = cmpx_data;
+for i = 1:10
+
+   data = [data cmpx_data];
    
-data = repmap(cmplx_data,1,500);
+end
 
 
 %file name
-file_name = "new" + ".h5";
+file_name = 'new' + .h5';
 
 I = real(data);
 Q = imag(data);
@@ -33,7 +37,12 @@ Q = imag(data);
 h5create(file_name,'/I/value',length(I));
 h5create(file_name,'/Q/value',length(Q));
 
+p = path();
+path(p);
+
 %writing hdf5 dataset
 h5write(file_name,'/I/value',I);
 h5write(file_name,'/Q/value',Q);
+
+
     
