@@ -115,9 +115,6 @@ end
 
 [dab_data, dab_carriers] = demodulate_rad(concatnated_pulses, dab_mode);
  
-% wrapTo360(rad2deg(angle(dab_data(1, dab_mode.mask))))
-% wrapTo360(rad2deg(angle(dab_data(2, dab_mode.mask))))
-%rad2deg(angle(dab_data(3, dab_mode.mask)))
 
 %% CONVERTING PHASES TO BITS
 

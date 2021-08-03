@@ -11,7 +11,7 @@ target_c_x = floor(target_size_x/2)+1;
 target_c_y = floor(target_size_y/2)+1;
 
 target_dis_x = floor(target_size_x/2);
-target_dis_y = floor(target_size_y/2);
+target_dis_y = floor(target_size_y/2);  
 
 target_response = ones(target_size_y,target_size_x);
 

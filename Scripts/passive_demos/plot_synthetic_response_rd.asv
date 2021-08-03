@@ -28,7 +28,7 @@ win_skip = 0;
 
 %to align 
 match_start = 1;
-match_end = 3*dab_mode.Ts;
+match_end = dab_mode.Tf;
 start_offset = match_end;
 
 cmplx_data_response = cmplx_data_response(start_offset+1:end);
