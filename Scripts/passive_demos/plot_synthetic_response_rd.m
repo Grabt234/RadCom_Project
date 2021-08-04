@@ -18,18 +18,18 @@ cmplx_data_response = loadfersHDF5_cmplx(hdf5_file_name_response);
 
 dab_mode = load_dab_rad_constants(3);
 %runtime of simulation (seconds)
-run_time = 0.1;
+run_time = 0.02;
 %sampling frequency
-fs = 2.048e7;
-fc = 2.45e9;
+fs = 2.048e9;
+fc = 2.4e9;
 %window skip (time steos), no null in ths mode
 win_skip = 0;
 
 
 %to align 
 match_start = 1;
-match_end = 3*dab_mode.Ts;
-start_offset = match_end;
+match_end = 5*dab_mode.Ts;
+start_offset = match_start+54000;
 
 cmplx_data_response = cmplx_data_response(start_offset+1:end);
 

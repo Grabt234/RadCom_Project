@@ -27,7 +27,7 @@
 n = 2;
 dab_mode = load_dab_rad_constants(3);
 
-output_file_name = "cw_emission";
+output_file_name = "cw_emission_5";
 
 onez = (dab_mode.L*dab_mode.p_intra*dab_mode.K-dab_mode.K);
 zeroz = (dab_mode.L*dab_mode.p_intra*dab_mode.K-dab_mode.K);
@@ -36,7 +36,7 @@ bits = bits(randperm(numel(bits)));
 bits = num2str(bits,'%i');
 
 
-f0 = 2.048e7;
+f0 = 2.048e9;
 T = 1/f0;
 
 
@@ -73,7 +73,7 @@ W_cube = rescale_cube_to_unity_weights(W_cube,F);
 %% GENERATING WAVEFORM
 
 % %time per symbol
-symbol_time = linspace(T,Ts,Ts);
+symbol_time = linspace(T,Ts,Ts);    
 size(symbol_time)
 %generating all envelopes of frames
 S = gen_all_pulses(symbol_time, F, L_0, Tu, Ts, Tg, K,W_cube,A_pulses);
@@ -100,6 +100,8 @@ p = path();
 path(p);
 
 create_hdf5(output_file_name,S);
+
+
 
 
 
