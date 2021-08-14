@@ -22,12 +22,11 @@
 %================================================
 %================================================t
 
-
 %% WAVEFORM PARAMETERS
 n = 2;
 dab_mode = load_dab_rad_constants(3);
 
-output_file_name = "cw_emission_5";
+output_file_name = "cw_emission";
 
 onez = (dab_mode.L*dab_mode.p_intra*dab_mode.K-dab_mode.K);
 zeroz = (dab_mode.L*dab_mode.p_intra*dab_mode.K-dab_mode.K);
@@ -36,7 +35,7 @@ bits = bits(randperm(numel(bits)));
 bits = num2str(bits,'%i');
 
 
-f0 = 2.048e9;
+f0 = 2.048e7;
 T = 1/f0;
 
 

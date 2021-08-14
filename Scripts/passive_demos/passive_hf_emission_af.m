@@ -2,7 +2,7 @@
 %% Plot the ambiguity function of any arbitrary waveform
 
 %file name
-hdf5_file_name_emission =  "cw_emission_5.h5"
+hdf5_file_name_emission =  "cw_emission.h5"
 
 %reading data from hdf5
 cmplx_data_emission = loadfersHDF5_iq(hdf5_file_name_emission);
@@ -10,7 +10,7 @@ cmplx_data_emission = loadfersHDF5_iq(hdf5_file_name_emission);
 %% Read in the output of the PXGF to HDF5 conversion.
 
 dab_mode = load_dab_rad_constants(3);
-a= cmplx_data_emission(dab_mode.Ts+1:2*dab_mode.Ts);
+a= cmplx_data_emission(dab_mode.Tg:3*dab_mode.Ts);
 Signal_ref = a;
 
 Signal_surv = a;
@@ -20,7 +20,7 @@ Signal = a;
 normalise = 0;
 
 % Determine the frequency bins
-fs_MHz = 2048; % Sampling frequency in MHz
+fs_MHz = 20.48; % Sampling frequency in MHz
 fc = 2.45e3; % Centre frequency in MHz
 T = fs_MHz/(max(size(Signal))-1); % Bin size
 bins = ((fc-fs_MHz/2):T:(fc+fs_MHz/2))'; % Vector containing each bin in frequency steps
