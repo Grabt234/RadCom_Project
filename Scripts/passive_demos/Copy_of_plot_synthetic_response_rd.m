@@ -20,19 +20,20 @@ cmplx_data_response = loadfersHDF5_iq(hdf5_file_name_response);
 
 dab_mode = load_dab_rad_constants(4);
 %runtime of simulation (seconds)
-run_time = 0.2;
+run_time = 0.05;
 %sampling frequency
 fs = 2.048e7;
 fc = 2.4e9;
-max_range = 20000 %meters
+max_range = 10000 %meters
 %window skip (time steos), no null in ths mode
 win_skip = 0;
 
 %to align 
-match_start = 1+dab_mode.Tg;
-match_end = 10*dab_mode.Ts;
-start_offset = match_start;
-match_length = match_end-match_start;
+%blanking is done automatically
+match_start_symbol = 1;
+match_end_symbol = 6;
+start_offset = (match_start_symbol)*dab_mode.Ts
+match_length = (match_end_symbol-match_start_symbol)*dab_mode.Ts
 
 
 cmplx_data_response = cmplx_data_response(start_offset:end);
@@ -72,10 +73,29 @@ plot((1:1:length(slow_time(1,:))),slow_time(1,:))
 title("SINGLE RECEIVED PULSE")
 
 %% MATCHING
- 
-%creating matched filter (there is a size mismatch)
-matched_filter = conj(fliplr(cmplx_data_emission(match_start:match_end)));
 
+matched_filter = cmplx_data_emission(1,match_start_symbol*dab_mode.Ts:match_end_symbol*dab_mode.Ts);
+
+symbols = match_end_symbol - match_start_symbol;
+
+for k = 1:symbols
+    
+    %selecting gaurd intervals
+    s = 1 + (k-1)*dab_mode.Ts
+    e = s+dab_mode.Tg -1
+    matched_filter(s:e) = 0;
+    
+end
+
+figure
+plot(1:1:length(matched_filter),matched_filter)
+figure
+%blanking guards
+matched_filter = conj(fliplr(matched_filter));
+length(matched_filter)
+%matched_filter = conj(fliplr(cmplx_data_emission(1,match_start:match_end)));
+
+%%
 %plottng matched response with prs from range bin
 prs_bin_response = abs(conv(matched_filter,squeeze(slow_time(1,:))));
 subplot(2,2,4)
