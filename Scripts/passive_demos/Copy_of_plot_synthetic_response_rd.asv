@@ -10,35 +10,39 @@ close all
 %file name
 hdf5_file_name_emission = "cw_emission.h5"
 hdf5_file_name_ref = "cw_response_surv.h5"
-hdf5_file_name_response = "can.h5"
+hdf5_file_name_response = "cw_response.h5"
 
 %reading data from hdf5
 RefData = loadfersHDF5_cmplx(hdf5_file_name_ref);
 cmplx_data_emission = loadfersHDF5_iq(hdf5_file_name_emission);
-cmplx_data_response = loadfersHDF5_iq(hdf5_file_name_response);
+cmplx_data_response = loadfersHDF5_cmplx(hdf5_file_name_response);
 
 
 dab_mode = load_dab_rad_constants(4);
 %runtime of simulation (seconds)
-run_time = 0.05;
+run_time = 0.2; %s
 %sampling frequency
-fs = 2.048e7;
-fc = 2.4e9;
+fs = 2.048e7; %hz
+%carrier frequency
+fc = 2.4e9; %hz       
 max_range = 10000 %meters
 %window skip (time steos), no null in ths mode
 win_skip = 0;
+%PRF - (time to repeat cw)
+prf = floor(1/(dab_mode.Tf*1/fs));
 
-%to align 
+%matched filter size
 %blanking is done automatically
-match_start = 1*dab_mode.Ts;
-match_end = 4*dab_mode.Ts;
-start_offset = match_start;
-match_length = match_end-match_start;
+match_start_symbol = 1;
+match_end_symbol = 4;
 
+%aligns signals - removes range offset from matched filter offset start 
+start_offset = (match_start_symbol)*dab_mode.Ts
+match_length = (match_end_symbol-match_start_symbol)*dab_mode.Ts
 
 cmplx_data_response = cmplx_data_response(start_offset:end);
 
-prf = floor(1/(dab_mode.Tf*1/fs));
+
 
 c =299792458;
 
@@ -52,7 +56,6 @@ title("PLOT SHOWING RECEIVED PULSE TRAIN")
 %% CUTTING INTO SLOW TIME SAMPLES
     
 %preallocating memory
-
 slow_time = zeros(floor(run_time*prf), floor((1/prf)*fs));
 
 i=0;
@@ -74,13 +77,36 @@ title("SINGLE RECEIVED PULSE")
 
 %% MATCHING
 
-matched_filter = cmplx_data_emission(1,match_start:match_end);
+%preallocating memory
+matched_filter = cmplx_data_emission(1,match_start_symbol*dab_mode.Ts:match_end_symbol*dab_mode.Ts);
 
-%blanking guards
-mached_filter()
-matched_filter = conj(fliplr(cmplx_data_emission(1,match_start:match_end)));
+%total number of symbols in filter
+symbols = match_end_symbol - match_start_symbol;
 
-%%
+%blanking guard interval
+for k = 1:symbols
+    
+    %start and end index for guard interval
+    s = 1 + (k-1)*dab_mode.Ts
+    e = s+dab_mode.Tg -1
+    %blanking
+    matched_filter(s:e) = 0;
+    
+end
+
+%flipping and taking conjugate
+%now have filter
+matched_filter = conj(fliplr(matched_filter));
+
+%matched_filter = conj(fliplr(cmplx_data_emission(1,match_start:match_end)));
+
+%plotting filter
+subplot(2,2,3)
+plot(1:1:length(matched_filter),matched_filter)
+title("Matched Filter")
+
+%% SLOW TIME - FILTER CONVOLUTION
+
 %plottng matched response with prs from range bin
 prs_bin_response = abs(conv(matched_filter,squeeze(slow_time(1,:))));
 subplot(2,2,4)
@@ -94,36 +120,34 @@ for j = 1:i
     
     range_response(j,:) = conv(matched_filter,slow_time(j,:));
     disp(j/i);
+    
 end
 
-%% FFT'ING
+%% FFT'ING ALONG COLUMNS
 
 range_response = fftshift(fft(range_response,[],1),1);
 
 range_response = range_response/max(range_response,[], 'all');
 
 %% CUTTING
-%removing "lead up due to matched filter"
-range_response = range_response(:,match_length:end);
 
 %limiting plot to max range
 max_index = ceil(max_range*2*fs/c);
 range_response = range_response(:,1:max_index);
 
-%% plotting
+%% PLOTTING RANGE DOPPLER
 
+%axes sizes
 fast_time = size(range_response,2);
 slow_time = size(range_response,1);
 
-%range axis
+%range axis scaling
 r_axis = (1:1:fast_time)*(1/fs)*(c/(2*1000));
 
 %velocity axis
-%SIMPLIFY THIS AXIS
-
 v_axis = ((-slow_time/2:1:slow_time/2))*(prf/slow_time)*(1/fc)*(c/2);
 
-%plotting
+%plotting image
 figure
 imagesc(r_axis , v_axis  ,(abs(range_response)))
 xlabel("Range (Km)")
