@@ -24,7 +24,7 @@
 
 %% WAVEFORM PARAMETERS
 n = 2;
-dab_mode = load_dab_rad_constants(3);
+dab_mode = load_dab_rad_constants(4);
 
 output_file_name = "cw_emission";
 

@@ -24,15 +24,16 @@ run_time = 0.2;
 %sampling frequency
 fs = 2.048e7;
 fc = 2.4e9;
-max_range = 20000 %meters
+max_range = 10000 %meters
 %window skip (time steos), no null in ths mode
 win_skip = 0;
 
 %to align 
 match_start = 1+dab_mode.Tg;
-match_end = 10*dab_mode.Ts;
+match_end = 1*dab_mode.Ts;
 start_offset = match_start;
 match_length = match_end-match_start;
+matched_symbols = 1;
 
 
 cmplx_data_response = cmplx_data_response(start_offset:end);
@@ -72,7 +73,16 @@ plot((1:1:length(slow_time(1,:))),slow_time(1,:))
 title("SINGLE RECEIVED PULSE")
 
 %% MATCHING
- 
+
+matched_filter = zeroes(1, matched_symbols*dab_mode.Tu);
+
+for i = 1:matched_symbols
+    
+    start_cut = 1 + dab_mode.Tg + (i-1)*dab_mode.Tu;
+    end_cut = 1 + dab_mode.Tg + (i-1)*dab_mode.Tu;
+    matched(1, )
+end
+
 %creating matched filter (there is a size mismatch)
 matched_filter = conj(fliplr(cmplx_data_emission(match_start:match_end)));
 

@@ -1,48 +1,22 @@
 
-hinfo = hdf5info('emission.h5');
-count = round(size(hinfo.GroupHierarchy.Datasets,2)/2);
-numelements = hinfo.GroupHierarchy.Datasets(1).Dims;
-
-I = zeros(numelements*count,1);
-Q = zeros(numelements*count,1);
-
-scale = hinfo.GroupHierarchy.Datasets(1).Attributes(3).Value;
-
-for k = 1:count
-   Itemp = hdf5read(hinfo.GroupHierarchy.Datasets(2*k-1));
-   Qtemp = hdf5read(hinfo.GroupHierarchy.Datasets(2*k));
-
-   I(1+(k-1)*numelements:k*numelements,1) = Itemp;
-   Q(1+(k-1)*numelements:k*numelements,1) = Qtemp;
-
-   cmpx_data = I + 1i*Q;
-end
-
-cmpx_data = cmpx_data.';
-   
-data = cmpx_data;
-for i = 1:10
-
-   data = [data cmpx_data];
-   
-end
 
 
-%file name
-file_name = 'new' + .h5';
 
-I = real(data);
-Q = imag(data);
+hdf5_file_name_emission = "cw_emission.h5"
+hdf5_file_name_ref = "cw_response_surv.h5"
+hdf5_file_name_response = "can.h5"
 
-h5create(file_name,'/I/value',length(I));
-h5create(file_name,'/Q/value',length(Q));
+%reading data from hdf5
+RefData = loadfersHDF5_cmplx(hdf5_file_name_ref);
+cmplx_data_emission = loadfersHDF5_iq(hdf5_file_name_emission);
+cmplx_data_response = loadfersHDF5_iq(hdf5_file_name_response);
 
-p = path();
-path(p);
+dab_mode = load_dab_rad_constants(5);
 
-%writing hdf5 dataset
-h5write(file_name,'/I/value',I);
-h5write(file_name,'/Q/value',Q);
+%plot(1:1:length(cmplx_data_emission), cmplx_data_emission)
 
+a = cmplx_data_emission(1,1+dab_mode.Tg:dab_mode.Ts);
+length(a)
+a = fftshift(fft(a))./length(a);
 
-    
+plot(1:1:length(a),abs(a))
