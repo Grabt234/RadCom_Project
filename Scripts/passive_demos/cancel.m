@@ -6,16 +6,16 @@ hdf5_file_name_response = "cw_response.h5"
 RefData = loadfersHDF5_cmplx(hdf5_file_name_ref);
 cmplx_data_response = loadfersHDF5_cmplx(hdf5_file_name_response);
 
-proc.cancellationMaxRange_m = 10000;
+proc.cancellationMaxRange_m = 20000;
 proc.cancellationMaxDoppler_Hz = 0;
 proc.TxToRefRxDistance_m = 1;
-proc.nSegments = 16;
-proc.nIterations = 20;
+proc.nSegments = 32;
+proc.nIterations = 30;
 proc.Fs = 2.048e7;
 proc.alpha = 0;
 proc.initialAlpha = 0;
 
-data = CGLS_Cancellation_RefSurv_2(RefData.', cmplx_data_response.', proc);
+data = CGLS_Cancellation_RefSurv(RefData.', cmplx_data_response.', proc);
 
 %file name
 file_name = 'can.h5';

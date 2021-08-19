@@ -28,8 +28,9 @@ dab_mode = load_dab_rad_constants(4);
 
 output_file_name = "cw_emission";
 
-onez = (dab_mode.L*dab_mode.p_intra*dab_mode.K-dab_mode.K);
-zeroz = (dab_mode.L*dab_mode.p_intra*dab_mode.K-dab_mode.K);
+onez = 0
+%onez = (dab_mode.L*dab_mode.p_intra*dab_mode.K-dab_mode.K);
+zeroz = 2*(dab_mode.L*dab_mode.p_intra*dab_mode.K-dab_mode.K);
 bits = [ones(1,onez), zeros(1,zeroz)];
 bits = bits(randperm(numel(bits)));
 bits = num2str(bits,'%i');

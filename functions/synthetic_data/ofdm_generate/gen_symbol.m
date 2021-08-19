@@ -19,7 +19,8 @@ function s = gen_symbol(t, l , Tu , Ts ,Tg, N, w, a)
     %           the time domain
     %
     % ---------------------------------------------------------------------
-
+   
+  
    s = gen_all_sub_carriers(t,l , Tu , Ts ,Tg, N, w, a);
     
 end

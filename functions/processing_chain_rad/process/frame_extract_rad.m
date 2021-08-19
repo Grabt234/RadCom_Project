@@ -26,8 +26,9 @@
         
     else
         % Otherwise simply extract the frame
-        dab_frame = iq_data(start_idx:start_idx + dab_mode.Tf -1);
         
+        dab_frame = iq_data(start_idx:start_idx + dab_mode.Tf -1);
+ 
     end
 
 end

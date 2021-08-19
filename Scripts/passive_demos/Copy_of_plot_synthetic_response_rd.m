@@ -10,12 +10,12 @@ close all
 %file name
 hdf5_file_name_emission = "cw_emission.h5"
 hdf5_file_name_ref = "cw_response_surv.h5"
-hdf5_file_name_response = "cw_response.h5"
+hdf5_file_name_response = "can.h5"
 
 %reading data from hdf5
 RefData = loadfersHDF5_cmplx(hdf5_file_name_ref);
 cmplx_data_emission = loadfersHDF5_iq(hdf5_file_name_emission);
-cmplx_data_response = loadfersHDF5_cmplx(hdf5_file_name_response);
+cmplx_data_response = loadfersHDF5_iq(hdf5_file_name_response);
 
 
 dab_mode = load_dab_rad_constants(4);
@@ -25,20 +25,20 @@ run_time = 0.2; %s
 fs = 2.048e7; %hz
 %carrier frequency
 fc = 2.4e9; %hz       
-max_range = 10000 %meters
+max_range = 20000 %meters
 %window skip (time steos), no null in ths mode
 win_skip = 0;
 %PRF - (time to repeat cw)
-prf = floor(1/(dab_mode.Tf*1/fs));
+prf = (1/(dab_mode.Tf*1/fs));
 
 %matched filter size
 %blanking is done automatically
 match_start_symbol = 1;
-match_end_symbol = 4;
+match_end_symbol = 5;
 
 %aligns signals - removes range offset from matched filter offset start 
-start_offset = (match_start_symbol)*dab_mode.Ts
-match_length = (match_end_symbol-match_start_symbol)*dab_mode.Ts
+start_offset = (match_start_symbol)*dab_mode.Ts;
+match_length = (match_end_symbol-match_start_symbol)*dab_mode.Ts;
 
 cmplx_data_response = cmplx_data_response(start_offset:end);
 
@@ -68,6 +68,9 @@ while length(cmplx_data_response) >= (1/prf)*fs
     cmplx_data_response = cmplx_data_response(floor((1/prf)*fs):end);
     
 end
+% 
+% max_index = ceil(max_range*2*fs/c);
+% slow_time = slow_time(:,1:max_index);
 
 %showing single pulse
 subplot(2,2,2)
@@ -86,18 +89,16 @@ symbols = match_end_symbol - match_start_symbol;
 for k = 1:symbols
     
     %start and end index for guard interval
-    s = 1 + (k-1)*dab_mode.Ts
-    e = s+dab_mode.Tg -1
+    s = 1 + (k-1)*dab_mode.Ts;
+    e = s+dab_mode.Tg -1;
     %blanking
-    matched_filter(s:e) = 0;
+    matched_filter(s:e)=0;
     
 end
 
 %flipping and taking conjugate
 %now have filter
 matched_filter = conj(fliplr(matched_filter));
-
-%matched_filter = conj(fliplr(cmplx_data_emission(1,match_start:match_end)));
 
 %plotting filter
 subplot(2,2,3)
@@ -124,13 +125,17 @@ end
 
 %% FFT'ING ALONG COLUMNS
 
+%taking fft
 range_response = fftshift(fft(range_response,[],1),1);
 
+%normalising 
 range_response = range_response/max(range_response,[], 'all');
 
 %% CUTTING
 
-%limiting plot to max range
+range_response = range_response(:,match_length:end);
+
+% %limiting plot to max range
 max_index = ceil(max_range*2*fs/c);
 range_response = range_response(:,1:max_index);
 

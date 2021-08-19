@@ -26,8 +26,8 @@ function dab_mode = load_dab_rad_constants(transmission_mode)
         
     elseif (transmission_mode == 2)
         %used
-        dab_mode.K         = 20;
-        dab_mode.L         = 2;
+        dab_mode.K         = 150;
+        dab_mode.L         = 4;
         dab_mode.Tnull     = 2552;
         dab_mode.Tu        = 2048;
         dab_mode.Tg        = 504;
@@ -40,7 +40,8 @@ function dab_mode = load_dab_rad_constants(transmission_mode)
         dab_mode.Tf        = (dab_mode.Tp + dab_mode.T_intra)*dab_mode.p_intra;
     elseif (transmission_mode == 3)
         %used in /passsive_processing
-        dab_mode.K         = 20;
+        %working RD
+        dab_mode.K         = 40;
         dab_mode.L         = 5;
         dab_mode.Tnull     = 0;
         dab_mode.Tu        = 2048;
@@ -50,22 +51,37 @@ function dab_mode = load_dab_rad_constants(transmission_mode)
         dab_mode.Tf        = dab_mode.Tnull +(dab_mode.L-1)* dab_mode.Ts;
         dab_mode.mask      = [ (dab_mode.Tu/2-dab_mode.K/2 +1):(dab_mode.Tu/2), ...
                                         (dab_mode.Tu/2+2):(dab_mode.Tu/2+dab_mode.K/2 +1) ];
-        dab_mode.p_intra   = 12;
+        dab_mode.p_intra   = 4;
         dab_mode.T_intra   = 0;
         dab_mode.Tf        = (dab_mode.Tp + dab_mode.T_intra)*dab_mode.p_intra;
      elseif (transmission_mode == 4)
-        %CW wave
-        dab_mode.K         = 100;
-        dab_mode.L         = 2;
+       %used in /passsive_processing
+        dab_mode.K         = 40;
+        dab_mode.L         = 5;
         dab_mode.Tnull     = 0;
-        dab_mode.Tu        = 0.5*2048;
-        dab_mode.Tg        = 0.5*504;
+        dab_mode.Tu        = 2048;
+        dab_mode.Tg        = 504;
         dab_mode.Ts        = dab_mode.Tu + dab_mode.Tg;
         dab_mode.Tp        = dab_mode.Tnull + (dab_mode.L)*dab_mode.Ts;
         dab_mode.Tf        = dab_mode.Tnull +(dab_mode.L-1)* dab_mode.Ts;
         dab_mode.mask      = [ (dab_mode.Tu/2-dab_mode.K/2 +1):(dab_mode.Tu/2), ...
                                         (dab_mode.Tu/2+2):(dab_mode.Tu/2+dab_mode.K/2 +1) ];
-        dab_mode.p_intra   = 1;
+        dab_mode.p_intra   = 4;
+        dab_mode.T_intra   = 0;
+        dab_mode.Tf        = (dab_mode.Tp + dab_mode.T_intra)*dab_mode.p_intra;
+    elseif (transmission_mode == 5)
+       %used in /passsive_processing
+        dab_mode.K         = 20;
+        dab_mode.L         = 4;
+        dab_mode.Tnull     = 0;
+        dab_mode.Tu        = 2048;
+        dab_mode.Tg        = 504;
+        dab_mode.Ts        = dab_mode.Tu + dab_mode.Tg;
+        dab_mode.Tp        = dab_mode.Tnull + (dab_mode.L)*dab_mode.Ts;
+        dab_mode.Tf        = dab_mode.Tnull +(dab_mode.L-1)* dab_mode.Ts;
+        dab_mode.mask      = [ (dab_mode.Tu/2-dab_mode.K/2 +1):(dab_mode.Tu/2), ...
+                                        (dab_mode.Tu/2+2):(dab_mode.Tu/2+dab_mode.K/2 +1) ];
+        dab_mode.p_intra   = 3;
         dab_mode.T_intra   = 0;
         dab_mode.Tf        = (dab_mode.Tp + dab_mode.T_intra)*dab_mode.p_intra;
     elseif (transmission_mode == 6)

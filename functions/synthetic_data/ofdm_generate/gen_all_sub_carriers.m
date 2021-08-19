@@ -28,7 +28,12 @@ function carriers = gen_all_sub_carriers(t, l, Tu, Ts, Tg,N, w, a)
    %generating all sub carriers
    %constant summing to save memory
    for n = 1:(N+1)
-
+        
+       if a(n) == 0
+       %dont waste time generating zeros
+        continue
+       end
+   
        carrier_temp = gen_sub_carrier(t, l, Tu, Ts, Tg, carrier_vals(n) );
        %applying frequency wight
        carrier_temp = carrier_temp*w(n);

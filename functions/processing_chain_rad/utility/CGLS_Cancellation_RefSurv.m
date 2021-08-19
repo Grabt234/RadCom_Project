@@ -1,5 +1,5 @@
-function [SurvData] = CGLS_Cancellation_RefSurv_2(RefData, SurvData, proc)
-fprintf('Performing CGLS cancellation\n')
+function [SurvData] = CGLS_Cancellation_RefSurv(RefData, SurvData, proc)
+% fprintf('Performing CGLS cancellation\n')
 
 %%%%
 % USAGE:
@@ -8,7 +8,7 @@ fprintf('Performing CGLS cancellation\n')
 %	RefData: Reference channel time data
 %	SurvData: Surveillance channel time data
 %
-%	proc.cancellationMaxRange_m = 12650; 
+%	proc.cancellationMaxRange_m = 12650;
 %	proc.cancellationMaxDoppler_Hz = 4;
 %	proc.TxToRefRxDistance_m = 12600;
 %	proc.nSegments = 16;
@@ -68,7 +68,7 @@ for segmentNo = 0:proc.nSegments - 1
     
     clear ZeroDopplerA
     
-   %% Initialize CGLS values
+    %% Initialize CGLS values
     [m, n] = size(A);
     b    = SurvData(segStartSampleNo:segStopSampleNo);
     x    = alpha;
@@ -78,8 +78,8 @@ for segmentNo = 0:proc.nSegments - 1
     if(mean(x) == 0)
         x = zeros(n, 1, 'single');
     end
-
-
+    
+    
     r    = b - A*x;
     s    = A'*r;     % s = A'b
     norms0 = norm(s);
@@ -135,7 +135,9 @@ for segmentNo = 0:proc.nSegments - 1
     %save alpha
     alpha = x;
     
-    SurvData(segStartSampleNo:segStopSampleNo) = SurvData(segStartSampleNo:segStopSampleNo) - (A * alpha);
+    a = (A * alpha);
+    
+    SurvData(segStartSampleNo:segStopSampleNo) = SurvData(segStartSampleNo:segStopSampleNo) - a(1,:);
    
     clear A
     

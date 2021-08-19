@@ -13,9 +13,14 @@ function B = cleave_bitstream(bits, n)
     %
     % ---------------------------------------------------------------------
     
+    if( isempty(bits) )
+        %in the case where only prs is beiing generated
+        B = ones(0,0);
+        return
+    end
     %preallocating array to fit grouped letters
-    remainder = mod( length(bits), n);
-    rows = (length(bits) - remainder)/n + ceil(remainder/n);
+    remainder = mod( length(bits), n)
+    rows = (length(bits) - remainder)/n + ceil(remainder/n)
     
     %preallocating array of strings
     B = zeros(rows,1);
