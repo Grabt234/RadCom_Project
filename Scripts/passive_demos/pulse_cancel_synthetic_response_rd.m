@@ -9,13 +9,11 @@ close all
 
 %file name
 hdf5_file_name_emission = "cw_emission.h5"
-hdf5_file_name_ref = "cw_response_surv.h5"
-hdf5_file_name_response = "can.h5"
+hdf5_file_name_response = "cw_response.h5"
 
 %reading data from hdf5
-RefData = loadfersHDF5_cmplx(hdf5_file_name_ref);
 cmplx_data_emission = loadfersHDF5_iq(hdf5_file_name_emission);
-cmplx_data_response = loadfersHDF5_iq(hdf5_file_name_response);
+cmplx_data_response = loadfersHDF5_cmplx(hdf5_file_name_response);
 
 
 dab_mode = load_dab_rad_constants(4);
@@ -34,7 +32,7 @@ prf = (1/(dab_mode.Tf*1/fs));
 %matched filter size
 %blanking is done automatically
 match_start_symbol = 1;
-match_end_symbol = 5;
+match_end_symbol = 10;
 
 %aligns signals - removes range offset from matched filter offset start 
 start_offset = (match_start_symbol)*dab_mode.Ts;
@@ -48,7 +46,7 @@ c =299792458;
 %% PLOTTING  READ DATA
 
 figure
-subplot(2,2,1)  
+subplot(2,3,1)  
 plot((1:1:length(cmplx_data_response)), cmplx_data_response)
 title("PLOT SHOWING RECEIVED PULSE TRAIN")
 
@@ -63,19 +61,46 @@ while length(cmplx_data_response) >= (1/prf)*fs
     
     i = i + 1;
     %storing slow time sample
-    slow_time(i,:) = cmplx_data_response(1:floor((1/prf)*fs));
+    slow_time(i,:) = cmplx_data_response(1:((1/prf)*fs));
     %removing slow time sample
-    cmplx_data_response = cmplx_data_response(floor((1/prf)*fs):end);
+    cmplx_data_response = cmplx_data_response(((1/prf)*fs)+1:end);
     
 end
-% 
+
+%left in for clarity
+slow_time_samples = i;
+clear i;
+
 % max_index = ceil(max_range*2*fs/c);
 % slow_time = slow_time(:,1:max_index);
 
 %showing single pulse
-subplot(2,2,2)
+subplot(2,3,2)
 plot((1:1:length(slow_time(1,:))),slow_time(1,:))
 title("SINGLE RECEIVED PULSE")
+
+%% PULSE CANCELING
+
+%pre allocating
+%pulse cancelling removes a single slowtime sample TF dim(1)-1
+can_slow_time = zeros(size(slow_time,1)-1, size(slow_time,2));
+
+
+for samp = 2:size(can_slow_time,1)
+    
+    %p_n = p_n - p_(n-1)
+    can_slow_time(samp-1,:) = slow_time(samp,:) - slow_time(samp-1,:);
+    
+end
+
+slow_time = can_slow_time;
+
+%adjusting for the removal of single slow time sample
+slow_time_samples = size(slow_time,1) -1;
+
+subplot(2,3,3);
+plot(1:1:length(slow_time),slow_time(2,:));
+title("N-1 CANCEL");
 
 %% MATCHING
 
@@ -101,7 +126,7 @@ end
 matched_filter = conj(fliplr(matched_filter));
 
 %plotting filter
-subplot(2,2,3)
+subplot(2,3,4)
 plot(1:1:length(matched_filter),matched_filter)
 title("Matched Filter")
 
@@ -109,17 +134,17 @@ title("Matched Filter")
 
 %plottng matched response with prs from range bin
 prs_bin_response = abs(conv(matched_filter,squeeze(slow_time(1,:))));
-subplot(2,2,4)
+subplot(2,3,5)
 plot(1:1:length( prs_bin_response), prs_bin_response)
 title("MATCHED RESPONSE")
 
 %preallocating memory
 range_response = zeros(ceil(run_time*prf),length(conv(matched_filter,slow_time(1,:))));
 
-for j = 1:i
+for samp = 1:slow_time_samples
     
-    range_response(j,:) = conv(matched_filter,slow_time(j,:));
-    disp(j/i);
+    range_response(samp,:) = conv(matched_filter,slow_time(samp,:));
+    disp(samp/slow_time_samples);
     
 end
 

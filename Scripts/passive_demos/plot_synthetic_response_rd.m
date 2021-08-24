@@ -10,12 +10,12 @@ close all
 %file name
 hdf5_file_name_emission = "cw_emission.h5"
 hdf5_file_name_ref = "cw_response_surv.h5"
-hdf5_file_name_response = "cw_response.h5"
+hdf5_file_name_response = "can.h5"
 
 %reading data from hdf5
 RefData = loadfersHDF5_cmplx(hdf5_file_name_ref);
 cmplx_data_emission = loadfersHDF5_iq(hdf5_file_name_emission);
-cmplx_data_response = loadfersHDF5_cmplx(hdf5_file_name_response);
+cmplx_data_response = loadfersHDF5_iq(hdf5_file_name_response);
 
 
 dab_mode = load_dab_rad_constants(4);
@@ -25,11 +25,11 @@ run_time = 0.2; %s
 fs = 2.048e7; %hz
 %carrier frequency
 fc = 2.4e9; %hz       
-max_range = 200000 %meters
+max_range = 20000 %meters
 %window skip (time steos), no null in ths mode
 win_skip = 0;
 %PRF - (time to repeat cw)
-prf = floor(1/(dab_mode.Tf*1/fs));
+prf = (1/(dab_mode.Tf*1/fs));
 
 %matched filter size
 %blanking is done automatically
@@ -68,9 +68,9 @@ while length(cmplx_data_response) >= (1/prf)*fs
     cmplx_data_response = cmplx_data_response(floor((1/prf)*fs):end);
     
 end
-
-max_index = ceil(max_range*2*fs/c);
-slow_time = slow_time(:,1:max_index);
+% 
+% max_index = ceil(max_range*2*fs/c);
+% slow_time = slow_time(:,1:max_index);
 
 %showing single pulse
 subplot(2,2,2)
@@ -92,15 +92,13 @@ for k = 1:symbols
     s = 1 + (k-1)*dab_mode.Ts;
     e = s+dab_mode.Tg -1;
     %blanking
-    matched_filter(s:e) = 0;
+    matched_filter(s:e)=0;
     
 end
 
 %flipping and taking conjugate
 %now have filter
 matched_filter = conj(fliplr(matched_filter));
-
-%matched_filter = conj(fliplr(cmplx_data_emission(1,match_start:match_end)));
 
 %plotting filter
 subplot(2,2,3)
@@ -135,9 +133,11 @@ range_response = range_response/max(range_response,[], 'all');
 
 %% CUTTING
 
+range_response = range_response(:,match_length:end);
+
 % %limiting plot to max range
-% max_index = ceil(max_range*2*fs/c);
-% range_response = range_response(:,1:max_index);
+max_index = ceil(max_range*2*fs/c);
+range_response = range_response(:,1:max_index);
 
 %% PLOTTING RANGE DOPPLER
 
