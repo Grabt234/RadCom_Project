@@ -48,18 +48,18 @@ n = 2;
 %bits =   '1010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010'
 %bits = '101010101010101010101010101010101010100010001010101011111110101010101011000110101010101010111111101010101010110001101010101010110010111010000101100101110100010101010';
 
-% onez = (dab_mode.L*dab_mode.p_intra*dab_mode.K-dab_mode.K)*2/2;
-% zeroz = (dab_mode.L*dab_mode.p_intra*dab_mode.K-dab_mode.K)*2/2;
-% bits = [ones(1,onez), zeros(1,zeroz)];
-% bits = bits(randperm(numel(bits)));
-% bits = num2str(bits,'%i')
-
-bits = '11001011000100011001111111100011110100101011111100001000010100100001010010011011';
-f0 = 2.048*10^9;
-T = 1/f0;
 
 %CHOOSE NEW CONSTANT
 dab_mode = load_dab_rad_constants(7);
+
+onez = (dab_mode.L*dab_mode.p_intra*dab_mode.K-dab_mode.K)*2/2;
+zeroz = (dab_mode.L*dab_mode.p_intra*dab_mode.K-dab_mode.K)*2/2;
+bits = [ones(1,onez), zeros(1,zeroz)];
+bits = bits(randperm(numel(bits)));
+bits = num2str(bits,'%i')
+
+f0 = 2.048*10^9;
+T = 1/f0;
 
 %% EXTRACTING DAB_CONSTANTS
 
@@ -122,7 +122,11 @@ create_hdf5('emission',S);
 
 fileID = fopen('emission.bin','w');
 fwrite(fileID,S,'short')
+fclose(fileID);
 
+fid =fopen('bits.txt', 'w' );
+fwrite(fid, bits);
+fclose(fid);
 
 
 

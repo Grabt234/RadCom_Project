@@ -125,32 +125,28 @@ end
 
 phase_codes = round(wrapTo360(rad2deg(angle(phase_codes))));
 
-rx_bits = '';
+transmitted_bits = '';
 
 mapper = define_inverse_alphabet_map(2);
 
 for z = 1:numel(phase_codes)
     
-   rx_bits = [rx_bits  mapper(phase_codes(z))];
+   transmitted_bits = [transmitted_bits  mapper(phase_codes(z))];
    
 end
 
-%% CHECKING TX SAME AS RX
-
+transmitted_bits
 
 %reference bits
 fileID = fopen('bits.txt','r');
-ref_bits = fscanf(fileID,'%s');
+ref_bits = fscanf(fileID,'%s',str);
 
-ref=char(num2cell(ref_bits));
-ref=reshape(str2num(ref),1,[])
 
-output=char(num2cell(rx_bits));
-output=reshape(str2num(output),1,[]);
 
-results = rx_bits -ref_bits;
-results = (string(results));
-results = horzcat(results{:})
+
+
+
+
 
 
 
