@@ -120,6 +120,10 @@ plot(1:1:length(S), S)
 create_hdf5('emission',S);
 
 
+fileID = fopen('emission.bin','w');
+fwrite(fileID,S,'short')
+
+
 
 
 
