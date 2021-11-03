@@ -56,9 +56,9 @@ onez = (dab_mode.L*dab_mode.p_intra*dab_mode.K-dab_mode.K)*2/2;
 zeroz = (dab_mode.L*dab_mode.p_intra*dab_mode.K-dab_mode.K)*2/2;
 bits = [ones(1,onez), zeros(1,zeroz)];
 bits = bits(randperm(numel(bits)));
-bits = num2str(bits,'%i')
+bits = num2str(bits,'%i');
 
-f0 = 2.048*10^9;
+f0 = 2.048*10^6;
 T = 1/f0;
 
 %% EXTRACTING DAB_CONSTANTS
@@ -87,16 +87,16 @@ T_intra = dab_mode.T_intra;
 A_pulses = A_pulses(:,2:end,:);
 
 %Frequency weights ()
+%time per symbol
 W_cube = ones(L_0,K_0,F);
-W_cube = rescale_cube_to_unity_weights(W_cube,F);
+%W_cube = rescale_cube_to_unity_weights(W_cube,F);
+
+symbol_time = linspace(0,Ts*T,Ts);
 
 %% GENERATING WAVEFORM
 
-% %time per symbol
-symbol_time = linspace(T,Ts,Ts);
-
 %generating all envelopes of frames
-S = gen_all_pulses(symbol_time, F, L_0, Tu, Ts, Tg, K,W_cube,A_pulses);
+S = gen_all_pulses(symbol_time, F, L_0, Tu*T, Ts, Tg*T, K,W_cube,A_pulses);
 
 %interframe time
 tif_time = linspace(T,T_intra,T_intra);
@@ -129,11 +129,35 @@ fwrite(fid, bits);
 fclose(fid);
 
 
+%%
+a = S(dab_mode.Tg -1:dab_mode.Tg + dab_mode.Tu-2);
+% b = S(1*dab_mode.Ts+1  :1*dab_mode.Ts + dab_mode.Tu -1);
 
+A = fftshift(fft(a))./length(a);
+% B = fftshift(fft(b))./length(b);
 
+figure
+plot(1:1:length(A),(abs(A)))
 
-
-
+% a = squeeze(A_pulses(1,3,:)).';
+% b = squeeze(A_pulses(1,2,:)).';
+% 
+% a(51) = [];
+% b(51) = [];
+% 
+% phase_codes = a./b;
+% 
+% phase_codes = round(wrapTo360(rad2deg(angle(phase_codes))));
+% 
+% rx_bits = '';
+% 
+% mapper = define_inverse_alphabet_map(2);
+% 
+% for z = 1:numel(phase_codes)
+%     
+%    rx_bits = [rx_bits  mapper(phase_codes(z))];
+%    
+% end
 
 
 

@@ -20,6 +20,6 @@ function g = gen_sub_carrier(t, l, Tu, Ts, Tg,n)
     % -Tg is the addition of the guard interval
 
       %exp generates as a complex value
-      g = exp((2*pi*1i*(n)*(t-Tg))/Tu).*rectangularPulse(0,Ts,t); 
-
+      g = exp((2*1i*pi*(n)*(t-Tg))/Tu).*ones(1,length(t));
+      
 end

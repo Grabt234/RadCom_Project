@@ -9,7 +9,7 @@
 
 %% LOADING IN INFORMATION
 
-hdf5_file_name = "emission.h5"
+hdf5_file_name = "emission.h5";
 iq_data = loadfersHDF5_iq(hdf5_file_name);
 
 dab_mode = load_dab_rad_constants(7);

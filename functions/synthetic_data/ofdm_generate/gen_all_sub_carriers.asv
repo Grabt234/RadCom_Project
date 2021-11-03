@@ -42,12 +42,12 @@ function carriers = gen_all_sub_carriers(t, l, Tu, Ts, Tg,N, w, a)
        %applying phase weight
        carriers(n,:) = carriers(n,:)*a(n);
        
-       
+       plot(1:1:2048, abs(fftshift(fft(carriers(:,504+1:end),[],2))))
        
    end
- 
+   figure
    %compressing rows into single row - form cmplx envelope
    carriers = sum(carriers);
-
+   stem(1:1:2048, abs(fftshift(fft(carriers(504+1:end)))) )
 
  end
