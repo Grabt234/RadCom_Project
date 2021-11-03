@@ -144,30 +144,30 @@ C = fftshift(fft(c))./length(c);
 
 BB = B./A; %finding
 CC = C./B;
-C = B./A;
+% C = B./A;
 % 
 % figure
 % plot(1:1:length(A),(abs(A)))
 
-phase_codes = round(wrapTo360(rad2deg(angle(BB(dab_mode.mask)))))
+%phase_codes = round(wrapTo360(rad2deg(angle(BB(dab_mode.mask)))))
 
 % phase_codes = B./A;
 % phase_codes2 = C./phase_codes;
 % phase_codes = phase_codes2;
 % % 
-% phase_codes = round(wrapTo360(rad2deg(angle(BB(dab_mode.mask)))))
-% 
-% rx_bits = '';
-% 
-% mapper = define_inverse_alphabet_map(2);
-% 
-% for z = 1:numel(phase_codes)
-%     
-%    rx_bits = [rx_bits  mapper(phase_codes(z))];
-% 
-% end
-% 
-% % rx_bits
+phase_codes = round(wrapTo360(rad2deg(angle(BB(dab_mode.mask)))))
+
+rx_bits = '';
+
+mapper = define_inverse_alphabet_map(2);
+
+for z = 1:numel(phase_codes)
+    
+   rx_bits = [rx_bits  mapper(phase_codes(z))];
+
+end
+
+% rx_bits
 % %% shows that pulses still coded correctly
 % % a = squeeze(A_pulses(1,3,:)).';
 % % b = squeeze(A_pulses(1,2,:)).';

@@ -22,10 +22,12 @@
     L_dqpsk(1,:) = L_encode(1,:);
     
     %running through all rows wihtout altering prs
+    %note: PRS in first position already
     for i = 2:size(L_encode,1)
     
         %applying dpsk z(i) = z(i-1)*y(i)
-        L_dqpsk(i,:) = L_encode(i,:).*L_dqpsk(i-1,:);
+        L_dqpsk(i,:) = L_encode(i-1,:).*L_dqpsk(i-1,:);
+        
         
     end
     

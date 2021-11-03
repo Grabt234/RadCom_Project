@@ -47,8 +47,6 @@ function carriers = gen_all_sub_carriers(t, l, Tu, Ts, Tg,N, w, a)
     %compressing rows into single row - form cmplx envelope
     carriers = sum(carriers);
     
-    plot(1:1:2048,abs(fftshift(fft(carriers))))
-    
 end
 
 
