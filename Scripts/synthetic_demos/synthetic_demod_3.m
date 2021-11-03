@@ -113,7 +113,7 @@ title("SINGLE FRAME")
 
 %% CONVERTING PHASES TO BITS
 
-phase_codes = dab_data(1,dab_mode.mask);
+phase_codes = dab_data(2,dab_mode.mask);
 
 for dd = 2:size(dab_data,1)
     
@@ -141,14 +141,15 @@ end
 %reference bits
 fileID = fopen('bits.txt','r');
 ref_bits = fscanf(fileID,'%s');
+fclose(fileID)
 
 ref=char(num2cell(ref_bits));
-ref=reshape(str2num(ref),1,[])
+ref=reshape(str2num(ref),1,[]);
 
 output=char(num2cell(rx_bits));
 output=reshape(str2num(output),1,[]);
 
-results = rx_bits -ref_bits;
+%results = rx_bits -ref_bits;
 results = (string(results));
 results = horzcat(results{:})
 

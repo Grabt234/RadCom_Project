@@ -20,18 +20,14 @@ function B = cleave_bitstream(bits, n)
     end
     
     %preallocating array to fit grouped letters
-    remainder = mod( length(bits), n);
+    remainder = mod( length(bits), n)
     
-    %if need to pad with 0's
-    if remainder ~= 0
+    if n ~= 0
         
-        fill = strjoin(string(ones(1,remainder)));
-    
-        %round to number of carriers by filling with zeros
-        bits = strjoin([bits fill]);
-    
     end
-   
-    B = reshape(bits, 2, [])'
+    
+    
+    
+    B = reshape(bits, 2, [])';
   
 end

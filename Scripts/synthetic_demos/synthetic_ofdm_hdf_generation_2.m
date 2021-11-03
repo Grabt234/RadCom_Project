@@ -50,7 +50,7 @@ n = 2;
 
 
 %CHOOSE NEW CONSTANT
-dab_mode = load_dab_rad_constants(7);
+dab_mode = load_dab_rad_constants(8);
 
 onez = (dab_mode.L*dab_mode.p_intra*dab_mode.K-dab_mode.K)*2/2;
 zeroz = (dab_mode.L*dab_mode.p_intra*dab_mode.K-dab_mode.K)*2/2;
@@ -117,7 +117,7 @@ S = S(:)';
 %% WRITTING TO FILES
 
 
-create_hdf5('emission',S);
+% create_hdf5('emission',S);
 
 
 fileID = fopen('emission.bin','w');
@@ -138,56 +138,49 @@ b = S((scale+1)*dab_mode.Ts+ dab_mode.Tg + 1:(scale+1)*dab_mode.Ts + dab_mode.Tg
 
 c = S((scale+2)*dab_mode.Ts+ dab_mode.Tg + 1:(scale+2)*dab_mode.Ts + dab_mode.Tg + dab_mode.Tu );
 
+d = S((scale+3)*dab_mode.Ts+ dab_mode.Tg + 1:(scale+3)*dab_mode.Ts + dab_mode.Tg + dab_mode.Tu );
+
+
+
 A = fftshift(fft(a))./length(a);
 B = fftshift(fft(b))./length(b);
 C = fftshift(fft(c))./length(c);
+D = fftshift(fft(d))./length(d);
 
 BB = B./A; %finding
 CC = C./B;
-C = B./A;
+DD = D./C;
 % 
 % figure
 % plot(1:1:length(A),(abs(A)))
 
-phase_codes = round(wrapTo360(rad2deg(angle(BB(dab_mode.mask)))))
+phase_codes = [round(wrapTo360(rad2deg(angle(BB(dab_mode.mask))))) round(wrapTo360(rad2deg(angle(CC(dab_mode.mask))))) round(wrapTo360(rad2deg(angle(DD(dab_mode.mask))))) ];
 
-% phase_codes = B./A;
-% phase_codes2 = C./phase_codes;
-% phase_codes = phase_codes2;
-% % 
-% phase_codes = round(wrapTo360(rad2deg(angle(BB(dab_mode.mask)))))
-% 
-% rx_bits = '';
-% 
-% mapper = define_inverse_alphabet_map(2);
-% 
-% for z = 1:numel(phase_codes)
-%     
-%    rx_bits = [rx_bits  mapper(phase_codes(z))];
-% 
-% end
-% 
-% % rx_bits
-% %% shows that pulses still coded correctly
-% % a = squeeze(A_pulses(1,3,:)).';
-% % b = squeeze(A_pulses(1,2,:)).';
-% 
-% a(51) = [];
-% b(51) = [];
-% 
-% phase_codes = a./b;
-% 
-% phase_codes = round(wrapTo360(rad2deg(angle(phase_codes))));
-% 
-% rx_bits = '';
-% 
-% mapper = define_inverse_alphabet_map(2);
-% 
-% for z = 1:numel(phase_codes)
-%     
-%    rx_bits = [rx_bits  mapper(phase_codes(z))];
-%    
-% end
+rx_bits = '';
+
+mapper = define_inverse_alphabet_map(2);
+
+for z = 1:numel(phase_codes)
+    
+   rx_bits = [rx_bits  mapper(phase_codes(z))];
+
+end
+
+%reference bits
+fileID = fopen('bits.txt','r');
+ref_bits = fscanf(fileID,'%s');
+fclose(fileID)
+
+ref=char(num2cell(ref_bits));
+ref=reshape(str2num(ref),1,[]);
+
+output=char(num2cell(rx_bits));
+output=reshape(str2num(output),1,[]);
+
+results = rx_bits - ref_bits;
+results = (string(results));
+results = horzcat(results{:})
+
 
 
 

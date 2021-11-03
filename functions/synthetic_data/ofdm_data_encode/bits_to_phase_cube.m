@@ -24,7 +24,7 @@ function [F,A_pulses] = bits_to_phase_cube(bits, n, dab_mode)
 
     %breaking bitstream into n sized strings
     cleaved_bit_stream = cleave_bitstream(bits,n);
-
+    
     %% BIT STREAM TO PHASE CODE
 
     %encoding strings in phases

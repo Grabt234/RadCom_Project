@@ -24,10 +24,28 @@
     %running through all rows wihtout altering prs
     %note: PRS in first position already
     for i = 2:size(L_encode,1)
-    
-        %applying dpsk z(i) = z(i-1)*y(i)
-        L_dqpsk(i,:) = L_encode(i-1,:).*L_dqpsk(i-1,:);
         
+        fprintf("HHHHHHHHHHHH\n")
+        %applying dpsk z(i) => theta_n = theta_(n-1) + phi_n
+        
+        phase_codes = round(wrapTo360(rad2deg(angle(L_encode(i,:)))));
+        
+        
+        rx_bits = '';
+
+        mapper = define_inverse_alphabet_map(2);
+
+        for z = 1:numel(phase_codes)
+
+           rx_bits = [rx_bits  mapper(phase_codes(z))];
+
+        end
+        
+        rx_bits
+        
+        fprintf("JJJ\n")
+        L_dqpsk(i,:) = L_encode(i,:).*L_dqpsk(i-1,:);
+        fprintf("HHHHHHHHHHH")
         
     end
     
