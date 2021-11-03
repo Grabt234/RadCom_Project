@@ -14,7 +14,7 @@ iq_data = loadfersHDF5_iq(hdf5_file_name);
 
 dab_mode = load_dab_rad_constants(7);
 
-f0 = 2.048*10^9;
+f0 = 2.048*10^6;
 
 %bits per per code
 n = 2;

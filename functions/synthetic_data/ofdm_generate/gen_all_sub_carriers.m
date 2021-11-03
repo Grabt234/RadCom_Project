@@ -19,21 +19,21 @@ function carriers = gen_all_sub_carriers(t, l, Tu, Ts, Tg,N, w, a)
     %
     % ---------------------------------------------------------------------
    
-   %pre allocating memory
-   carriers = zeros(N,length(t));
-   
-   %carriers around center
-   carrier_vals = -N/2 : N/2;
+    %pre allocating memory
+    carriers = zeros(N,length(t));
     
-   %generating all sub carriers
-   %constant summing to save memory
-   
-   for n = 1:(N+1)
+    %carriers around center
+    carrier_vals = -N/2 : N/2;
+    
+    %generating all sub carriers
+    %constant summing to save memory
+
+    for n = 1:(N+1)
         
        if a(n) == 0
         
            carriers(n,:) = 0;
-        
+            continue
        end
         
        carriers(n,:) = gen_sub_carrier(t, l, Tu, Ts, Tg, carrier_vals(n) );
@@ -41,13 +41,42 @@ function carriers = gen_all_sub_carriers(t, l, Tu, Ts, Tg,N, w, a)
        carriers(n,:) = carriers(n,:)*w(n);
        %applying phase weight
        carriers(n,:) = carriers(n,:)*a(n);
-       
-       
-       
-   end
- 
-   %compressing rows into single row - form cmplx envelope
-   carriers = sum(carriers);
+
+    end
+    
+    %compressing rows into single row - form cmplx envelope
+    carriers = sum(carriers);
+    
+    plot(1:1:2048,abs(fftshift(fft(carriers))))
+    
+end
 
 
- end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

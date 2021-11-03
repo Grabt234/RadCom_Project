@@ -50,7 +50,7 @@ n = 2;
 
 
 %CHOOSE NEW CONSTANT
-dab_mode = load_dab_rad_constants(7);
+dab_mode = load_dab_rad_constants(8);
 
 onez = (dab_mode.L*dab_mode.p_intra*dab_mode.K-dab_mode.K)*2/2;
 zeroz = (dab_mode.L*dab_mode.p_intra*dab_mode.K-dab_mode.K)*2/2;
@@ -91,12 +91,12 @@ A_pulses = A_pulses(:,2:end,:);
 W_cube = ones(L_0,K_0,F);
 %W_cube = rescale_cube_to_unity_weights(W_cube,F);
 
-symbol_time = linspace(0,Ts*T,Ts);
+symbol_time = 1:1:2048;
 
 %% GENERATING WAVEFORM
 
 %generating all envelopes of frames
-S = gen_all_pulses(symbol_time, F, L_0, Tu*T, Ts, Tg*T, K,W_cube,A_pulses);
+S = gen_all_pulses(symbol_time, F, L_0, Tu, Ts, Tg, K,W_cube,A_pulses);
 
 %interframe time
 tif_time = linspace(T,T_intra,T_intra);
