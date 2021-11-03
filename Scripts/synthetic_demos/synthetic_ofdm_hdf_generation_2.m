@@ -50,7 +50,7 @@ n = 2;
 
 
 %CHOOSE NEW CONSTANT
-dab_mode = load_dab_rad_constants(8);
+dab_mode = load_dab_rad_constants(7);
 
 onez = (dab_mode.L*dab_mode.p_intra*dab_mode.K-dab_mode.K)*2/2;
 zeroz = (dab_mode.L*dab_mode.p_intra*dab_mode.K-dab_mode.K)*2/2;

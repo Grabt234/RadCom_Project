@@ -47,7 +47,6 @@ function [F,A_pulses] = bits_to_phase_cube(bits, n, dab_mode)
     L_encode = fill_symbols(L_encode, dab_mode);
    
     %coverting phases to differential encoding
-    bits
     L_dpsk = convert_symbols_dpsk(L_encode);
     
     %converting to phase codes for each PULSE (multiple in frame)

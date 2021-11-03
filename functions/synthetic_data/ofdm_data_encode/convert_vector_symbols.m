@@ -31,13 +31,10 @@ function L_encode = convert_vector_symbols(A,dab_mode)
     A = [A; fill];
 
     %% SPLITTING INTO INDEPENDANT SYMBOLS
-    K
-    A
     
     %matlab is column dominant, fills columns before rows
     L_encode = reshape(A, K, []).';
     
-    L_encode
 end
 
 
