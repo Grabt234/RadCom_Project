@@ -24,6 +24,8 @@
     %running through all rows wihtout altering prs
     %note: PRS in first position already
     for i = 2:size(L_encode,1)
+         L_encode(i,:)
+        L_dqpsk(i,:) = L_encode(i,:).*L_dqpsk(i-1,:);
         
         fprintf("HHHHHHHHHHHH\n")
         %applying dpsk z(i) => theta_n = theta_(n-1) + phi_n
@@ -44,8 +46,7 @@
         rx_bits
         
         fprintf("JJJ\n")
-        L_dqpsk(i,:) = L_encode(i,:).*L_dqpsk(i-1,:);
-        fprintf("HHHHHHHHHHH")
+      
         
     end
     

@@ -14,12 +14,13 @@ function A = bitstream_to_phase(alphabet_map, B)
     % ---------------------------------------------------------------------
     
     %preallocating memory
-    A = zeros(size(B));
+    A = zeros(size(B,1),1);
+    
     
     for b = 1:length(B)
         
-        A(b) = convert_bin_to_phase(alphabet_map,B(b));
-        
+        A(b,:) = convert_bin_to_phase(alphabet_map,B(b,:));
+       
     end
     
 end

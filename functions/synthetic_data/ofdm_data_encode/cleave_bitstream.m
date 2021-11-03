@@ -32,6 +32,7 @@ function B = cleave_bitstream(bits, n)
     
     end
    
-    B = reshape(bits, 2, [])'
+    %cutting into encoding pieces
+    B = (reshape(bits, n, [])');
   
 end
