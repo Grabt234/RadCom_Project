@@ -169,7 +169,7 @@ end
 %reference bits
 fileID = fopen('bits.txt','r');
 ref_bits = fscanf(fileID,'%s');
-fclose(fileID)
+fclose(fileID);
 
 ref=char(num2cell(ref_bits));
 ref=reshape(str2num(ref),1,[]);

@@ -118,7 +118,7 @@ title("SINGLE FRAME")
 %initialising phase codes array with first symbol
 phase_codes = dab_data(1,dab_mode.mask);
 
-%filling with remainder of symbols
+%filling with remaind
 for dd = 2:size(dab_data,1)
     
     phase_codes = [phase_codes dab_data(dd,dab_mode.mask)];
