@@ -8,16 +8,49 @@
 %=================================
 
 %% LOADING IN INFORMATION
-
-hdf5_file_name = "emission.h5";
-iq_data = loadfersHDF5_iq(hdf5_file_name);
-
-%min snr: -2db
-iq_data = awgn(iq_data,10,"measured");
-
+close all
 dab_mode = load_dab_rad_constants(7);
 
-f0 = 2.048*10^6;
+fs = 2.5e6;
+integrationInterval = 2;
+filename = "rx.dat";
+fileParams.fileType = 'Bin';
+ 
+
+
+fileParams.fs=fs; %Sampling rate
+%Integration interval
+fileParams.interval = integrationInterval*fs; %samples
+ 
+
+fileParams.r_fid = fopen(filename,'rb');
+
+r_file = fread(fileParams.r_fid, 2*fileParams.interval,'double');
+
+r_ch = r_file(1:2:end) + 1j*r_file(2:2:end);
+
+r_ch = resample(r_ch,2.048e6, 2.5e6);
+
+
+iq_data = r_ch.';
+ax = (1:1:length(iq_data))*fs/length(iq_data) - fs/2;
+plot(ax/1e6, abs(fftshift(fft(iq_data))))
+figure
+%% refernce read in
+
+% hdf5_file_name = "emission.h5";
+% iq_data = loadfersHDF5_iq(hdf5_file_name);
+% 
+% min snr: -2db
+% iq_data = awgn(iq_data,10,"measured");
+% 
+% ax = (1:1:length(iq_data))*fs/length(iq_data) - fs/2;
+% plot(ax/1e6, abs(fftshift(fft(iq_data))))
+% figure
+
+%%
+
+f0 = 2.048e6;
 
 %bits per per code
 n = 2;

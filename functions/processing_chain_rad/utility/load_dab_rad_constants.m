@@ -100,7 +100,7 @@ function dab_mode = load_dab_rad_constants(transmission_mode)
         dab_mode.Tf        = (dab_mode.Tp + dab_mode.T_intra)*dab_mode.p_intra;
     elseif (transmission_mode == 7)
         %Do not remove, used in /radcom_processing_demo
-        dab_mode.K         = 100;
+        dab_mode.K         = 500;
         dab_mode.L         = 4;
         dab_mode.Tnull     = 0;
         dab_mode.Tu        = 2048;

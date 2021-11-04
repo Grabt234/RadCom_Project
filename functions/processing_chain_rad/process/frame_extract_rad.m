@@ -19,7 +19,7 @@
 
     % If gone too far back, pad the front of the returned frame with zero
     if (start_idx < 1)
-    
+      
         % start_idx is negative, so (1-start_idx) is positive
         dab_frame = zeros(1,1 - start_idx);   
         dab_frame = [dab_frame  iq_data(1:dab_mode.Tf-1)];

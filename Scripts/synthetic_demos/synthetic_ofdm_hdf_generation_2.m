@@ -40,14 +40,6 @@
 
 %% WAVEFORM PARAMETERS
 n = 2;
-%bits =  '10101010101010101011010101010101010101101010101010101010110101010101010101011010101010101010101';
-%bits = '0000000000000000000000000000000000000000';
-%bits =  '111111111111111111111111111111111111111';
-%bits =  '111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111';
-%bits = '101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010'
-%bits =   '1010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010'
-%bits = '101010101010101010101010101010101010100010001010101011111110101010101011000110101010101010111111101010101010110001101010101010110010111010000101100101110100010101010';
-
 
 %CHOOSE NEW CONSTANT
 dab_mode = load_dab_rad_constants(7);
@@ -117,69 +109,109 @@ S = S(:)';
 %% WRITTING TO FILES
 
 
-% create_hdf5('emission',S);
+create_hdf5('emission',S);
+
+S = resample(S,2.5e6,2.048e6);
 
 
-fileID = fopen('emission.bin','w');
-fwrite(fileID,S,'short')
-fclose(fileID);
+
+a = zeros(2,length(S));
+a(1,:)=real(S);
+a(2,:)=imag(S);
+fid = fopen('tmp.bin', 'w');
+fwrite(fid, a, 'double');
+fclose(fid);
+
+% fid = fopen('tmp.bin', 'r');
+% b = fread(fid, 4, 'double');
+% b=b(1:2:end)+j*b(2:2:end)
+% fclose(fid);
+
+
+% a = [real(S) imag(S)];
+
+% fileID = fopen('tmp.bin','w');
+% fwrite(fileID,a,'double')
+% fclose(fileID);
 
 fid =fopen('bits.txt', 'w' );
 fwrite(fid, bits);
 fclose(fid);
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 %% debug code
-scale = 0;
-% symbol n
-a = S( (scale)*dab_mode.Ts + dab_mode.Tg + 1:(scale)*dab_mode.Ts   + dab_mode.Tg + dab_mode.Tu );
-% symbol n + 1
-b = S((scale+1)*dab_mode.Ts+ dab_mode.Tg + 1:(scale+1)*dab_mode.Ts + dab_mode.Tg + dab_mode.Tu );
-
-c = S((scale+2)*dab_mode.Ts+ dab_mode.Tg + 1:(scale+2)*dab_mode.Ts + dab_mode.Tg + dab_mode.Tu );
-
-d = S((scale+3)*dab_mode.Ts+ dab_mode.Tg + 1:(scale+3)*dab_mode.Ts + dab_mode.Tg + dab_mode.Tu );
-
-
-
-A = fftshift(fft(a))./length(a);
-B = fftshift(fft(b))./length(b);
-C = fftshift(fft(c))./length(c);
-D = fftshift(fft(d))./length(d);
-
-BB = B./A; %finding
-CC = C./B;
-DD = D./C;
+% scale = 0;
+% % symbol n
+% a = S( (scale)*dab_mode.Ts + dab_mode.Tg + 1:(scale)*dab_mode.Ts   + dab_mode.Tg + dab_mode.Tu );
+% % symbol n + 1
+% b = S((scale+1)*dab_mode.Ts+ dab_mode.Tg + 1:(scale+1)*dab_mode.Ts + dab_mode.Tg + dab_mode.Tu );
 % 
-% figure
-% plot(1:1:length(A),(abs(A)))
+% c = S((scale+2)*dab_mode.Ts+ dab_mode.Tg + 1:(scale+2)*dab_mode.Ts + dab_mode.Tg + dab_mode.Tu );
+% 
+% d = S((scale+3)*dab_mode.Ts+ dab_mode.Tg + 1:(scale+3)*dab_mode.Ts + dab_mode.Tg + dab_mode.Tu );
+% 
+% 
+% 
+% A = fftshift(fft(a))./length(a);
+% B = fftshift(fft(b))./length(b);
+% C = fftshift(fft(c))./length(c);
+% D = fftshift(fft(d))./length(d);
+% 
+% BB = B./A; %finding
+% CC = C./B;
+% DD = D./C;
+% % 
+% % figure
+% % plot(1:1:length(A),(abs(A)))
+% 
+% phase_codes = [round(wrapTo360(rad2deg(angle(BB(dab_mode.mask))))) round(wrapTo360(rad2deg(angle(CC(dab_mode.mask))))) round(wrapTo360(rad2deg(angle(DD(dab_mode.mask))))) ];
+% 
+% rx_bits = '';
+% 
+% mapper = define_inverse_alphabet_map(2);
+% 
+% for z = 1:numel(phase_codes)
+%     
+%    rx_bits = [rx_bits  mapper(phase_codes(z))];
+% 
+% end
+% 
+% %reference bits
+% fileID = fopen('bits.txt','r');
+% ref_bits = fscanf(fileID,'%s');
+% fclose(fileID);
 
-phase_codes = [round(wrapTo360(rad2deg(angle(BB(dab_mode.mask))))) round(wrapTo360(rad2deg(angle(CC(dab_mode.mask))))) round(wrapTo360(rad2deg(angle(DD(dab_mode.mask))))) ];
-
-rx_bits = '';
-
-mapper = define_inverse_alphabet_map(2);
-
-for z = 1:numel(phase_codes)
-    
-   rx_bits = [rx_bits  mapper(phase_codes(z))];
-
-end
-
-%reference bits
-fileID = fopen('bits.txt','r');
-ref_bits = fscanf(fileID,'%s');
-fclose(fileID);
-
-ref=char(num2cell(ref_bits));
-ref=reshape(str2num(ref),1,[]);
-
-output=char(num2cell(rx_bits));
-output=reshape(str2num(output),1,[]);
-
-results = rx_bits - ref_bits;
-results = (string(results));
-results = horzcat(results{:})
+% ref=char(num2cell(ref_bits));
+% ref=reshape(str2num(ref),1,[]);
+% 
+% output=char(num2cell(rx_bits));
+% output=reshape(str2num(output),1,[]);
+% 
+% results = rx_bits - ref_bits;
+% results = (string(results));
+% results = horzcat(results{:})
 
 
 
