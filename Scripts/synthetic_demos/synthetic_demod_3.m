@@ -12,7 +12,8 @@
 hdf5_file_name = "emission.h5";
 iq_data = loadfersHDF5_iq(hdf5_file_name);
 
-% iq_data = awgn(iq_data,20,"measured");
+%min snr: -2db
+iq_data = awgn(iq_data,10,"measured");
 
 dab_mode = load_dab_rad_constants(7);
 
@@ -79,35 +80,6 @@ subplot(2,2,2)
 plot(1:1:length(dab_frame), dab_frame)
 title("SINGLE FRAME")
 
-% %%  PULSE EXTRACTION
-% % ONLY MAKES A DIFFERENCES WHEN FRAME HAS INTRA PULSE TIMES
-% 
-% %preallocating memory for pulses
-% dab_pulses = zeros(dab_mode.p_intra, dab_mode.Tp);
-% 
-% %+1 accounts for the array pos starting at 1
-% pulse_idx = dab_mode.T_intra+1;
-% 
-% %iterating through every pulse WITHIN A COHERENT FRAME
-% for pulse = 1:dab_mode.p_intra
-%     
-%     dab_pulses(pulse,:) = dab_frame(1,pulse_idx :(pulse_idx+dab_mode.Tp-1));
-%     
-%     pulse_idx =  pulse_idx + dab_mode.Tp + dab_mode.T_intra;
-% 
-% end
-
-%%
-
-% %% CONCATNATING 2+ PULSES
-% 
-% concatnated_pulses = dab_pulses(1,:);
-% 
-% for pulse = 2:dab_mode.p_intra
-%       
-%    concatnated_pulses = [concatnated_pulses dab_pulses(pulse,1+dab_mode.Tnull:end)];
-% 
-% end
 
 %% DEMODULATING CONCATNATED PULSES
 
