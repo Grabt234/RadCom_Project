@@ -102,7 +102,29 @@ ylabel("Velocity (m/s)")
 
 
 
-
+%  y = chirp_gen(fs,f0,B,T);
+%         y = [y zeros(1, PRT*fs - length(y))];
+%         mf = mf_gen(y);
+%         %moving to frequency domain
+%         MF = fft(mf);
+%         
+%         %upscaling ro rx bins size
+%         MF = repmat(MF, n_pulses, 1);
+%         
+%         RX_SIGS = fft(rx_sigs,[],2);
+%         
+%         MF = MF(:,length(MF)/2:end);
+%         RX_SIGS =  RX_SIGS(:,length( RX_SIGS)/2:end);
+%         
+%         %matching
+%         RD = RX_SIGS.*MF;
+%         RD = fftshift((fft2(RD)),1);
+%         
+%         %moving range to correct bins
+%         RD = flip(RD,2);
+%         
+%         %normalising
+%         RD = RD/max(RD,[],"all");
 
 
 
