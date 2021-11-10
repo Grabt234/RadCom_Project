@@ -4,52 +4,93 @@
 
 close all
 
-%file name
-hdf5_file_name_emission = "_emission.h5"
-hdf5_file_name_response = "_response.h5"
+%% HDF config
 
-
-%reading data from hdf5
-cmplx_data_emission = loadfersHDF5_iq(hdf5_file_name_emission);
-cmplx_data_response = loadfersHDF5_cmplx(hdf5_file_name_response);
+% %file name
+% hdf5_file_name_emission = "_emission.h5"
+% hdf5_file_name_response = "_response.h5"
+% 
+% 
+% %reading data from hdf5
+% cmplx_data_emission = loadfersHDF5_iq(hdf5_file_name_emission);
+% cmplx_data_response = loadfersHDF5_cmplx(hdf5_file_name_response);
+% 
+% dab_mode = load_dab_rad_constants(7);
+% %runtime of simulation (seconds)
+% run_time = 0.02;
+% %sampling frequency
+% fs = 2.048e9;
+% fc = 2.048e9;
+% %window skip (time steos), no null in ths mode
+% win_skip = dab_mode.Tf;
+% %pulse repetition frequency
+% prf = 25000;
+% %the dab mode used
+%     
 
 %%
-dab_mode = load_dab_rad_constants(7);
-%runtime of simulation (seconds)
-run_time = 0.02;
-%sampling frequency
-fs = 2.048e9;
-fc = 2.048e9;
-%window skip (time steos), no null in ths mode
-win_skip = dab_mode.Tf;
-%pulse repetition frequency
-prf = 25000;
-%the dab mode used
-    
+prf = 100;
+integrationInterval = 0.5;
+prt = 1/prf;
+fc = 2.4e9;
 
-%% PLOTTING  READ DATA
+%% Bin config
+
+close all
+dab_mode = load_dab_rad_constants(7);
+
+fs = 2.5e6;
+
+filename = "rx.dat";
+fileParams.fileType = 'Bin';
+fileParams.fs=fs; %Sampling rate
+
+%Integration interval
+fileParams.interval = integrationInterval*fs; %samples
+
+fileParams.r_fid = fopen(filename,'rb');
+
+%reading rx form file
+r_file = fread(fileParams.r_fid, 2*fileParams.interval,'double');
+rx = r_file(1:2:end) + 1j*r_file(2:2:end);
+rx = resample(rx,2.048e6, 2.5e6);
+rx = rx.';
+fclose(fileParams.r_fid)
+
+%plotting rx
+ax = (1:1:length(rx))*fs/length(rx) - fs/2;
+plot(ax/1e6, 20*log10(abs(fftshift(fft(rx)))))
+figure
+
+%% TX Data
+
+tx  =  loadfersHDF5_iq("emission.h5");
 
 figure
 subplot(2,2,1)  
-plot((1:1:length(cmplx_data_response))*(1/fs), cmplx_data_response)
-title("PLOT SHOWING RECEIVED PULSE TRAIN")
+plot((1:1:length(tx))*(1/fs), tx)
+title("PLOT SHOWING TX PULSE TRAIN")
 
 %% CUTTING INTO SLOW TIME SAMPLES
 
 %preallocating memory
+fs = 2.048e6;
 
-slow_time = zeros(floor(run_time*prf), floor((1/prf)*fs));
+slow_time = zeros(floor(integrationInterval*prf), floor((1/prf)*fs));
 
 i=0;
 
-while length(cmplx_data_response) >= (1/prf)*fs
+while length(rx) >= (1/prf)*fs
     
     i = i + 1;
     %stroing slow time sample
-    slow_time(i,:) = cmplx_data_response(1:(1/prf)*fs);
+    slow_time(i,:) = rx(1:(1/prf)*fs);
     %removing slow time sample
-    cmplx_data_response = cmplx_data_response((1/prf)*fs:end);
+    rx = rx((1/prf)*fs:end);
     
+    if(i*prt > integrationInterval)
+        break
+    end
 end
 
 %showing single pulse
@@ -58,73 +99,67 @@ plot((1:1:length(slow_time(1,:)))*(1/fs),slow_time(1,:))
 title("SINGLE RECEIVED PULSE")
 
 %% MATCHING
- 
+slow_time = slow_time(2:end,:);
+
 %creating matched filter (there is a size mismatch)
-matched_filter = conj(fliplr(cmplx_data_emission));
+mf = [tx zeros(1, prt*fs - length(tx))];
+mf = conj(flip(mf));
 
-% %plottng matched response with prs from range bin
-% prs_bin_response = abs(conv(matched_filter,squeeze(range_bins(1,prs_pos,:))));
-% subplot(2,2,4)
-% plot(1:1:length( prs_bin_response), prs_bin_response)
-% title("MATCHED RESPONSE")
+RD = zeros(size(slow_time,1), length(conv(mf, slow_time(1,:))));
 
-%preallocating memory
-range_response = zeros(ceil(run_time*prf),length(conv(matched_filter,slow_time(1,:))));
-
-for j = 1:i
+for i = 1:size(slow_time,1)
     
-    range_response(j,:) = conv(matched_filter,slow_time(j,:));
-    
+    RD(i,:) = conv(mf, slow_time(i,:) );
+
 end
 
-%% PLOTTING FIGURE
+RD = fftshift(fft(RD,[],1),1);
+
 figure
-range_response = fftshift(fft(range_response,[],1),1);
+s = surf(10*log10(abs(RD)));
+set(s,"linestyle", "none")
+% %moving to frequency domain
+% MF = fft(mf);
+% %upscaling ro rx bins size
+% MF = repmat(MF, size(slow_time,1), 1);
 
-range_response = range_response/max(range_response,[], 'all');
+% RX = fft(slow_time,[],2);
+% 
+% MF = MF(:,length(MF)/2:end);
+% RX=  RX(:,length( RX)/2:end);
+% 
+% %matching
+% RD = RX.*MF;
+% RD = fftshift((ifft2(RD)),1);
+%         
+% %moving range to correct bins
+% RD = flip(RD,2);
+%         
+% %normalising
+% RD = RD/max(RD,[],"all");
 
 
-fast_time = size(range_response,2);
-slow_time = size(range_response,1);
-
-%range axis
-r_axis = (1:1:fast_time)*(1/fc)*(3e8/(2*1000));
-
+% 
+% fast_time = size(RD,2);
+% slow_time = size(RD,1);
+% 
+% range axis
+% r_axis = (1:1:fast_time)*(1/fc)*(3e8/(2*1000));
+% 
 %velocity axis
-%SIMPLIFY THIS AXIS
+%SIMPLIFY THIS AXIS 
+% v_axis = (-slow_time/2:1:slow_time/2)*(prf/slow_time)*(1/fs)*(3e8/2);
 
-v_axis = (-slow_time/2:1:slow_time/2)*(prf/slow_time)*(1/fs)*(3e8/2);
+% figure
+% su = surf(10*log10(abs(RD)));
+% set(su,"linestyle", "none")
+% 
+% %plotting
+% % Rimagesc(r_axis , v_axis  ,10*log10(abs(range_response)))
+% xlabel("Range (Km)")
+% ylabel("Velocity (m/s)")
 
-%plotting
-imagesc(r_axis , v_axis  ,10*log10(abs(range_response)))
-xlabel("Range (Km)")
-ylabel("Velocity (m/s)")
 
-
-
-%  y = chirp_gen(fs,f0,B,T);
-%         y = [y zeros(1, PRT*fs - length(y))];
-%         mf = mf_gen(y);
-%         %moving to frequency domain
-%         MF = fft(mf);
-%         
-%         %upscaling ro rx bins size
-%         MF = repmat(MF, n_pulses, 1);
-%         
-%         RX_SIGS = fft(rx_sigs,[],2);
-%         
-%         MF = MF(:,length(MF)/2:end);
-%         RX_SIGS =  RX_SIGS(:,length( RX_SIGS)/2:end);
-%         
-%         %matching
-%         RD = RX_SIGS.*MF;
-%         RD = fftshift((fft2(RD)),1);
-%         
-%         %moving range to correct bins
-%         RD = flip(RD,2);
-%         
-%         %normalising
-%         RD = RD/max(RD,[],"all");
 
 
 

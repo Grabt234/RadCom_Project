@@ -50,7 +50,8 @@ bits = [ones(1,onez), zeros(1,zeroz)];
 bits = bits(randperm(numel(bits)));
 bits = num2str(bits,'%i');
 
-f0 = 2.048*10^6;
+f0 = 6.144*10^6;
+txf0 = 6.25e6;
 T = 1/f0;
 
 %% EXTRACTING DAB_CONSTANTS
@@ -108,10 +109,10 @@ S = S(:)';
 
 %% WRITTING TO FILES
 
+% 
+% create_hdf5('emission',S);
 
-create_hdf5('emission',S);
-
-S = resample(S,2.5e6,2.048e6);
+S = resample(S,txf0,f0);
 
 
 
