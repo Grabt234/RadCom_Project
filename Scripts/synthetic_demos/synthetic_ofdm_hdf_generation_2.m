@@ -50,8 +50,12 @@ bits = [ones(1,onez), zeros(1,zeroz)];
 bits = bits(randperm(numel(bits)));
 bits = num2str(bits,'%i');
 
-f0 = 2.048*10^6;
+f0 = 2.048e6;
+txf0 = 2.5e6;
 T = 1/f0;
+
+%
+delay_samps = (2048)*4;
 
 %% EXTRACTING DAB_CONSTANTS
 
@@ -96,7 +100,6 @@ tif_time = linspace(T,T_intra,T_intra);
 %adding in interframe time periods
 S = insert_inter_frame_time(S, F, tif_time);
 
-
 %% PLOTTING
     
 %converting rows to columns
@@ -104,23 +107,42 @@ S = S';
 %stacking all columns the transposing
 S = S(:)';
 
-% plot(1:1:length(S), S)
+S = [S zeros(1,delay_samps)];
+
 
 %% WRITTING TO FILES
 
+% create_hdf5('emission',S);
 
-create_hdf5('emission',S);
+figure
+plot(1:1:length(S), S)
+xlabel("samples - n")
+title("ORIGNAL SAMP RATE")
 
-S = resample(S,2.5e6,2.048e6);
+S = resample(S,txf0,f0);
 
+figure
+plot(1:1:length(S), S)
+xlabel("samples - n")
 
+figure
+plot((1:1:length(S))*1/txf0, S)
+xlabel("time - s")
 
 a = zeros(2,length(S));
+% b = zeros(2,length(S));
+% b(1,:)=real(S);
+% b(2,:)=imag(S);
 a(1,:)=real(S);
 a(2,:)=imag(S);
+
 fid = fopen('tmp.bin', 'w');
 fwrite(fid, a, 'double');
 fclose(fid);
+
+% fid = fopen('tmp2.bin', 'w');
+% fwrite(fid, b, 'double');
+% fclose(fid);
 
 % fid = fopen('tmp.bin', 'r');
 % b = fread(fid, 4, 'double');
