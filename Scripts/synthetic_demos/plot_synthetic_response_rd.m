@@ -53,7 +53,9 @@ fileParams.r_fid = fopen(filename,'rb');
 %reading rx form file
 r_file = fread(fileParams.r_fid, 2*fileParams.interval,'double');
 rx = r_file(1:2:end) + 1j*r_file(2:2:end);
-rx = resample(rx,2.6.114e6, 6.25e6);
+
+rx = resample(rx,2.048e6, 2.5e6);
+
 rx = rx.';
 fclose(fileParams.r_fid)
 
