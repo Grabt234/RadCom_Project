@@ -50,12 +50,12 @@ bits = [ones(1,onez), zeros(1,zeroz)];
 bits = bits(randperm(numel(bits)));
 bits = num2str(bits,'%i');
 
-f0 = 2.048e6;
-txf0 = 2.5e6;
+f0 =  dab_mode.f0;
+txf0 = dab_mode.ftx;
 T = 1/f0;
 
 %
-delay_samps = (2048)*4;
+delay_samps = dab_mode.Td;
 
 %% EXTRACTING DAB_CONSTANTS
 
@@ -91,7 +91,7 @@ symbol_time = 1:1:Ts;
 
 %% GENERATING WAVEFORM
 
-%generating all envelopes of frames
+%generating all envelopes of framestx = tx(1:4096);
 S = gen_all_pulses(symbol_time, F, L_0, Tu, Ts, Tg, K,W_cube,A_pulses);
 
 %interframe time

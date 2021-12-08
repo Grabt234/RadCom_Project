@@ -10,21 +10,23 @@ dab_mode = load_dab_rad_constants(7);
 
 %% RF Parameters
 %system sampling rate
-fs = 2.048e6;
+fs =  dab_mode.f0;
 fc = 2.4e9;
 readIn = 1; %s
-d = (2048)*4;
+d = dab_mode.Td;
 tau = dab_mode.Tf;
 prt = (d + tau)*1/fs;
 prf = 1/prt;
-maxPulses = 100;
-txFileParams.fs = 2.5e6;
-rxFileParams.fs = 2.5e6;
+maxPulses = 50;
+%txFileParams.fs = 2.5e6;
+%rxFileParams.fs = 2.5e6;
+txFileParams.fs = dab_mode.ftx;
+rxFileParams.fs = dab_mode.ftx;
 
 %delay before data starts being taken by hardware
-settle = 0.1;
-delay = settle + 10*prt*fs;
-cableSpeed = 0.6; % as a factor fo the speed of light
+settle = 0;
+% delay = settle + 10*prt*fs;
+cableSpeed = 0.67; % as a factor fo the speed of light
 c= 299792458*cableSpeed;
 
 %% TX Params Config
@@ -120,11 +122,15 @@ sgtitle('PLOTS SHOWING READ IN DATA')
 %new figure/subplots for the ard generation
 figure
 
-%prepending zeroes to round to closest prf after sampling delay
-rx = [zeros(1, settle*fs) rx];
+if settle ~= 0
+    %prepending zeroes to round to closest prf after sampling delay
+    rx = [zeros(1, round(settle*fs)) rx];
+    disp("here")
+    %removing first pulse in order to remove added zeros
+    rx = rx(1,(settle+prt)*fs :end);
+end
 
-%removing first pulse in order to remove added zeros
-rx = rx(1,(settle+prt)*fs :end);
+
 
 %% RD Prep
 
@@ -135,17 +141,20 @@ ylabel("amplitude - lin")
 title("TIME DOMAIN OF RX SIGNAL (shifted to prf)")
 
 %preallocating memory 
-RD = zeros(maxPulses, floor(fs/prf));
+RD = zeros(maxPulses, round(fs/prf));
 
 nPulses = 0;
+
+a = tx(1:1024);
+p = 1000;
 
 while nPulses < maxPulses
 
     %taking slow time cut
     RD(nPulses+1,:) = rx(1,1:fs/prf);
     %removing cut from data
-    rx = rx(1, (fs/prf)+1:end);
-
+    rx = rx(1, (fs/prf)+1:end); 
+    rx(1+p:1024+p) = rx(1+p:1024+p) + a;
     nPulses = nPulses +1 ;
 end
 
@@ -161,22 +170,10 @@ title("TIME DOMAIN OF SINGLE RX SLOW TIME SLICE")
 %% Creating Matched Filter
 
 mf = tx;
+mf = mf(1:end-1);
 fill = floor(fs/prf) - length(tx);
 mf = [mf zeros(1,fill)];
 mf = conj(flip(mf));
-
-
-% 
-% t = rx(1:1000000);
-% 
-% t = conv(t,mf);
-% 
-% figure
-% plot(1:1:length(t),abs(t))
-% 
-% a = conv(tx,mf);
-% figure
-% plot(1:1:length(a),abs(a))
 
 
 subplot(2,2,3)
@@ -185,24 +182,17 @@ xlabel("time - s")
 ylabel("amplitude - lin")
 title("TIME DOMAIN MATCHED FILTER")
 
-MF = fft(mf);
+MF = fftshift(fft(mf));
 MF = repmat(MF, nPulses,1);
 
 %% ARD Frequency
-% 
-%fft along rows
 
-% RD = conv2(RD.',mf.', "same").';
-
-RD = fft(RD,[],2);
+% %fft along rows
+RD = fftshift(fft(RD,[],2),2);
 % 
-% %cutting redundant info
-% MF = MF(:, length(MF)/2:end);
-% RD = RD(:, length(RD)/2:end);
-% 
-%matching in frequency domain
+% %matching in frequency domain
 RD = RD.*MF;
-% 
+
 %plotting matched response
 subplot(2,2,4)
 plot(1:1:length(RD(1,:)),abs(fftshift(ifft(RD(1,:)))));
@@ -215,16 +205,14 @@ title("mf response")
 % RD = flip(RD,2);
 
 RD = ifft(RD,[],2);
-RD = fftshift(fft(RD,[],1));
+RD = fft(RD,[],1);
+RD = fftshift(RD,1);
+%RD = fftshift((RD,[],2));
 % RD = flip(RD,2);
 
 
 %RD = fftshift(fft(RD),1);
 % RD = flip(RD, 2);
-
-
-
-%
 
 vres = c*prf/(2*fc*size(RD,1));
 
@@ -232,11 +220,11 @@ velocityAxis = (-size(RD,1)/2+1:size(RD,1)/2)-1; %hz
 
 dopplerAxis = velocityAxis*2*(c/fc); %m/s
 
-delayAxis = (1:size(RD,2)/2)*c/(fs*1000); %km
+delayAxis = (1:1:size(RD,2))*c/(fs*1000); %km
 % 
 figure
-imagesc(delayAxis,dopplerAxis, 20*log10(abs(RD)))
-%imagesc(delayAxis,dopplerAxis, (abs(RD(:,length(RD)/2:end))))
+%imagesc(delayAxis,dopplerAxis, 20*log10(abs(RD)))
+imagesc(delayAxis,dopplerAxis, (abs(RD)))
 xlabel("range - km")
 ylabel("doppler - hz")
 % % s = surf((abs(RD)));
