@@ -7,15 +7,15 @@ close all
 clear all
 
 dab_mode = load_dab_rad_constants(7);
-
+a =1;
 %% RF Parameters
 %system sampling rate
-fs =  dab_mode.f0;
+fs =  dab_mode.ftx;
 fc = 2.4e9;
 readIn = 1; %s
 d = dab_mode.Td;
 tau = dab_mode.Tf;
-prt = (d + tau)*1/fs;
+prt = 4166*1/fs;%(d + tau)*1/fs;
 prf = 1/prt;
 maxPulses = 50;
 %txFileParams.fs = 2.5e6;
@@ -26,7 +26,7 @@ rxFileParams.fs = dab_mode.ftx;
 %delay before data starts being taken by hardware
 settle = 0;
 % delay = settle + 10*prt*fs;
-cableSpeed = 0.67; % as a factor fo the speed of light
+cableSpeed = 1; % as a factor fo the speed of light
 c= 299792458*cableSpeed;
 
 %% TX Params Config
@@ -95,6 +95,8 @@ rx = rx_file(1:2:end) + 1j*rx_file(2:2:end);
 %changing column into row
 rx = rx.';
 
+% rx = rx(40:end);
+
 %Plotting time domain of tx signal
 subplot(2,2,3)
 ax = (1:1:length(rx))*1/rxFileParams.fs;
@@ -124,13 +126,11 @@ figure
 
 if settle ~= 0
     %prepending zeroes to round to closest prf after sampling delay
-    rx = [zeros(1, round(settle*fs)) rx];
-    disp("here")
-    %removing first pulse in order to remove added zeros
-    rx = rx(1,(settle+prt)*fs :end);
+%     rx = [zeros(1, round(settle*fs)) rx];
+%     %removing first pulse in order to remove added zeros
+%     rx = rx(1,(settle+prt)*fs :end);
+        rx = rx(1,settle*fs:end);
 end
-
-
 
 %% RD Prep
 
@@ -145,17 +145,14 @@ RD = zeros(maxPulses, round(fs/prf));
 
 nPulses = 0;
 
-a = tx(1:1024);
-p = 1000;
-
 while nPulses < maxPulses
 
     %taking slow time cut
     RD(nPulses+1,:) = rx(1,1:fs/prf);
     %removing cut from data
     rx = rx(1, (fs/prf)+1:end); 
-    rx(1+p:1024+p) = rx(1+p:1024+p) + a;
     nPulses = nPulses +1 ;
+
 end
 
 %cutting excess if leftover rows of zeros
@@ -170,7 +167,7 @@ title("TIME DOMAIN OF SINGLE RX SLOW TIME SLICE")
 %% Creating Matched Filter
 
 mf = tx;
-mf = mf(1:end-1);
+mf = mf(1:end-a);
 fill = floor(fs/prf) - length(tx);
 mf = [mf zeros(1,fill)];
 mf = conj(flip(mf));
@@ -189,8 +186,8 @@ MF = repmat(MF, nPulses,1);
 
 % %fft along rows
 RD = fftshift(fft(RD,[],2),2);
-% 
-% %matching in frequency domain
+
+%matching in frequency domain
 RD = RD.*MF;
 
 %plotting matched response
@@ -220,7 +217,7 @@ velocityAxis = (-size(RD,1)/2+1:size(RD,1)/2)-1; %hz
 
 dopplerAxis = velocityAxis*2*(c/fc); %m/s
 
-delayAxis = (1:1:size(RD,2))*c/(fs*1000); %km
+delayAxis = (1:1:size(RD,2))*c/(fs*2*1000); %km
 % 
 figure
 %imagesc(delayAxis,dopplerAxis, 20*log10(abs(RD)))
