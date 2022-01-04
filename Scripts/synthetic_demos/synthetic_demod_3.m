@@ -2,9 +2,7 @@
 %=================================
 % running iq data that was synthetically though (hopefully generalised) 
 % DAB processing chain
-%
-%encoded bits = 11001011000100011001111111100011110100101011111100001000010100100001010010011011
-           
+%          
 %=================================
 
 %% LOADING IN INFORMATION
@@ -12,7 +10,7 @@ close all
 dab_mode = load_dab_rad_constants(7);
 
 fs = 2.5e6;
-integrationInterval = 2;
+integrationInterval = 0.1;
 filename = "rx.dat";
 fileParams.fileType = 'Bin';
  
