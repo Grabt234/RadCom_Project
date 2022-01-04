@@ -43,7 +43,7 @@ display = 0;
 n = 2;
 
 %CHOOSE NEW CONSTANT
-dab_mode = load_dab_rad_constants(7);
+dab_mode = load_dab_rad_constants();
 
 %minus two: L1 Null, L2 PRS, these are only data carrying bits
 onez = ((dab_mode.L-2)*dab_mode.p_intra*dab_mode.K)*2/2;
@@ -92,7 +92,7 @@ symbol_time = 1:1:Ts;
 %removing null to make basic pulse wave
 A_pulses = A_pulses(:,2:end,:);
 W_cube = W_cube(:,2:end,:);
-L_0 = L_0 - 1; %remvoed null tf symbols go down
+
 %% GENERATING WAVEFORM
 
 %generating all envelopes of framestx = tx(1:4096);
