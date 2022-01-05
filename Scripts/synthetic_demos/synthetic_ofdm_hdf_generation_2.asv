@@ -1,4 +1,4 @@
-%=================================
+    %=================================
 % Key 
 %=================================
 % n    - Number of bits encoded in a single letter
@@ -43,7 +43,7 @@ display = 0;
 n = 2;
 
 %CHOOSE NEW CONSTANT
-dab_mode = load_dab_rad_constants();
+dab_mode = load_dab_rad_constants(3);
 
 %minus two: L1 Null, L2 PRS, these are only data carrying bits
 onez = ((dab_mode.L-2)*dab_mode.p_intra*dab_mode.K)*2/2;
@@ -92,11 +92,17 @@ symbol_time = 1:1:Ts;
 %removing null to make basic pulse wave
 A_pulses = A_pulses(:,2:end,:);
 W_cube = W_cube(:,2:end,:);
-
+L_0 = L_0 - 1; %remvoed null tf symbols go down
 %% GENERATING WAVEFORM
 
 %generating all envelopes of framestx = tx(1:4096);
 S = gen_all_pulses(symbol_time, F, L_0, Tu, Ts, Tg, K,W_cube,A_pulses);
+
+p = S(2049:2*2048);
+plot(1:1:length(p), abs(fftshift(fft(p))));
+xlim([0 2048])
+ylabel("Amplitude [arb]")
+xlabel("Frequency [KHz]")
 
 %interframe time
 tif_time = linspace(T,T_intra,T_intra);
@@ -176,11 +182,28 @@ fclose(fid);
 
 
 
+%% for a pretty prectorgram insert at line 100-101
 
 
+a = reshape(S,2048,[]);
 
+A = fftshift(fft(a,[],1));
+b = 30;
+d = 5;
+A = [A zeros(2048,b) A zeros(2048,b) A ];
+A = A.';
 
-
+h = surf(abs(A));
+colour = [0, 0.4470, 0.7410];
+colormap 'white';
+h.FaceLighting = 'flat';
+h.EdgeAlpha = 1;
+h.EdgeColor = colour;
+h.EdgeLighting = 'gouraud';
+xlabel("Carrier [K]");
+ylabel("Symbol Index [L]",'FontSize',15);
+zlabel("Magnitude [arb]",'FontSize',15);
+title("FREQUNECY DOMAIN SPECTROGRAM OF OFDM SYMBOL GENERATED USING AN ARBITRARY DAB MODE",'FontSize',17)
 
 
 
