@@ -21,7 +21,7 @@ function L_encode = fill_symbols(L_encode,dab_mode)
     required_symbols = (ceil(number_pulses) - number_pulses)*(dab_mode.L);
     
     %see below
-    additional = ones(required_symbols, dab_mode.K);
+    additional = ones(round(required_symbols), dab_mode.K);
     
     %appending symbols to make integer number of pulses
     L_encode = [L_encode ; additional];  

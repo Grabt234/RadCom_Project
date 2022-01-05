@@ -97,13 +97,13 @@ L_0 = L_0 - 1; %remvoed null tf symbols go down
 
 %generating all envelopes of framestx = tx(1:4096);
 S = gen_all_pulses(symbol_time, F, L_0, Tu, Ts, Tg, K,W_cube,A_pulses);
-
-p = S(2049:2*2048);
-plot(((1:1:length(p))-length(p)/2 -1)*f0/(length(p)*1000), abs(fftshift(fft(p))));
-%xlim([-1024 1024])
-ylabel("Amplitude [arb]",'FontSize',15)
-xlabel("Frequency [KH]",'FontSize',15)
-title("FFT OF OFDM SYMBOL USING THE SINGAL GENERATION CHAIN AND DAB MODE 2")
+% 
+% p = S(2049:2*2048);
+% plot(((1:1:length(p))-length(p)/2 -1)*f0/(length(p)*1000), abs(fftshift(fft(p))));
+% %xlim([-1024 1024])
+% ylabel("Amplitude [arb]",'FontSize',15)
+% xlabel("Frequency [KH]",'FontSize',15)
+% title("FFT OF OFDM SYMBOL USING THE SINGAL GENERATION CHAIN AND DAB MODE 2")
 %interframe time
 tif_time = linspace(T,T_intra,T_intra);
 

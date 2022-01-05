@@ -28,8 +28,9 @@ function S = gen_all_pulses(time,P, L , Tu , Ts ,Tg, N,W_cube,A_cube)
     for p = 1:P
         
         %extracting frequency weights for current pulse
-        W = W_cube(:,:,p);
-        
+        W = W_cube(p,:,:);
+        W = shiftdim(W,1);
+
         %extracting phase weights for current pulse
         A = A_cube(p,:,:);
         A = shiftdim(A,1);
