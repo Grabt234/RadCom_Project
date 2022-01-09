@@ -69,6 +69,5 @@ for i = 1: length(Ls)
     ylabel("Magnitude [dB]", "FontSize", 15)
 
 end
-%% WRITTING TO FILES
 
 
