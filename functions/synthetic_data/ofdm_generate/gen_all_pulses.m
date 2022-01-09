@@ -35,7 +35,6 @@ function S = gen_all_pulses(time,P, L , Tu , Ts ,Tg, N,W_cube,A_cube)
         A = A_cube(p,:,:);
         A = shiftdim(A,1);
         disp(p)
-        
         %generating frame
         S(p,:) = gen_pulse(time,L , Tu , Ts ,Tg, N,W,A);
         
