@@ -3,6 +3,9 @@
 % Tests conversion of bits to phases
 %================================================
 
+close all
+clear all
+
 %% Setting carrier and frame parameter
 
 %Number of frames
@@ -11,7 +14,7 @@ F = 2;
 L = 2;
 L_0 = L;
 %carriers no center
-K = 5;    
+K = 10;    
 %carriers incl. center
 K_0 = K + 1;
 %bits per phase
@@ -54,6 +57,31 @@ for i = 1:length(Ns)
     L_encode = convert_vector_symbols(A,K);
     
     disp(L_encode)
-
+    
+    %% Trying to make a nice plot with calculated data
+    
+    hold on
+    
+    s = scatter(i*real(A),i*imag(A), 'LineWidth',1.5)
+    
 end
     
+
+set(gca,'LineWidth',0.75) 
+ax = gca;  
+grid on
+box on
+xlim padded
+ylim padded
+
+%creating legend
+Legend=cell(3,1);
+Legend{1} = "1 bit per phase";
+Legend{2} = "2 bits per phase";
+Legend{3} = "3 bits per phase";
+
+legend(Legend);
+
+
+
+
