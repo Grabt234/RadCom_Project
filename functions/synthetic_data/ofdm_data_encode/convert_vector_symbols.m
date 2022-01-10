@@ -1,4 +1,4 @@
-function L_encode = convert_vector_symbols(A,dab_mode)
+function L_encode = convert_vector_symbols(A,K)
     % ---------------------------------------------------------------------    
     % convert_vector_symbols: Takes an array of phase codes and converts
     %                           them into an array of symbols
@@ -14,9 +14,6 @@ function L_encode = convert_vector_symbols(A,dab_mode)
     %
     % ---------------------------------------------------------------------
     %% ASSIGNING CONSTANTS  
-
-    %carriers per symbol
-    K = dab_mode.K;
 
     %% CALCULATING REQUIRED PULSES
 
