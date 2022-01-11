@@ -122,7 +122,7 @@ S = [S zeros(1,delay_samps)];
 % S = [exp(j*2*pi*(zeros(1,50))) 0*exp(j*2*pi*(zeros(1,950)))] ;
 %% WRITTING TO FILES
 
-% create_hdf5('emission',S);
+create_hdf5('emission',S);
 
 figure
 plot(1:1:length(S), S)
@@ -185,27 +185,27 @@ fclose(fid);
 %% for a pretty prectorgram insert at line 100-101
 
 
-a = reshape(S,2048,[]);
-
-A = fftshift(fft(a,[],1));
-b = 30;
-d = 5;
-A = [A zeros(2048,b) A zeros(2048,b) A ];
-A = A.';
-
-h = surf(abs(A));
-colour = [0, 0.4470, 0.7410];
-colormap 'white';
-h.FaceLighting = 'flat';
-h.EdgeAlpha = 1;
-h.EdgeColor = colour;
-h.EdgeLighting = 'gouraud';
-xlabel("Carrier [K]");
-ylabel("Symbol Index [L]",'FontSize',15);
-zlabel("Magnitude [arb]",'FontSize',15);
-title("FREQUNECY DOMAIN SPECTROGRAM OF OFDM SYMBOL GENERATED USING AN ARBITRARY DAB MODE",'FontSize',17)
-
-
+% a = reshape(S,2048,[]);
+% 
+% A = fftshift(fft(a,[],1));
+% b = 30;
+% d = 5;
+% A = [A zeros(2048,b) A zeros(2048,b) A ];
+% A = A.';
+% 
+% h = surf(abs(A));
+% colour = [0, 0.4470, 0.7410];
+% colormap 'white'; 
+% h.FaceLighting = 'flat';
+% h.EdgeAlpha = 1;
+% h.EdgeColor = colour;
+% h.EdgeLighting = 'gouraud';
+% xlabel("Carrier [K]");
+% ylabel("Symbol Index [L]",'FontSize',15);
+% zlabel("Magnitude [arb]",'FontSize',15);
+% title("FREQUNECY DOMAIN SPECTROGRAM OF OFDM SYMBOL GENERATED USING AN ARBITRARY DAB MODE",'FontSize',17)
+% 
+% 
 
 
 

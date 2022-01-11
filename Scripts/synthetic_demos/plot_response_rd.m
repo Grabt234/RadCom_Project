@@ -6,13 +6,13 @@
 close all
 clear all
 
-dab_mode = load_dab_rad_constants(7);
-a =1;
+dab_mode = load_dab_rad_constants(3);
+a =0;
 %% RF Parameters
 %system sampling rate
 fs =  dab_mode.ftx;
 fc = 2.4e9;
-readIn = 1; %s
+readIn = 0.5; %s
 d = dab_mode.Td;
 tau = (dab_mode.L-1)*(dab_mode.Tu+dab_mode.Tg); %pulse width with null removed
 prt = (d + tau)*1/fs;%(d + tau)*1/fs;
@@ -20,8 +20,8 @@ prf = 1/prt;
 maxPulses = 50;
 %txFileParams.fs = 2.5e6;
 %rxFileParams.fs = 2.5e6;
-txFileParams.fs = dab_mode.ftx;
-rxFileParams.fs = dab_mode.ftx;
+txFileParams.fs = 6*2.048e6;
+rxFileParams.fs = 6*2.048e6;
 
 %delay before data starts being taken by hardware
 settle = 0;
@@ -78,24 +78,26 @@ xlabel("frequency - Mhz")
 ylabel("amplitude")
 title("FREQUENCY DOMAIN OF TX SIGNAL")
 
+tx = loadfersHDF5_iq("synthetic_demos/emission.h5");
 %resampling to system frequency
 tx = resample(tx, fs, txFileParams.fs);
 
 % tx = tx(1, 1:dab_mode.Tf);
 %% RX read in/Resample
 
-rxFileParams.r_fid = fopen(rxFilename,'rb');
-
-%reading in doubles from bin file
-rx_file = fread(rxFileParams.r_fid,2*readIn*rxFileParams.fs ,'double');
-
-%changing into complex numbers
-rx = rx_file(1:2:end) + 1j*rx_file(2:2:end);
-
-%changing column into row
-rx = rx.';
+% rxFileParams.r_fid = fopen(rxFilename,'rb');
+% 
+% %reading in doubles from bin file
+% rx_file = fread(rxFileParams.r_fid,2*readIn*rxFileParams.fs ,'double');
+% 
+% %changing into complex numbers
+% rx = rx_file(1:2:end) + 1j*rx_file(2:2:end);
+% 
+% %changing column into row
+% rx = rx.';
 
 % rx = rx(40:end);
+rx = loadfersHDF5_cmplx("synthetic_demos/cw_response.h5");
 
 %Plotting time domain of tx signal
 subplot(2,2,3)
@@ -167,9 +169,6 @@ title("TIME DOMAIN OF SINGLE RX SLOW TIME SLICE")
 %% Creating Matched Filter
 
 mf = tx;
-mf = mf(1:end-a);
-fill = floor(fs/prf) - length(tx);
-mf = [mf zeros(1,fill)];
 mf = conj(flip(mf));
 
 
@@ -179,20 +178,20 @@ xlabel("time - s")
 ylabel("amplitude - lin")
 title("TIME DOMAIN MATCHED FILTER")
 
-MF = fftshift(fft(mf));
+MF = fft(mf);
 MF = repmat(MF, nPulses,1);
 
 %% ARD Frequency
 
 % %fft along rows
-RD = fftshift(fft(RD,[],2),2);
+RD = fft(RD,[],2);
 
 %matching in frequency domain
 RD = RD.*MF;
 
 %plotting matched response
 subplot(2,2,4)
-plot(1:1:length(RD(1,:)),abs(fftshift(ifft(RD(1,:)))));
+plot(1:1:length(RD(1,:)),abs(fftshift(ifft(RD(4,:)))));
 title("mf response")
 
 % RD = conv2(RD.',mf.', "same").';
@@ -201,31 +200,30 @@ title("mf response")
 % RD = fftshift(fft2(RD),1);
 % RD = flip(RD,2);
 
-RD = ifft(RD,[],2);
+RD = fftshift(ifft(RD,[],2));
 RD = fft(RD,[],1);
 RD = fftshift(RD,1);
-%RD = fftshift((RD,[],2));
-% RD = flip(RD,2);
 
+RD = RD(:,length(RD)/2 + 1:end);
 
-%RD = fftshift(fft(RD),1);
-% RD = flip(RD, 2);
-
-vres = c*prf/(2*fc*size(RD,1));
+vmax = c/(4*fc*prt);
 
 velocityAxis = (-size(RD,1)/2+1:size(RD,1)/2)-1; %hz
 
 dopplerAxis = velocityAxis*2*(c/fc); %m/s
 
+velocityAxis = velocityAxis*(vmax/(size(RD,1)/2));
+
 delayAxis = (1:1:size(RD,2))*c/(fs*2*1000); %km
 % 
 figure
 %imagesc(delayAxis,dopplerAxis, 20*log10(abs(RD)))
-imagesc(delayAxis,dopplerAxis, (abs(RD)))
+imagesc(delayAxis,velocityAxis, 20*log10(abs(RD)))
 xlabel("range - km")
 ylabel("doppler - hz")
 % % s = surf((abs(RD)));
 % % set(s, "linestyle", "none")
 
-
-%% ARD Time
+figure
+h = surf(20*log10(abs(RD)))
+h.LineStyle = "none"

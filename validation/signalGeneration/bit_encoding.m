@@ -74,6 +74,9 @@ box on
 xlim padded
 ylim padded
 
+xlabel("Real", "FontSize", 18)
+ylabel("Imaginary", "FontSize", 18)
+    
 %creating legend
 Legend=cell(3,1);
 Legend{1} = "1 bit per phase";

@@ -62,7 +62,8 @@ for i = 1: length(Ls)
     S = S./max(S);
     
     subplot(2,2,i)
-    plot(((1:1:length(S)) - length(S)/2)*(f0/1000), 20*log10(abs(S)));
+    plot(((1:1:length(S)) - length(S)/2)*(f0/1000000000), 20*log10(abs(S)));
+    XTickLabel = ""
     xlim tight
     ylim padded
     xlabel("Frequency [Mhz]", "FontSize", 15)
