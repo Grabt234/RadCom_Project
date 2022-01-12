@@ -51,21 +51,21 @@ for i = 1:length(Ls)
      subplot(2,2,i)
      S = S.';
      S = S./max(S,[],"all");
-    h = surf(abs(S));
-    colour = [0, 0.4470, 0.7410];
-    colormap 'white'; 
-    h.FaceLighting = 'flat';
-    h.EdgeAlpha = 1;
-    h.EdgeColor = colour;
-    h.EdgeLighting = 'gouraud';
-    xlabel("Carrier [K]",'FontSize',15);
-    ylabel("Symbol Index [L]",'FontSize',15);
-    zlabel("Magnitude [arb]",'FontSize',15);
-    xlim tight
-    ylim tight
-    if L == 2
-      yticks([1 2])
-    end
+        h = surf(((1:1:size(S,2)) - size(S,2)/2)/size(S,2)*2.048,1:1:size(S,1),abs(S));
+        colour = [0, 0.4470, 0.7410];
+        colormap 'white'; 
+        h.FaceLighting = 'flat';
+        h.EdgeAlpha = 1;
+        h.EdgeColor = colour;
+        h.EdgeLighting = 'gouraud';
+        xlabel("Frequency [MHz]",'FontSize',15);
+        ylabel("Symbol Index [L]",'FontSize',15);
+        zlabel("Magnitude [arb]",'FontSize',15);
+        xlim tight
+        ylim tight
+        if L == 2
+          yticks([1 2])
+        end
     
 
 end
