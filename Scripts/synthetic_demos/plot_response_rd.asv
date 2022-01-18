@@ -180,7 +180,7 @@ proc.nIterations = 30;
 proc.Fs = f0;
 proc.alpha = 0;
 proc.initialAlpha = 0;
-
+git remote set-url origin it@github.com:username/repo.git
 % rx = CGLS_Cancellation_RefSurv(rx_lb.' , rx.', proc).';
 
 %% Creating Matched Filter

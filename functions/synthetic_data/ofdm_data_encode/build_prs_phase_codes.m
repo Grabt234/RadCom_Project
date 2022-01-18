@@ -1,4 +1,4 @@
-function prs = build_prs_phase_codes(K)
+function prs = build_prs_phase_codes(dab_mode)
     % ---------------------------------------------------------------------    
     % build_prs_custom: takes the standard DAB prs and isolates nearest L/2
     %               pulses in order to create custom prs
@@ -12,10 +12,7 @@ function prs = build_prs_phase_codes(K)
     %  > prs - the new prs for L carriers
     %
     % ---------------------------------------------------------------------
-   
-    %forcing to always generate full prs
-    %subsequently cut back on it
-    transmission_mode = 1;
+   transmission_mode =1;
    
    if (transmission_mode == 1)
         % LUTs for Mode 1:
@@ -102,9 +99,9 @@ function prs = build_prs_phase_codes(K)
             transmission_mode);
    end
     
-   %extracting L references
-   prs = prs_mode_1(1025 - (K)/2:1025 + (K)/2);
    
+   %extracting L references
+   prs = prs_mode_1(1025 - (dab_mode.K)/2:1025 + (dab_mode.K)/2);
 end
 
 

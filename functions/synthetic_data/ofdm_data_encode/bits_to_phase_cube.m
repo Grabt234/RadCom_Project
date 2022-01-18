@@ -36,7 +36,7 @@ function [F,A_pulses] = bits_to_phase_cube(bits, n, dab_mode)
     %% PHASE CODES TO SYMBOLS
 
     %converting phase codes to set of symbols
-    L_encode = convert_vector_symbols(A,dab_mode.K);
+    L_encode = convert_vector_symbols(A,dab_mode);
     
     %% SYMBOLS TO FRAME
     

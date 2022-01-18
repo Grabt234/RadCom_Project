@@ -15,9 +15,9 @@ function A_cube = prepend_prs(L_encode,dab_mode)
     % ---------------------------------------------------------------------
     
     %generating prs (and remove center carrier to be added in later)
-    prs = build_prs_phase_codes(dab_mode.K);
+    prs = build_prs_phase_codes(dab_mode);
     
-    %cutting to remove central carrier - zero is now gone
+    %cutting to remove central carrier
     prs_left = prs(1:(length(prs)+1)/2-1);
     prs_right = prs((length(prs)+1)/2+1:end);
     

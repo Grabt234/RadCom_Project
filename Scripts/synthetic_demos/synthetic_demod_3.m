@@ -2,21 +2,21 @@
 %=================================
 % running iq data that was synthetically though (hopefully generalised) 
 % DAB processing chain
-%          
+%
+           
 %=================================
 
 %% LOADING IN INFORMATION
 close all
-dab_mode = load_dab_rad_constants(7);
+dab_mode = load_dab_rad_constants(6);
 
-fs = 2.5e6;
-integrationInterval = 0.1;
+integrationInterval = 2;
 filename = "rx.dat";
 fileParams.fileType = 'Bin';
  
 
 
-fileParams.fs=fs; %Sampling rate
+fileParams.fs=dab_mode.ftx; %Sampling rate
 %Integration interval
 fileParams.interval = integrationInterval*fs; %samples
  
@@ -27,7 +27,7 @@ r_file = fread(fileParams.r_fid, 2*fileParams.interval,'double');
 
 r_ch = r_file(1:2:end) + 1j*r_file(2:2:end);
 
-r_ch = resample(r_ch,2.048e6, 2.5e6);
+r_ch = resample(r_ch,dab_mode.f0, dab_mode.ftx);
 
 
 iq_data = r_ch.';
@@ -47,8 +47,6 @@ figure
 % figure
 
 %%
-
-f0 = 2.048e6;
 
 %bits per per code
 n = 2;
