@@ -9,18 +9,21 @@ clear all
 dab_mode = load_dab_rad_constants(8);
 a = 0;
 %% RF Parameters
-range = 50;
+range = 150;
 %system sampling rate
 f0 =  dab_mode.f0;
 fc = 2.45e9;
-readIn = 2; %s
+readIn = 5; %s
 d = dab_mode.Td;
 tau = dab_mode.Td + dab_mode.Tf;
 prt = (tau)*1/f0;
 prf = 1/prt;
-maxPulses = 200;
+maxPulses = 500;
+skip = 0;% 24*dab_mode.ftx*2*4;
 %txFileParams.fs = 2.5e6;
-%rxFileParams.fs = 2.5e6;
+%rxFileParams.fs = 2.5e6;   
+%coherent integration?
+coCount = 25;
 
 %hardware sampling rates
 txFileParams.fs = dab_mode.ftx;
@@ -100,6 +103,8 @@ tx = loadfersHDF5_iq("synthetic_demos/emission_f0.h5");
 
 rxFileParamslb.r_fid = fopen(rxFilenamelb,'rb');
 
+fseek(rxFileParamslb.r_fid, skip, "bof");
+
 %reading in doubles from bin file
 rx_filelb = fread(rxFileParamslb.r_fid,2*readIn*rxFileParamslb.fs ,'double');
 
@@ -136,6 +141,9 @@ rx_lb = resample(rx_lb, f0, rxFileParamslb.fs);
 
 rxFileParams.r_fid = fopen(rxFilename,'rb');
 
+
+fseek(rxFileParams.r_fid, skip, "bof")
+
 %reading in doubles from bin file
 rx_file = fread(rxFileParams.r_fid,2*readIn*rxFileParams.fs ,'double');
 
@@ -147,6 +155,7 @@ rx = rx_file(1:2:end) + 1j*rx_file(2:2:end);
 
 %changing column into row
 rx = rx.';
+
 
 %Plotting time domain of tx signal
 subplot(3,2,5)
@@ -168,6 +177,8 @@ title("FREQUENCY DOMAIN OF RX SIGNAL")
 %resampling to system frequency
 rx = resample(rx, f0, rxFileParams.fs);
 
+rx = rx(prt*f0*100:end);
+
 sgtitle('PLOTS SHOWING READ IN DATA FROM GENERATED (1) AND RECORDED FILES (2,3)') 
 
 %% Cancellation
@@ -185,11 +196,8 @@ proc.initialAlpha = 0;
 
 %% Creating Matched Filter
 
-mf = tx;
-mf = mf(1:end-a);
-fill = floor(f0/prf) - length(tx);
-mf = [mf zeros(1,fill)];
-mf = conj(flip(mf));
+
+mf = conj(flip(tx(1:2048)));
 
 figure
 subplot(1,2,1)
@@ -198,11 +206,10 @@ xlabel("time - s")
 ylabel("amplitude - lin")
 title("TIME DOMAIN MATCHED FILTER")
 
-%frequency domain matched filter
-MF = fft(mf)./length(mf);
+
 
 subplot(1,2,2)
-plot(1:1:length(MF), fftshift(abs(MF)))
+plot(1:1:length(mf), fftshift(abs(fft(mf))))
 xlabel("time - s")
 ylabel("amplitude - lin")
 title("FREQUENCY DOMAIN MATCHED FILTER")
@@ -210,30 +217,23 @@ title("FREQUENCY DOMAIN MATCHED FILTER")
 %% COMMUNICATIONS TIME ADJUSTMET
 
 
-rxl_b = rx_lb(1,10*prt*f0:end);
+rx_lb = rx_lb(1,10*prt*f0:end);
 
 t = rx_lb(1,1:f0/prf);
 
-RX_LB = (fft(t));
-
-TT = (MF).*RX_LB;
-tt = (ifft(TT));
+tt = conv(mf,t);
+tt = tt(length(mf):end);
 [~,I] = max(abs(tt));
-% figure
-% plot(1:1:length(tt), abs(tt))
-%I = I - tau/2  + 1; %required offset
 
 tmp = rx(40*prt*f0+1:41*prt*f0);
-TMP = fft(tmp);
-TMP_MF = MF.*TMP;
-tmp_mf = ifft(TMP_MF);
-[~,I]  =max(tmp_mf);
+tmp = conv(mf,tmp);
+tmp = tmp(length(mf):end);
 
 figure
-subplot(2,2,1)
+subplot(1,2,1)
 hold on
 plot((1:1:length(tt)), abs(tt)./max(abs(tt)));
-plot((1:1:length(tt)), abs(tmp_mf)./max(abs(tmp_mf)));
+plot((1:1:length(tmp)), abs(tmp)./max(abs(tmp)));
 legend('Loopback','Transmitted path')
 hold off
 % xlabel("time - s")
@@ -241,12 +241,9 @@ hold off
 title("FREQUENCY DOMAIN OF RX SIGNAL - LOOPBACK")
 
 %% RD Prep
-% 
-% %I = 21;
-% I = 0;
+
 %%removing offset and transient
-% rx = [zeros(1,100) rx];
-rx = rx(1,40*prt*f0 + I :end);
+rx = rx(1,40*prt+I:end);
 
 %preallocating memory 
 RD = zeros(maxPulses, round(f0/prf));
@@ -267,8 +264,7 @@ end
 %cutting excess if leftover rows of zeros
 RD = RD(1:nPulses,:);
 
-figure
-subplot(1,2,1)
+subplot(1,2,2)
 plot((1:1:length(RD(1,:))), real(RD(1:4,:)));
 xlabel("time - s")
 ylabel("amplitude - lin")
@@ -295,7 +291,6 @@ title("TIME DOMAIN OF SINGLE RX SLOW TIME SLICE")
 % title("mf response")
 % % % 
 
-mf = conj(flip(tx(1:dab_mode.L*dab_mode.Tu)));
 RD2 = zeros(nPulses, length(mf)+ length(RD(1,:)) - 1);
 
 for i = 1:size(RD,1)
@@ -304,8 +299,7 @@ for i = 1:size(RD,1)
 
 end
 
-%coherent integration?
-coCount = 20;
+
 counter = 0;    
 RD3 = zeros(nPulses/coCount, size(RD2,2));
 
@@ -348,7 +342,6 @@ delayAxis = (1:1:size(RD,2))*c/(f0*2*1000); %km
 
 
 figure
-%imagesc(delayAxis,dopplerAxis, 20*log10(abs(RD)))
 
 %allows for variable range cutoffs
 if range == 0
