@@ -1,13 +1,30 @@
-%%Notes
-
-%TX file should be generated at the ideal system sampling rate, not what is
-%   use in the physiocal hardware
+%================================================
+% Demonstrates the 100m cable loopback
+%
+%   TX gain = 00dB
+%   RX gain = 10dB
+%================================================
 %%
 close all
 clear all
 
-dab_mode = load_dab_rad_constants(8);
-a = 50;
+%% Dab Mode
+dab_mode.K         = 1500;
+dab_mode.L         = 1;
+dab_mode.Tnull     = 0;
+dab_mode.Tu        = 1*2048;
+dab_mode.Tg        = 0;
+dab_mode.Td        = 2*2048;
+dab_mode.Ts        = dab_mode.Tu + dab_mode.Tg;
+dab_mode.Tp        = dab_mode.Tnull + (dab_mode.L)*dab_mode.Ts;
+dab_mode.mask      = [ (dab_mode.Tu/2-dab_mode.K/2 +1):(dab_mode.Tu/2), ...
+                                (dab_mode.Tu/2+2):(dab_mode.Tu/2+dab_mode.K/2 +1) ];
+dab_mode.p_intra   = 1;
+dab_mode.T_intra   = 0;
+dab_mode.Tf        = (dab_mode.Tp + dab_mode.T_intra)*dab_mode.p_intra;
+dab_mode.f0        = 2*2.048e6;
+dab_mode.ftx        =2*2.5e6; 
+
 %% RF Parameters
 range = 50;
 %system sampling rate
@@ -19,11 +36,10 @@ tau = dab_mode.Td + dab_mode.Tf;
 prt = (tau)*1/f0;
 prf = 1/prt;
 maxPulses = 250;
-skip =(0*dab_mode.ftx)*2*4;% 24*dab_mode.ftx*2*4;
-%txFileParams.fs = 2.5e6;
-%rxFileParams.fs = 2.5e6;   
+skip = 0;
+  
 %coherent integration?
-coCount = 5;
+coCount = 1;
 
 %hardware sampling rates
 txFileParams.fs = dab_mode.ftx;
@@ -39,7 +55,7 @@ c= 299792458*cableSpeed;
 %% TX Params Config
 
 %transmitted file parameters
-txFilename = "synthetic_demos/tmp.bin";
+txFilename = "loopback/tmp.bin";
 
 %file reading configurations
 txFileParams.fileType = 'Bin';
@@ -47,7 +63,7 @@ txFileParams.dataType = 'float32=>double';
 
 %% RX LOOPBACK Param Config
 
-rxFilenamelb = "synthetic_demos/rx.00.dat";
+rxFilenamelb = "loopback/rx.00.dat";
 
 %file reading configurations
 rxFileParamslb.fileType = 'Bin';
@@ -56,7 +72,7 @@ rxFileParamslb.dataType = "double=>double";
 %% RX Params Config
 
 %transmitted file parameters
-rxFilename = "synthetic_demos/rx.01.dat";
+rxFilename = "loopback/rx.00.dat";
 
 %file reading configurations
 rxFileParams.fileType = 'Bin';
@@ -98,7 +114,7 @@ title("FREQUENCY DOMAIN OF TX SIGNAL")
 %resampling to system frequency
 tx = resample(tx, f0, txFileParams.fs);
 
-tx = loadfersHDF5_iq("synthetic_demos/emission_f0.h5");
+tx = loadfersHDF5_iq("loopback/emission_f0.h5");
 %% RX LOOPBACK read in/Resample
 
 rxFileParamslb.r_fid = fopen(rxFilenamelb,'rb');
@@ -140,7 +156,6 @@ rx_lb = resample(rx_lb, f0, rxFileParamslb.fs);
 %% RX read in/Resample
 
 rxFileParams.r_fid = fopen(rxFilename,'rb');
-
 
 fseek(rxFileParams.r_fid, skip, "bof")
 
@@ -269,26 +284,6 @@ xlabel("time - s")
 ylabel("amplitude - lin")
 title("TIME DOMAIN OF SINGLE RX SLOW TIME SLICE")
 
-%% ARD Frequency
-
-
-% % %fft along rows to conver time domain signal to frequency domain
-% RD = fft(RD,[],2)./length(RD);
-% 
-% %replicating mf to multiply with RD
-% MF = repmat(MF, nPulses,1);
-% % 
-% % % RD(:,1:3) = 0;
-% % % RD(:,length(RD)-1,:) = 0;
-% % 
-% %matching in frequency domain
-% RD = RD.*MF;
-
-% %plotting matched response
-% subplot(1,2,2)
-% plot(1:1:length(RD(1,:)),abs(fftshift(ifft(RD(4,:)))));
-% title("mf response")
-% % % 
 
 RD2 = zeros(nPulses, length(mf)+ length(RD(1,:)) - 1);
 
@@ -298,27 +293,6 @@ for i = 1:size(RD,1)
 
 end
 
-
-counter = 0;        
-RD3 = zeros(nPulses/coCount, size(RD2,2));
-
-j = 1;
-for i = 1:size(RD,1)
-    
-    RD3(j,:) = RD3(j,:) +  RD2(i,:);
-    
-    counter = counter + 1;
-    
-    
-    if counter == coCount+1
-        j = j+1;
-        counter  = 1;
-    end
-
-
-end
-
-RD2 = RD3;
 
 RD2 = RD2(:,length(mf):end);
 
@@ -362,5 +336,4 @@ end
 h.LineStyle = "none";
 xlabel("range - km")
 ylabel("velocity - m/s")
-% % s = surf((abs(RD)));
-% % set(s, "linestyle", "none")
+

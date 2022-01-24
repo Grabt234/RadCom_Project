@@ -50,14 +50,15 @@ end
 %% Plotting
 
 figure
-range = ((1:1:length(acf)) - length(acf)/2)*1/dab_mode.Tu; %tau/tb
+%*1/dab_mode.Tu; %tau/tb
+range = ((1:1:length(acf)) - length(acf)/2)*1/dab_mode.Tu;;%3e8/(2*1000*dab_mode.f0); 
 doppler = ((1:1:size(acf,1)) - size(acf,1)/2)*(dab_mode.L*dab_mode.Tu*1/dab_mode.f0); %vMt_b %levananon 
 
-rBound = 100;
+rBound = 25;
 rStart = length(acf)/2 - rBound;
 rEnd = length(acf)/2 + rBound;
 
-dBound = 100;
+dBound = 50;
 dStart = size(acf,1)/2 - dBound;
 dEnd = size(acf,1)/2 + dBound;
 

@@ -59,7 +59,7 @@ T = 1/f0;
 delay_samps = dab_mode.Td;
 
 %% EXTRACTING DAB_CONSTANTS
-
+    
 %symbols
 L = dab_mode.L;
 L_0 = L ;
@@ -90,8 +90,6 @@ W_cube = ones(L_0,K_0,F);
 W_cube = rescale_cube_to_unity_weights(W_cube,F);
 
 %for randos :)
-W_cube = randn([L,K+1,F]) + 1i*randn([L,K+1,F]);
-A_pulses = randn([F , L,K+1]);
 
 symbol_time = 1:1:Ts;
 
