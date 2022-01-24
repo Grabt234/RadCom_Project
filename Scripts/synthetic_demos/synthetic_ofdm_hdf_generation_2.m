@@ -105,6 +105,8 @@ S = gen_all_pulses(symbol_time, F, L_0, Tu, Ts, Tg, K,W_cube,A_pulses);
 % xlabel("Frequency [KH]",'FontSize',15)
 % title("FFT OF OFDM SYMBOL USING THE SINGAL GENERATION CHAIN AND DAB MODE 2")
 %interframe time
+
+
 tif_time = linspace(T,T_intra,T_intra);
 
 %adding in interframe time periods

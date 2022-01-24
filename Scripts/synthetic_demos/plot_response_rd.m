@@ -7,17 +7,18 @@ close all
 clear all
 
 dab_mode = load_dab_rad_constants(3);
+range = 300;
 a =0;
 %% RF Parameters
 %system sampling rate
 fs =  dab_mode.ftx;
 fc = 2.4e9;
-readIn = 0.5; %s
+readIn = 0.5    ; %s
 d = dab_mode.Td;
 tau = (dab_mode.L-1)*(dab_mode.Tu+dab_mode.Tg); %pulse width with null removed
 prt = (d + tau)*1/fs;%(d + tau)*1/fs;
 prf = 1/prt;
-maxPulses = 50;
+maxPulses = 100;
 %txFileParams.fs = 2.5e6;
 %rxFileParams.fs = 2.5e6;
 txFileParams.fs = 6*2.048e6;
@@ -80,7 +81,7 @@ title("FREQUENCY DOMAIN OF TX SIGNAL")
 
 tx = loadfersHDF5_iq("synthetic_demos/emission.h5");
 %resampling to system frequency
-tx = resample(tx, fs, txFileParams.fs);
+% tx = resample(tx, fs, txFileParams.fs);
 
 % tx = tx(1, 1:dab_mode.Tf);
 %% RX read in/Resample
@@ -126,13 +127,13 @@ sgtitle('PLOTS SHOWING READ IN DATA')
 %new figure/subplots for the ard generation
 figure
 
-if settle ~= 0
-    %prepending zeroes to round to closest prf after sampling delay
-%     rx = [zeros(1, round(settle*fs)) rx];
-%     %removing first pulse in order to remove added zeros
-%     rx = rx(1,(settle+prt)*fs :end);
-        rx = rx(1,settle*fs:end);
-end
+% if settle ~= 0
+%     %prepending zeroes to round to closest prf after sampling 4delay
+% %     rx = [zeros(1, round(settle*fs)) rx];
+% %     %removing first pulse in order to remove added zeros
+% %     rx = rx(1,(settle+prt)*fs :end);
+%         rx = rx(1,settle*fs:end);
+% end
 
 %% RD Prep
 
@@ -218,12 +219,14 @@ delayAxis = (1:1:size(RD,2))*c/(fs*2*1000); %km
 % 
 figure
 %imagesc(delayAxis,dopplerAxis, 20*log10(abs(RD)))
-imagesc(delayAxis,velocityAxis, 20*log10(abs(RD)))
+imagesc(delayAxis(1:range),velocityAxis, 20*log10(abs(RD(:,1:range))))
 xlabel("range - km")
-ylabel("doppler - hz")
+ylabel("velocity - m/s")
 % % s = surf((abs(RD)));
 % % set(s, "linestyle", "none")
 
 figure
-h = surf(20*log10(abs(RD)))
+h = surf(delayAxis(1:range),velocityAxis, 20*log10(abs(RD(:,1:range))));
+xlabel("range - km")
+ylabel("velocioty - m/s")
 h.LineStyle = "none"
