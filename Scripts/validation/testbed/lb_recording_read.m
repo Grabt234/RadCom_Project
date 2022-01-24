@@ -1,6 +1,6 @@
 
 %================================================
-% Demonstrates the isolation level between
+% Demonstrates the loopback level between
 % TX/RX and RX2 on USRP 1 and RX2 on USRP 2
 %
 %   TX gain = 30dB
@@ -9,7 +9,7 @@
 
 %% Reading in File
 
-filenames = ["testbed/iso.00.dat" "testbed/iso.01.dat"];
+filenames = ["testbed/rx.00.dat" "testbed/rx.01.dat"];
 
 for i = 1:2
     
@@ -49,7 +49,7 @@ for i = 1:2
     
     frequency = 1:1:length(rxp);
     frequency = (frequency-length(rxp)/2)*(fs/length(rxp))/1e6; % MHz
-
+    
     %Frequency Domain
     subplot(1,2,i)
     plot(frequency, 20*log10(abs(fftshift(fft(rxp)./length(rxp)))));
