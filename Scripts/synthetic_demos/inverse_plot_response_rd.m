@@ -18,12 +18,12 @@ d = dab_mode.Td;
 tau = dab_mode.Td + dab_mode.Tf;
 prt = (tau)*1/f0;
 prf = 1/prt;
-maxPulses = 200;
-skip =0*dab_mode.ftx*2*4;% 24*dab_mode.ftx*2*4;
+maxPulses = 100;
+skip = 0*dab_mode.ftx*2*4;% 24*dab_mode.ftx*2*4;
 %txFileParams.fs = 2.5e6;
 %rxFileParams.fs = 2.5e6;   
 %coherent integration?
-coCount = 10;
+coCount = 1;
 
 %hardware sampling rates
 txFileParams.fs = dab_mode.ftx;
@@ -185,12 +185,12 @@ proc.cancellationMaxRange_m = 1500;
 proc.cancellationMaxDoppler_Hz = 5;
 proc.TxToRefRxDistance_m = 5;
 proc.nSegments = 16;
-proc.nIterations = 40;
+proc.nIterations = 50;
 proc.Fs = f0;
 proc.alpha = 0;
 proc.initialAlpha = 0;
 
-% rx = CGLS_Cancellation_RefSurv(rx_lb.' , rx.', proc).';
+%rx = CGLS_Cancellation_RefSurv(rx_lb.' , rx.', proc).';
 
 %% Creating Matched Filter
 
@@ -214,17 +214,15 @@ title("FREQUENCY DOMAIN MATCHED FILTER")
 
 %% COMMUNICATIONS TIME ADJUSTMET
 
-
-rx_lb = rx_lb(1,10*prt*f0:end);
-
 t = rx_lb(1,1:f0/prf);
 
 tt = conv(mf,t);
 tt = tt(length(mf):end);
 [~,I] = max(abs(tt));
 
-tmp = rx(40*prt*f0+1:41*prt*f0);
+tmp = rx(1:f0/prf);
 tmp = conv(mf,tmp);
+[~,I1] = max(abs(tmp));
 tmp = tmp(length(mf):end);
 
 figure
@@ -239,22 +237,31 @@ hold off
 title("FREQUENCY DOMAIN OF RX SIGNAL - LOOPBACK")
 
 %% RD Prep
+% I
+% I1
+% rx_lb = rx_lb(1,I:end);
 
 %%removing offset and transient
 rx = rx(1,I:end);
 
 %preallocating memory 
 RD = zeros(maxPulses, prt*dab_mode.f0);
+RD_lb = zeros(maxPulses, prt*dab_mode.f0);
 
 nPulses = 0;
+
 
 while nPulses < maxPulses
 
     %taking slow time cut
     RD(nPulses+1,:) =  RD(nPulses+1,:)  + rx(1,1:f0/prf);
+    RD_lb(nPulses+1,:) =  RD_lb(nPulses+1,:)  + awgn(tx,25);
+
     rx = rx(1,2:end);
+    rx_lb = rx_lb(1,2:end);
     %removing cut from data 
-    rx = rx(1, (f0/prf):end); 
+    rx = rx(1, (f0/prf):end);
+    rx_lb = rx_lb(1, (f0/prf):end);
     
     nPulses = nPulses+1;
 
@@ -262,6 +269,7 @@ end
 
 %cutting excess if leftover rows of zeros
 RD = RD(1:nPulses,:);
+RD_lb = RD_lb(1:nPulses,:);
 
 subplot(1,2,2)
 plot((1:1:length(RD(1,:))), real(RD(1:4,:)));
@@ -269,67 +277,17 @@ xlabel("time - s")
 ylabel("amplitude - lin")
 title("TIME DOMAIN OF SINGLE RX SLOW TIME SLICE")
 
-%% ARD Frequency
+%% Inerse Filtering
 
-
-% % %fft along rows to conver time domain signal to frequency domain
-% RD = fft(RD,[],2)./length(RD);
-% 
-% %replicating mf to multiply with RD
-% MF = repmat(MF, nPulses,1);
-% % 
-% % % RD(:,1:3) = 0;
-% % % RD(:,length(RD)-1,:) = 0;
-% % 
-% %matching in frequency domain
-% RD = RD.*MF;
-
-% %plotting matched response
-% subplot(1,2,2)
-% plot(1:1:length(RD(1,:)),abs(fftshift(ifft(RD(4,:)))));
-% title("mf response")
-% % % 
-
-RD2 = zeros(nPulses, length(mf)+ length(RD(1,:)) - 1);
-
-for i = 1:size(RD,1)
-    
-    RD2(i,:) = conv(mf,RD(i,:));
-
-end
-
-
-counter = 0;        
-RD3 = zeros(nPulses/coCount, size(RD2,2));
-
-j = 1;
-for i = 1:size(RD,1)
-    
-    RD3(j,:) = RD3(j,:) +  RD2(i,:);
-    
-    counter = counter + 1;
-    
-    
-    if counter == coCount+1
-        j = j+1;
-        counter  = 1;
-    end
-
-
-end
-
-RD2 = RD3;
-
-RD2 = RD2(:,length(mf):end);
-
-RD = RD2;
-
-% RD = fftshift(ifft(RD,[],2));
 RD = fft(RD,[],1);
 RD = fftshift(RD,1);
-% % 
+
+RD_lb = fft(RD_lb,[],1);
+RD_lb = fftshift(RD_lb,1);
+ 
 %RD = RD(:,length(RD)/2 -1:end);
 
+RD = RD./RD_lb;
 
 vmax = c/(4*fc*prt); %koks 8.10
 
@@ -353,6 +311,7 @@ xlabel("range - km")
 ylabel("velocity - m/s")
 
 figure
+
 if range == 0
    h = surf(delayAxis,velocityAxis,20*log10(abs(RD)));
 else

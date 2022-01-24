@@ -76,6 +76,7 @@ Tg = dab_mode.Tg;
 %intra frame time: spacing between pulses within a frame
 T_intra = dab_mode.T_intra;
 
+
 %% ENCODING BITS
 % 
 [F, A_pulses] = bits_to_phase_cube(bits,n,dab_mode);
@@ -87,6 +88,10 @@ A_pulses = A_pulses(:,2:end,:);
 %time per symbol
 W_cube = ones(L_0,K_0,F);
 W_cube = rescale_cube_to_unity_weights(W_cube,F);
+
+%for randos :)
+W_cube = randn([L,K+1,F]) + 1i*randn([L,K+1,F]);
+A_pulses = randn([F , L,K+1]);
 
 symbol_time = 1:1:Ts;
 
