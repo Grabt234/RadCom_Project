@@ -27,7 +27,7 @@ dab_mode.ftx        =2*2.5e6;
 
 %% Loading in Data
 
-iq = loadfersHDF5_iq("signal_analysis/emission_dqpsk.h5");
+iq = loadfersHDF5_iq("signal_analysis/emission_randPhase.h5");
 
 startIndex = 1;%*factor*2048;
 stopIndex = 0;%10*factor*2048;
@@ -65,8 +65,8 @@ end
 %% Plotting
 
 figure
-range = ((1:1:length(acf)) - length(acf)/2)*3e8/(2*1000*dab_mode.f0); %tau/tb
-doppler = ((1:1:size(acf,1)) - size(acf,1)/2)*(dab_mode.f0/(1000*length(tx)));%(dab_mode.L*dab_mode.Tu*1/dab_mode.f0); %vMt_b %levananon 
+range = ((1:1:length(acf)) - length(acf)/2)*1e6/(dab_mode.f0; %tau/tb
+doppler = ((1:1:size(acf,1)) - size(acf,1)/2)*(dab_mode.f0/length(tx))%(dab_mode.L*dab_mode.Tu*1/dab_mode.f0); %vMt_b %levananon 
 
 rBound = 100;
 rStart = length(acf)/2 - rBound;
@@ -81,12 +81,11 @@ s = surf(range(1,rStart:rEnd), doppler(dStart:dEnd), ...
 
 set(s,"linestyle", "none")
 lighting flat
-xlabel("Range - [Km]","FontSize",16)
+xlabel("Delay - [{\mus}]","FontSize",16)
 ylabel("Doppler - [KHz]","FontSize",16)
 
 figure
 imagesc(range(1,rStart:rEnd), doppler(dStart:dEnd), ...
     20*log10(abs(acf(dStart:dEnd,rStart:rEnd))./max(abs(acf),[],"all")))
-xlabel("Range - [Km]","FontSize",16)
+xlabel("Range - [{\mus}]","FontSize",16)
 ylabel("Doppler - [KHz]","FontSize",16)
-colorbar

@@ -49,7 +49,7 @@ end
 
 figure
 range = ((1:1:length(acf)) - length(acf)/2)*(3e8/(2*fs*1000)); 
-doppler = ((1:1:size(acf,1)) - size(acf,1)/2)*(1000/fs); 
+doppler = ((1:1:size(acf,1)) - size(acf,1)/2)*(fs/(1000*length(tx))); 
 
 %range bound
 rBound = 2000;
@@ -61,14 +61,15 @@ dBound = 100;
 dStart = size(acf,1)/2 - dBound;
 dEnd = size(acf,1)/2 + dBound;
 
-s = surf(range(1,rStart:rEnd), doppler(dStart:dEnd), ...
+s = imagesc(range(1,rStart:rEnd), doppler(dStart:dEnd), ...
     (20*log10(abs(acf(dStart:dEnd,rStart:rEnd))./max(abs(acf),[],"all"))));
 
 %pretty stuffs
-set(s,"linestyle", "none")
-lighting flat
-xlabel("Range - [{\mus}]","FontSize",16)
+% set(s,"linestyle", "none")
+% lighting flat
+xlabel("Range - [Km]","FontSize",16)
 ylabel("Doppler - [KHz]","FontSize",16)
 zlabel("Magnitude - [dB]","FontSize",16)
 zlim([-50 0])
 caxis([[-50 0]])
+colorbar

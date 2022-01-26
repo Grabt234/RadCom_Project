@@ -21,8 +21,8 @@ dab_mode.mask      = [ (dab_mode.Tu/2-dab_mode.K/2 +1):(dab_mode.Tu/2), ...
 dab_mode.p_intra   = 1;
 dab_mode.T_intra   = 0;
 dab_mode.Tf        = (dab_mode.Tp + dab_mode.T_intra)*dab_mode.p_intra;
-dab_mode.f0        = 2*2.048e6;
-dab_mode.ftx        =2*2.5e6; 
+dab_mode.f0        = 2.048e6;
+dab_mode.ftx        =2.5e6; 
 
 
 %% Loading in Data
@@ -65,8 +65,8 @@ end
 %% Plotting
 
 figure
-range = ((1:1:length(acf)) - length(acf)/2)*1/dab_mode.Tu; %tau/tb
-doppler = ((1:1:size(acf,1)) - size(acf,1)/2)*(dab_mode.L*dab_mode.Tu*1/dab_mode.f0); %vMt_b %levananon 
+range = ((1:1:length(acf)) - length(acf)/2)*3e8/(2*1000*dab_mode.f0); %tau/tb
+doppler = ((1:1:size(acf,1)) - size(acf,1)/2)*(dab_mode.f0/(1000*length(tx)));%(dab_mode.L*dab_mode.Tu*1/dab_mode.f0); %vMt_b %levananon 
 
 rBound = 100;
 rStart = length(acf)/2 - rBound;
@@ -81,11 +81,12 @@ s = surf(range(1,rStart:rEnd), doppler(dStart:dEnd), ...
 
 set(s,"linestyle", "none")
 lighting flat
-xlabel("Range - ^{\tau}/_{t_{u}}","FontSize",16)
-ylabel("Doppler - VLT_{u}","FontSize",16)
+xlabel("Range - [Km]","FontSize",16)
+ylabel("Doppler - [KHz]","FontSize",16)
 
 figure
 imagesc(range(1,rStart:rEnd), doppler(dStart:dEnd), ...
     20*log10(abs(acf(dStart:dEnd,rStart:rEnd))./max(abs(acf),[],"all")))
-xlabel("Range - ^{\tau}/_{t_{u}}","FontSize",16)
-ylabel("Doppler - VLT_{u}","FontSize",16)
+xlabel("Range - [Km]","FontSize",16)
+ylabel("Doppler - [KHz]","FontSize",16)
+colorbar
