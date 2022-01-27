@@ -74,8 +74,8 @@ box on
 xlim padded
 ylim padded
 
-xlabel("Real", "FontSize", 18)
-ylabel("Imaginary", "FontSize", 18)
+xlabel("Real", "FontSize", 16)
+ylabel("Imaginary", "FontSize", 16)
     
 %creating legend
 Legend=cell(3,1);
