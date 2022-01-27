@@ -18,12 +18,12 @@ d = dab_mode.Td;
 tau = dab_mode.Td + dab_mode.Tf;
 prt = (tau)*1/f0;
 prf = 1/prt;
-maxPulses = 250;
+maxPulses = 300;
 skip =(0*dab_mode.ftx)*2*4;% 24*dab_mode.ftx*2*4;
 %txFileParams.fs = 2.5e6;
 %rxFileParams.fs = 2.5e6;   
 %coherent integration?
-coCount = 5;
+coCount = 1;
 
 %hardware sampling rates
 txFileParams.fs = dab_mode.ftx;
@@ -64,131 +64,131 @@ rxFileParams.dataType = "double=>double";
 
 %% TX Read In/Resample
 
-txFileParams.r_fid = fopen(txFilename,'rb');
+% txFileParams.r_fid = fopen(txFilename,'rb');
+% 
+% %reading in doubles from bin file
+% tx_file = fread(txFileParams.r_fid, txFileParams.dataType);
+% 
+% %closing file
+% fclose(txFileParams.r_fid);
+% 
+% %changing into complex numbers
+% tx = tx_file(1:2:end) + 1j*tx_file(2:2:end);
+% 
+% %changing column into row
+% tx = tx.';
+% 
+% figure
+% %Plotting time domain of tx signal
+% subplot(3,2,1)
+% ax = (1:1:length(tx))*1/txFileParams.fs;
+% plot(ax, real(tx))
+% xlabel("time - s")
+% ylabel("amplitude")
+% title("TIME DOMAIN OF TX SIGNAL")
+% 
+% %Plotting Tx Frequency Domain
+% subplot(3,2,2)
+% ax = (1:1:length(tx))*txFileParams.fs/length(tx) - txFileParams.fs/2;
+% plot(ax/1e6, 20*log10(abs(fftshift(fft(tx)))))
+% xlabel("frequency - Mhz")
+% ylabel("amplitude")
+% title("FREQUENCY DOMAIN OF TX SIGNAL")
+% 
+% %resampling to system frequency
+% tx = resample(tx, f0, txFileParams.fs);
 
-%reading in doubles from bin file
-tx_file = fread(txFileParams.r_fid, txFileParams.dataType);
-
-%closing file
-fclose(txFileParams.r_fid);
-
-%changing into complex numbers
-tx = tx_file(1:2:end) + 1j*tx_file(2:2:end);
-
-%changing column into row
-tx = tx.';
-
-figure
-%Plotting time domain of tx signal
-subplot(3,2,1)
-ax = (1:1:length(tx))*1/txFileParams.fs;
-plot(ax, real(tx))
-xlabel("time - s")
-ylabel("amplitude")
-title("TIME DOMAIN OF TX SIGNAL")
-
-%Plotting Tx Frequency Domain
-subplot(3,2,2)
-ax = (1:1:length(tx))*txFileParams.fs/length(tx) - txFileParams.fs/2;
-plot(ax/1e6, 20*log10(abs(fftshift(fft(tx)))))
-xlabel("frequency - Mhz")
-ylabel("amplitude")
-title("FREQUENCY DOMAIN OF TX SIGNAL")
-
-%resampling to system frequency
-tx = resample(tx, f0, txFileParams.fs);
-
-tx = loadfersHDF5_iq("synthetic_demos/emission_f0.h5");
+tx = loadfersHDF5_iq("emission_f0.h5");
 %% RX LOOPBACK read in/Resample
 
-rxFileParamslb.r_fid = fopen(rxFilenamelb,'rb');
+% rxFileParamslb.r_fid = fopen(rxFilenamelb,'rb');
+% 
+% fseek(rxFileParamslb.r_fid, skip, "bof");
+% 
+% %reading in doubles from bin file
+% rx_filelb = fread(rxFileParamslb.r_fid,2*readIn*rxFileParamslb.fs ,'double');
+% 
+% %closing file
+% fclose(rxFileParamslb.r_fid);
+% 
+% %changing into complex numbers
+% rx_lb = rx_filelb(1:2:end) + 1j*rx_filelb(2:2:end);
+% 
+% %changing column into row
+% rx_lb = rx_lb.';
+% 
+% %Plotting time domain of tx signal
+% subplot(3,2,3)
+% ax = (1:1:length(rx_lb))*1/rxFileParamslb.fs;
+% plot(ax, real(rx_lb))
+% xlabel("time - s")
+% ylabel("amplitude - v")
+% title("TIME DOMAIN OF RX SIGNAL - LOOPBACK")
 
-fseek(rxFileParamslb.r_fid, skip, "bof");
-
-%reading in doubles from bin file
-rx_filelb = fread(rxFileParamslb.r_fid,2*readIn*rxFileParamslb.fs ,'double');
-
-%closing file
-fclose(rxFileParamslb.r_fid);
-
-%changing into complex numbers
-rx_lb = rx_filelb(1:2:end) + 1j*rx_filelb(2:2:end);
-
-%changing column into row
-rx_lb = rx_lb.';
-
-%Plotting time domain of tx signal
-subplot(3,2,3)
-ax = (1:1:length(rx_lb))*1/rxFileParamslb.fs;
-plot(ax, real(rx_lb))
-xlabel("time - s")
-ylabel("amplitude - v")
-title("TIME DOMAIN OF RX SIGNAL - LOOPBACK")
-
-
-%Plotting Tx Frequency Domain
-subplot(3,2,4)
-ax = ((1:1:length(rx_lb)) -length(rx_lb)/2)*rxFileParamslb.fs/length(rx_lb);
-plot(ax/1e6, 20*log10(abs(fftshift(fft(rx_lb)./length(rx_lb)))))
-xlabel("frequency - MHz")
-ylabel("amplitude - dBm")
-title("FREQUENCY DOMAIN OF RX SIGNAL - FEEDTHROUGH")
-
-%resampling to system frequency
-rx_lb = resample(rx_lb, f0, rxFileParamslb.fs);
+% 
+% %Plotting Tx Frequency Domain
+% subplot(3,2,4)
+% ax = ((1:1:length(rx_lb)) -length(rx_lb)/2)*rxFileParamslb.fs/length(rx_lb);
+% plot(ax/1e6, 20*log10(abs(fftshift(fft(rx_lb)./length(rx_lb)))))
+% xlabel("frequency - MHz")
+% ylabel("amplitude - dBm")
+% title("FREQUENCY DOMAIN OF RX SIGNAL - FEEDTHROUGH")
+% 
+% %resampling to system frequency
+% rx_lb = resample(rx_lb, f0, rxFileParamslb.fs);
 
 %% RX read in/Resample
 
-rxFileParams.r_fid = fopen(rxFilename,'rb');
-
-
-fseek(rxFileParams.r_fid, skip, "bof")
-
-%reading in doubles from bin file
-rx_file = fread(rxFileParams.r_fid,2*readIn*rxFileParams.fs ,'double');
-
-%closing file
-fclose(rxFileParams.r_fid);
-
-%changing into complex numbers
-rx = rx_file(1:2:end) + 1j*rx_file(2:2:end);
-
-%changing column into row
-rx = rx.';
-
-
-%Plotting time domain of tx signal
-subplot(3,2,5)
-ax = (1:1:length(rx))*1/rxFileParams.fs;
-plot(ax, real(rx))
-xlabel("time - s")
-ylabel("amplitude - v")
-title("TIME DOMAIN OF RX SIGNAL")
-
-
-%Plotting Tx Frequency Domain
-subplot(3,2,6)
-ax = (1:1:length(rx))*rxFileParams.fs/length(rx) - rxFileParams.fs/2;
-plot(ax/1e6, 20*log10(abs(fftshift(fft(rx)./length(rx)))))
-xlabel("frequency - MHz")
-ylabel("amplitude - dBm")
-title("FREQUENCY DOMAIN OF RX SIGNAL")
-
-%resampling to system frequency
-rx = resample(rx, f0, rxFileParams.fs);
-
-sgtitle('PLOTS SHOWING READ IN DATA FROM GENERATED (1) AND RECORDED FILES (2,3)') 
+% rxFileParams.r_fid = fopen(rxFilename,'rb');
+% 
+% 
+% fseek(rxFileParams.r_fid, skip, "bof")
+% 
+% %reading in doubles from bin file
+% rx_file = fread(rxFileParams.r_fid,2*readIn*rxFileParams.fs ,'double');
+% 
+% %closing file
+% fclose(rxFileParams.r_fid);
+% 
+% %changing into complex numbers
+% rx = rx_file(1:2:end) + 1j*rx_file(2:2:end);
+% 
+% %changing column into row
+% rx = rx.';
+% 
+% 
+% %Plotting time domain of tx signal
+% subplot(3,2,5)
+% ax = (1:1:length(rx))*1/rxFileParams.fs;
+% plot(ax, real(rx))
+% xlabel("time - s")
+% ylabel("amplitude - v")
+% title("TIME DOMAIN OF RX SIGNAL")
+% 
+% 
+% %Plotting Tx Frequency Domain
+% subplot(3,2,6)
+% ax = (1:1:length(rx))*rxFileParams.fs/length(rx) - rxFileParams.fs/2;
+% plot(ax/1e6, 20*log10(abs(fftshift(fft(rx)./length(rx)))))
+% xlabel("frequency - MHz")
+% ylabel("amplitude - dBm")
+% title("FREQUENCY DOMAIN OF RX SIGNAL")
+% 
+% %resampling to system frequency
+% rx = resample(rx, f0, rxFileParams.fs);
+% 
+% sgtitle('PLOTS SHOWING READ IN DATA FROM GENERATED (1) AND RECORDED FILES (2,3)') 
 
 %% Cancellation
     
-proc.cancellationMaxRange_m = 1500;
-proc.cancellationMaxDoppler_Hz = 5;
-proc.TxToRefRxDistance_m = 5;
-proc.nSegments = 16;
-proc.nIterations = 40;
-proc.Fs = f0;
-proc.alpha = 0;
-proc.initialAlpha = 0;
+% proc.cancellationMaxRange_m = 1500;
+% proc.cancellationMaxDoppler_Hz = 5;
+% proc.TxToRefRxDistance_m = 5;
+% proc.nSegments = 16;
+% proc.nIterations = 40;
+% proc.Fs = f0;
+% proc.alpha = 0;
+% proc.initialAlpha = 0;
 
 % rx = CGLS_Cancellation_RefSurv(rx_lb.' , rx.', proc).';
 
@@ -214,35 +214,37 @@ title("FREQUENCY DOMAIN MATCHED FILTER")
 
 %% COMMUNICATIONS TIME ADJUSTMET
 
-
-rx_lb = rx_lb(1,10*prt*f0:end);
-
-t = rx_lb(1,1:f0/prf);
-
-tt = conv(mf,t);
-tt = tt(length(mf):end);
-[~,I] = max(abs(tt));
-
-tmp = rx(40*prt*f0+1:41*prt*f0);
-tmp = conv(mf,tmp);
-tmp = tmp(length(mf):end);
-
-figure
-subplot(1,2,1)
-hold on
-plot((1:1:length(tt)), abs(tt)./max(abs(tt)));
-plot((1:1:length(tmp)), abs(tmp)./max(abs(tmp)));
-legend('Loopback','Transmitted path')
-hold off
-% xlabel("time - s")
-% ylabel("amplitude - lin")
-title("FREQUENCY DOMAIN OF RX SIGNAL - LOOPBACK")
+% 
+% rx_lb = rx_lb(1,10*prt*f0:end);
+% 
+% t = rx_lb(1,1:f0/prf);
+% 
+% tt = conv(mf,t);
+% tt = tt(length(mf):end);
+% [~,I] = max(abs(tt));
+% 
+% tmp = rx(40*prt*f0+1:41*prt*f0);
+% tmp = conv(mf,tmp);
+% tmp = tmp(length(mf):end);
+% 
+% figure
+% subplot(1,2,1)
+% hold on
+% plot((1:1:length(tt)), abs(tt)./max(abs(tt)));
+% plot((1:1:length(tmp)), abs(tmp)./max(abs(tmp)));
+% legend('Loopback','Transmitted path')
+% hold off
+% 
+% % xlabel("time - s")
+% % ylabel("amplitude - lin")
+% title("FREQUENCY DOMAIN OF RX SIGNAL - LOOPBACK")
 
 %% RD Prep
 
-%%removing offset and transient
-rx = rx(1,I:end);
+% %%removing offset and transient
+% rx = rx(1,I:end);
 
+rx = loadfersHDF5_cmplx("synthetic_demos/cw_response.h5");
 %preallocating memory 
 RD = zeros(maxPulses, prt*dab_mode.f0);
 
