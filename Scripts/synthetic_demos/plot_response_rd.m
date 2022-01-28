@@ -9,7 +9,7 @@ clear all
 dab_mode = load_dab_rad_constants(8);
 a = 50;
 %% RF Parameters
-range = 50;
+range = 100;
 %system sampling rate
 f0 =  dab_mode.f0;
 fc = 2.45e9;
@@ -18,7 +18,7 @@ d = dab_mode.Td;
 tau = dab_mode.Td + dab_mode.Tf;
 prt = (tau)*1/f0;
 prf = 1/prt;
-maxPulses = 300;
+maxPulses = 250;
 skip =(0*dab_mode.ftx)*2*4;% 24*dab_mode.ftx*2*4;
 %txFileParams.fs = 2.5e6;
 %rxFileParams.fs = 2.5e6;   
