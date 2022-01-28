@@ -14,10 +14,10 @@ clear all
 %Number of frames
 F = 1;
 %symbols
-L = 4;
+L = 3;
 L_0 = L-1; %excluding prs
 %carriers no center
-K = 6;    
+K = ;    
 %carriers incl. center
 K_0 = K + 1;
 %bits per phase
@@ -84,7 +84,7 @@ for i = 1:length(Ns)
     L_decode = dqpsk_demap(L_dqpsk,dab_mode);
     
     %row wise reshape
-    L_decode = reshape(L_decode.',[],1);
+    L_decode = reshape(L_decode,[],1);
     
     %defning an inverse map according the "n"
     mapper = define_inverse_alphabet_map(Ns);
