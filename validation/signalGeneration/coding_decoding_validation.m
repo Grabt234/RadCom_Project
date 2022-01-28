@@ -14,10 +14,10 @@ clear all
 %Number of frames
 F = 1;
 %symbols
-L = 4;
+L = 5;
 L_0 = L-1; %excluding prs
 %carriers no center
-K = 6;    
+K = 50;    
 %carriers incl. center
 K_0 = K + 1;
 %bits per phase
@@ -90,7 +90,7 @@ for i = 1:length(Ns)
     mapper = define_inverse_alphabet_map(Ns);
     
     %converting cmplx number to degree
-    phase_codes = round(wrapTo360(rad2deg(angle(L_decode))))
+    phase_codes = round(wrapTo360(rad2deg(angle(L_decode))));
 
     rx_bits =  "";
     
