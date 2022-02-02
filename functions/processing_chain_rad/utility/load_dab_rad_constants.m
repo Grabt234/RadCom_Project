@@ -53,11 +53,10 @@ function dab_mode = load_dab_rad_constants(transmission_mode)
         dab_mode.Tp        = dab_mode.Tnull + (dab_mode.L)*dab_mode.Ts;
         dab_mode.mask      = [ (dab_mode.Tu/2-dab_mode.K/2 +1):(dab_mode.Tu/2), ...
                                         (dab_mode.Tu/2+2):(dab_mode.Tu/2+dab_mode.K/2 +1) ];
-        dab_mode.p_intra   = 1;
-        dab_mode.T_intra   = 0;
-        dab_mode.Tf        = (dab_mode.Tp + dab_mode.T_intra)*dab_mode.p_intra;
-        dab_mode.f0        = 6*2.048e6;
-        dab_mode.ftx       = 6*2.048e6;
+        dab_mode.rep       = 5;
+        dab_mode.Tf        = (dab_mode.Tp + dab_mode.Td)*dab_mode.rep;
+        dab_mode.f0        = 2.048e6;
+        dab_mode.ftx       = 2.048e6;
      elseif (transmission_mode == 4)
        %used in /passsive_processing
         dab_mode.K         = 40;

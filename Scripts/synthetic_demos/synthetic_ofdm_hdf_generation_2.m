@@ -19,25 +19,15 @@
 % Ts  - Elementary periods per symbol
 % Tu  - Elementary periods per integration period
 % Tg  - Elementary periods in the gaurd interval
-
-
-%DAB_MODE DESCRIPTION
-%     dab_mode.K         = 20;
-%     dab_mode.L         = 3;
-%     dab_mode.Tnull     = 0;
-%     dab_mode.Tu        = 2048;
-%     dab_mode.Tg        = 504;
-%     dab_mode.Ts        = dab_mode.Tu + dab_mode.Tg;
-%     dab_mode.Tp        = dab_mode.Tnull + (dab_mode.L)*dab_mode.Ts;
-%     dab_mode.mask      = [ (dab_mode.Tu/2-dab_mode.K/2 +1):(dab_mode.Tu/2), ...
-%                                     (dab_mode.Tu/2+2):(dab_mode.Tu/2+dab_mode.K/2 +1) ];
-%     dab_mode.p_intra   = 1;
-%     dab_mode.T_intra   = 0;
-%     dab_mode.Tf        = (dab_mode.Tp + dab_mode.T_intra)*dab_mode.p_intra;
 %================================================
 %================================================
 
 display = 0;
+
+%% Deleteing previuosly generated file
+
+delete("emission_single.h5");
+delete("emission.h5");
 
 %% WAVEFORM PARAMETERS
 n = 2;
@@ -46,8 +36,9 @@ n = 2;
 dab_mode = load_dab_rad_constants(3);
 
 %minus two: L1 Null, L2 PRS, these are only data carrying bits
-onez = ((dab_mode.L-2)*dab_mode.p_intra*dab_mode.K)*2/2;
-zeroz = ((dab_mode.L-2)*dab_mode.p_intra*dab_mode.K)*2/2;
+frames = 1;
+onez = frames*((dab_mode.L-2)*dab_mode.K)*2/2;
+zeroz = frames*((dab_mode.L-2)*dab_mode.K)*2/2;
 bits = [ones(1,onez), zeros(1,zeroz)];
 bits = bits(randperm(numel(bits)));
 bits = num2str(bits,'%i');
@@ -74,8 +65,6 @@ Tu = dab_mode.Tu;
 Ts = dab_mode.Ts;
 %gaurd inteval
 Tg = dab_mode.Tg;
-%intra frame time: spacing between pulses within a frame
-T_intra = dab_mode.T_intra;
 
 %% ENCODING BITS
 % 
@@ -107,11 +96,6 @@ S = gen_all_pulses(symbol_time, F, L_0, Tu, Ts, Tg, K,W_cube,A_pulses);
 %interframe time
 
 
-tif_time = linspace(T,T_intra,T_intra);
-
-%adding in interframe time periods
-S = insert_inter_frame_time(S, F, tif_time);
-
 %% PLOTTING
     
 %converting rows to columns
@@ -121,9 +105,15 @@ S = S(:)';
 
 S = [S zeros(1,delay_samps)];
 
+S_single = S;
+
+%repeating to multiple pulses
+S = repmat(S,[1,dab_mode.rep]);
+
 % S = [exp(j*2*pi*(zeros(1,50))) 0*exp(j*2*pi*(zeros(1,950)))] ;
 %% WRITTING TO FILES
 
+create_hdf5('emission_single',S_single);
 create_hdf5('emission',S);
 
 figure
