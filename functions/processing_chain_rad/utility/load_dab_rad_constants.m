@@ -105,12 +105,12 @@ function dab_mode = load_dab_rad_constants(transmission_mode)
         dab_mode.ftx        = 2.5e6;
     elseif (transmission_mode == 7)
         %Do not remove, used in /radcom_processing_demo
-        dab_mode.K         = 500;
-        dab_mode.L         = 3;
+        dab_mode.K         = 1300;
+        dab_mode.L         = 2;
         dab_mode.Tnull     = 0;
         dab_mode.Tu        = 2048;
-        dab_mode.Tg        = 504;
-        dab_mode.Td        = 1*2048;
+        dab_mode.Tg        = 0;
+        dab_mode.Td        = 0;
         dab_mode.Ts        = dab_mode.Tu + dab_mode.Tg;
         dab_mode.Tp        = dab_mode.Tnull + (dab_mode.L)*dab_mode.Ts;
         dab_mode.mask      = [ (dab_mode.Tu/2-dab_mode.K/2 +1):(dab_mode.Tu/2), ...
