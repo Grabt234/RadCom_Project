@@ -78,10 +78,10 @@ symbol_time = 1:1:Ts;
 
 %% removing nulls
 
-%removing null to make basic pulse wave
-A_pulses = A_pulses(:,2:end,:);
-W_cube = W_cube(:,2:end,:);
-L_0 = L_0 - 1; %remvoed null tf symbols go down
+% uincomment to remove null to make basic pulse wave
+% A_pulses = A_pulses(:,2:end,:);
+% W_cube = W_cube(:,2:end,:);
+% L_0 = L_0 - 1; %remvoed null tf symbols go down
 %% GENERATING WAVEFORM
 
 %generating all envelopes of framestx = tx(1:4096);
