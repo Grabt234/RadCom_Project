@@ -14,7 +14,7 @@ function dab_symbols = symbols_unpack_rad(dab_frame, dab_mode)
     %
     % ---------------------------------------------------------------------    
     % Read symbols from each frame
-    symbol_count = dab_mode.L*dab_mode.p_intra;
+    symbol_count = dab_mode.L-1;
     
     dab_symbols = zeros(symbol_count, dab_mode.Tu);
     

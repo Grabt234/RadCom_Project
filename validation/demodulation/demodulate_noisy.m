@@ -4,6 +4,7 @@
 % continuous matched filter response
 %
 % Note: null has been manually removed
+% SNR = 0dB
 %================================================
 
 close all

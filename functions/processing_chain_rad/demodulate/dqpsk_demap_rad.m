@@ -14,7 +14,7 @@ function dab_data_raw = dqpsk_demap_rad(dab_carriers, dab_mode)
     % ---------------------------------------------------------------------
 
     %number of symbols in each frame  (prs removed)
-    frame_symbols = dab_mode.L*dab_mode.p_intra-1;
+    frame_symbols = dab_mode.L-2;
     
     %preallocation of memeory
     dab_data_raw = zeros(frame_symbols,dab_mode.Tu);

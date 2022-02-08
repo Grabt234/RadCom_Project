@@ -27,7 +27,7 @@ function dab_mode = load_dab_rad_constants(transmission_mode)
     elseif (transmission_mode == 2)
         %Used for validation demo in report
         dab_mode.K         = 500;
-        dab_mode.L         = 3;
+        dab_mode.L         = 5;
         dab_mode.Tnull     = 0;
         dab_mode.Tu        = 2048;
         dab_mode.Tg        = 0;
@@ -44,10 +44,10 @@ function dab_mode = load_dab_rad_constants(transmission_mode)
     elseif (transmission_mode == 3)
         
         dab_mode.K         = 1000;
-        dab_mode.L         = 3;
+        dab_mode.L         = 5;
         dab_mode.Tnull     = 0;
         dab_mode.Tu        = 2048;
-        dab_mode.Tg        = 0;
+        dab_mode.Tg        = 504;
         dab_mode.Td        = 4*2048;
         dab_mode.Ts        = dab_mode.Tu + dab_mode.Tg;
         dab_mode.Tp        = dab_mode.Tnull + (dab_mode.L)*dab_mode.Ts;
