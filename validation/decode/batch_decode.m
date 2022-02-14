@@ -8,11 +8,11 @@ close all
 
 %% Multi Test Parameter Selection
 
-Ks = [500 1000 1500]; %carriers
-Ls = [3 5 7 ];
+Ks = [500 750 1000]; %carriers
+Ls = [3 5 8];
 Tus = [2048 4096]; %samples
-Tgs = [504];
-Tds = [4*2048];
+Tgs = [0 504];
+Tds = [4096 2*4096];
 
 error = 0;
 total_bits = 0;
