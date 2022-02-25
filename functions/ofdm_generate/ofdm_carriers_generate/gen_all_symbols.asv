@@ -35,15 +35,10 @@ function [s,s_rows] = gen_all_symbols(L , Tu , Ts ,Tg, W, A)
         s(l,:) = gen_symbol(Ts, Tu, Tg, K, w, a);
     end
     
-    %to return array of (L x Ts) symbols
+    %to return array r
     s_rows = s;
     
-    %transposing to concatnate columns as matlab is column first
-    % (L x Ts) -> (Ts x L)
     s = s';
-    
-    %concatenating colums the transposing
-    % (Ts x L) -> (Ts*L x 1) -> (1 x Ts*L)
     s = s(:)';
     
 end
