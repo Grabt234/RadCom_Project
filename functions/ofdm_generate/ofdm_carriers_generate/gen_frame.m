@@ -1,26 +1,23 @@
-function f = gen_frame(time,L , Tu , Ts ,Tg, N,W,a)
+function s = gen_frame(Ts, Tu, Tg, W, A, L)
     % ---------------------------------------------------------------------    
-    % gen_frame: compiles symbols into a sigle pulse
+    % gen_frame: encapsulation of gen_all_symbols for readability
     %                                  
     % ---------------------------------------------------------------------
     % Usage:
     %  Inputs
-    %   > t  - Array of time values for which to calculate the sinusoid
-    %   > L  - Total OFDM symbols (within the broader frame) 
-    %   > Tu - Useful time period(not inlcuding crc)
+    %   > Ts - Symbol Period
+    %   > Tu - Integration period
     %   > Tg - Guard Inverval
-    %   > Ts - Symbol time period (Ts + Tg)
-    %   > N  - Total number of sub carriers in signal
-    %   > W  - Matrix of row vectors containing frequency weights
-    %   > A  - Matrix of row vectors containing phase codes
+    %   > K  - OFDM carriers per symbol 
+    %   > W  - frequency weight matrix (LxK)
+    %   > A  - complex phase matrix (LxK)
     %  Outputs
-    %   > f = Complex envelope of the frame
+    %   > s = iq data of frame, array of size (1xL*Ts)
     %
     % ---------------------------------------------------------------------
     
-    %compiles all symbols into a single continous frame
-    
-    [f,~]= gen_all_symbols(time,L , Tu , Ts ,Tg, N,W,a);
+    %all symbols into a single continous frame
+    [s,~]= gen_all_symbols(Ts , Tu ,Tg, W, A, L);
     
 
 end

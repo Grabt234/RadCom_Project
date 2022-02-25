@@ -1,8 +1,7 @@
-function [s,s_rows] = gen_all_symbols(L , Tu , Ts ,Tg, W, A)
+function [s,s_rows] = gen_all_symbols(Ts , Tu ,Tg, W, A, L)
     % ---------------------------------------------------------------------    
     % gen_all_symbols: Time domain array of (1 x L*Ts) iq data containing
     %                   L symbols
-    %
     %                                    
     % ---------------------------------------------------------------------
     % Usage:
@@ -10,9 +9,9 @@ function [s,s_rows] = gen_all_symbols(L , Tu , Ts ,Tg, W, A)
     %   > Ts - Symbol Period
     %   > Tu - Integration period
     %   > Tg - Guard Inverval
-    %   > K  - OFDM carriers per symbol ()
-    %   > W  - frequency weight vector (1xK)
-    %   > A  - complex phase value (1xK)
+    %   > K  - OFDM carriers per symbol 
+    %   > W  - frequency weight matrix (LxK)
+    %   > A  - complex phase matrix (LxK)
     %  Outputs
     %   > s = iq data of frame, array of size (1xL*Ts)
     %   > s_rows = iq data of each symbol in frame, array of size (L x Ts) 
