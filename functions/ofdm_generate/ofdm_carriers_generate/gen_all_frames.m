@@ -1,46 +1,44 @@
-function S = gen_all_frames(time,P, L , Tu , Ts ,Tg, N,W_cube,A_cube)
+function s = gen_all_frames(Ts, Tu, Tg, W_cube, A_cube, L, F)
     % ---------------------------------------------------------------------    
     % gen_frame: compiles sigle frames into a "pulse train"
     %                                  
     % ---------------------------------------------------------------------
     % Usage:
     %  Inputs
-    %   > t  - Array of time values for which to calculate the sinusoid
-    %   > P  - Number of pulses
-    %   > L  - Total OFDM symbols (within a broader frame) 
-    %   > Tu - Useful time period(not inlcuding crc)
+    %   > Ts - Symbol Period
+    %   > Tu - Integration period
     %   > Tg - Guard Inverval
-    %   > Ts - Symbol time period (Ts + Tg)
-    %   > N  - Total number of sub carriers in signal
-    %   > W_cube  - a cube of (LxN)xF frequency weights
-    %   > A  - Matrix of row vectors containing phase codes
+    %   > K  - OFDM carriers per symbol 
+    %   > W  - frequency weight matrix (F x L x K)
+    %   > A  - complex phase matrix (F x L x K)
+    %   > F  - Number of frames to generate
     %  Outputs
-    %   > S = Matrix where rows correspond to compelx envelope of frame
+    %   > s  - retrun (F X L*Ts) matrix of frames
     %
     % ---------------------------------------------------------------------
     
-    %pre allocating memory for time domain
-    %will create (pulses X pulse length)
-    S = zeros(P, L*length(time));
+    %pre allocating frame matrix
+    s = zeros(F, L*Ts);
     
-    
-    
-    for p = 1:P
+    %generating all frames
+    for f = 1:F
         
         %extracting frequency weights for current pulse
-        W = W_cube(p,:,:);
+        W = W_cube(f,:,:);
+        %compressing into (L x K) matrix
+        % (F x L x K) -> (L x K)
         W = shiftdim(W,1);
 
         %extracting phase weights for current pulse
-        A = A_cube(p,:,:);
+        A = A_cube(f,:,:);
+        %compressing into (L x K) matrix
+        % (F x L x K) -> (L x K)
         A = shiftdim(A,1);
-        disp(p)
-        %generating subframe
-        S(p,:) = gen_frame(time,L , Tu , Ts ,Tg, N,W,A);
+
+        %generating frame iq data
+        s(f,:) = gen_frame(Ts, Tu, Tg, W, A, L);
         
     end
     
-    %returning matrix(FxL(len(time)) where a row is a pulse
-    
-    size(S)
+
 end
