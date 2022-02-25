@@ -1,4 +1,4 @@
-function [s,s_rows] = gen_all_symbols(t, L , Tu , Ts ,Tg, N, W, A)
+function [s,s_rows] = gen_all_symbols(L , Tu , Ts ,Tg, W, A)
     % ---------------------------------------------------------------------    
     % gen_all_symbols: Creates a time domain representation of all the
     %                       symbols contained in a frame
@@ -6,21 +6,19 @@ function [s,s_rows] = gen_all_symbols(t, L , Tu , Ts ,Tg, N, W, A)
     % ---------------------------------------------------------------------
     % Usage:
     %  Inputs
-    %   > t  - Array of time values for which to calculate the sinusoid
-    %   > L  - Total OFDM symbols (within the broader frame) 
-    %   > Tu - Useful time period(not inlcuding crc)
+    %   > Ts - Symbol Period
+    %   > Tu - Integration period
     %   > Tg - Guard Inverval
-    %   > Ts - Symbol time period (Ts + Tg)
-    %   > N  - Total number of sub carriers in signal
-    %   > W  - Matrix of row vectors containing frequency weights
-    %   > A  - Matrix of row vectors containing phase codes
+    %   > K  - OFDM carriers per symbol ()
+    %   > W  - frequency weight vector (1xK)
+    %   > A  - complex phase value (1xK)
     %  Outputs
     %   > s = Complex envelope of all the symbolbs contained in a frame
     %
     % ---------------------------------------------------------------------
   
     %pre allocating memory
-    s = zeros(1, length(t));
+    s = zeros(1, Ts);
 
     for l = 1:L
         %transposing row of freq and phase weights into column vectors
@@ -28,7 +26,7 @@ function [s,s_rows] = gen_all_symbols(t, L , Tu , Ts ,Tg, N, W, A)
         a = A(l,:).';
         
         %(L x t) array where every row is time domain values of a symbol l
-        s(l,:) = gen_symbol(t, l-1, Tu, Ts, Tg, N, w, a);
+        s(l,:) = gen_symbol(Ts, Tu, Tg, K, w, a);
     end
     
     s_rows = s;

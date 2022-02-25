@@ -1,4 +1,4 @@
-function s = gen_sub_carrier(t, Tu, Tg,k)
+function s = gen_sub_carrier(Ts, Tu, Tg,k)
     % ---------------------------------------------------------------------    
     % gen_sub_carrier: generates an array of complex time domain
     %                    sinusoid values according to dab params (incl.CRC)
@@ -7,17 +7,16 @@ function s = gen_sub_carrier(t, Tu, Tg,k)
     % ---------------------------------------------------------------------
     % Usage:
     %  Inputs
-    %   > t  - Array of elemtary units (1:Ts) to generate  sinusoid
-    %           length of symbol time length(t) = Ts = Tg + Tu
-    %   > Tu - Integration period
-    %   > Tg - Guard Inverval
+    %   > Ts - Symbol period   [in elementary units]
+    %   > Tu - Integration period [in elementary units]
+    %   > Tg - Guard Inverval [in elementary units]
     %   > k  - OFDM carrier index
     %  Outputs
-    %  > (1 x Ts) array of complex time domain sinusoid values
+    %  > (1 x Ts) Array of complex time domain sinusoid values
     %
     % ---------------------------------------------------------------------
     
       %exp generates as a complex value
-      s = exp((2*1i*pi*(k)*(t-Tg))/(Tu));
+      s = exp((2*1i*pi*(k)*((1:Ts)-Tg))/(Tu));
       
 end
