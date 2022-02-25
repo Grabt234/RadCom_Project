@@ -10,7 +10,7 @@ close all
 
 Ks = [500 750 1000]; %carriers
 Ls = [3 5 8];
-Tus = [2048 4096]; %samples
+Tus = [1024 2048 4096]; %samples
 Tgs = [0 504];
 Tds = [4096 2*4096];
 

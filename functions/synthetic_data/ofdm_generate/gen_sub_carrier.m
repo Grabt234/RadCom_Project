@@ -1,4 +1,4 @@
-function g = gen_sub_carrier(t, l, Tu, Ts, Tg,n)
+function g = gen_sub_carrier(t, l, Tu, Ts, Tg,k)
     % ---------------------------------------------------------------------    
     % gen_sub_carrier: generates an array of complex time domain
     %                    sinusoid values according to dab params (incl.CRC)
@@ -20,6 +20,6 @@ function g = gen_sub_carrier(t, l, Tu, Ts, Tg,n)
     % -Tg is the addition of the guard interval
     
       %exp generates as a complex value
-      g = exp((2*1i*pi*(n)*(t-Tg))/(Tu));
+      g = exp((2*1i*pi*(k)*(t-Tg))/(Tu));
       
 end

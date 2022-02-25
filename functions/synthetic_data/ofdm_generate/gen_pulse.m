@@ -1,4 +1,4 @@
-function f = gen_pulse(time,L , Tu , Ts ,Tg, N,W,a)
+function f = gen_frame(time,L , Tu , Ts ,Tg, N,W,a)
     % ---------------------------------------------------------------------    
     % gen_frame: compiles symbols into a sigle pulse
     %                                  
