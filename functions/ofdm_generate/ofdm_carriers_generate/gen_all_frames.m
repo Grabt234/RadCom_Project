@@ -1,4 +1,4 @@
-function S = gen_all_pulses(time,P, L , Tu , Ts ,Tg, N,W_cube,A_cube)
+function S = gen_all_frames(time,P, L , Tu , Ts ,Tg, N,W_cube,A_cube)
     % ---------------------------------------------------------------------    
     % gen_frame: compiles sigle frames into a "pulse train"
     %                                  
@@ -36,7 +36,7 @@ function S = gen_all_pulses(time,P, L , Tu , Ts ,Tg, N,W_cube,A_cube)
         A = shiftdim(A,1);
         disp(p)
         %generating subframe
-        S(p,:) = gen_pulse(time,L , Tu , Ts ,Tg, N,W,A);
+        S(p,:) = gen_frame(time,L , Tu , Ts ,Tg, N,W,A);
         
     end
     
