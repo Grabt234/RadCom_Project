@@ -51,7 +51,7 @@ for i = 1: length(Ls)
 
     %generating all envelopes of frames
         %note this is a F x(L*Ts) array
-    s = gen_all_pulses(symbol_time, F, L_0, Tu, Ts, Tg, K,W_cube,A_cube);
+    s = gen_all_frames(symbol_time, F, L_0, Tu, Ts, Tg, K,W_cube,A_cube);
 
     %% Plotting
 
