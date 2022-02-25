@@ -1,4 +1,4 @@
-function carriers = gen_all_sub_carriers(t, l, Tu, Ts, Tg,N, w, a)
+function carriers = gen_all_sub_carriers(t, Tu, Tg, K, w, a)
     % ---------------------------------------------------------------------    
     % gen_sub_carrier: generates an array of complex time domain
     %                    sinusoid values according to dab params (incl CRC)
@@ -6,41 +6,43 @@ function carriers = gen_all_sub_carriers(t, l, Tu, Ts, Tg,N, w, a)
     % ---------------------------------------------------------------------
     % Usage:
     %  Inputs
-    %   > t  - Array of time values for which to calculate the sinusoid
-    %   > l  - OFDM symbols symbol number (per frame)
-    %   > Tu - Useful time period(not inlcuding crc)
+    %   > t  - Array of elemtary units (1:Ts) to generate  sinusoid
+    %           length of symbol time length(t) = Ts = Tg + Tu
+    %   > Tu - Integration period
     %   > Tg - Guard Inverval
-    %   > Ts - Symbol time period (Ts + Tg)
-    %   > N  - Totol number of sub carriers in signal
-    %   > w  - frequency weight
-    %   > a  - complex phase value
+    %   > K  - OFDM carriers per symbol ()
+    %   > w  - frequency weight vector (1xK)
+    %   > a  - complex phase value (1xK)
     %  Outputs
     %   > (N x t) array of complex time domain sinusoid values
     %
     % ---------------------------------------------------------------------
    
     %pre allocating memory
-    carriers = zeros(N,length(t));
+    carriers = zeros(K,length(t));
     
     %carriers around center
-    carrier_vals = -N/2 : N/2;
+    carrier_index = -K/2 : K/2;
     
-    %generating all sub carriers
-    %constant summing to save memory
-
-    for n = 1:(N+1)
+    %generating K sub carriers
+    for k = 1:(K+1)
         
-       if a(n) == 0
-        
-           carriers(n,:) = 0;
-            continue
+       if a(k) == 0
+            
+           %central null carrier as per DAB standard
+           carriers(k,:) = 0;
+           continue
+            
        end
-        
-       carriers(n,:) = gen_sub_carrier(t, l, Tu, Ts, Tg, carrier_vals(n) );
+       
+       %generating symbol sub carrier
+       carriers(k,:) = gen_sub_carrier(t, Tu, Tg, carrier_index(k));
+       
        %applying frequency wight
-       carriers(n,:) = carriers(n,:)*w(n);
+       carriers(k,:) = carriers(k,:)*w(k);
+       
        %applying phase weight
-       carriers(n,:) = carriers(n,:)*a(n);
+       carriers(k,:) = carriers(k,:)*a(k);
 
     end
     
