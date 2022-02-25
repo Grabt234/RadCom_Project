@@ -19,7 +19,7 @@ function carriers = gen_all_sub_carriers(Ts, Tu, Tg, K, w, a)
     % ---------------------------------------------------------------------
    
     %pre allocating memory
-    carriers = zeros(K,length(t));
+    carriers = zeros(K,Ts);
     
     %carriers around center
     carrier_index = -K/2 : K/2;
