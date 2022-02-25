@@ -1,26 +1,23 @@
-function s = gen_symbol(t, l , Tu , Ts ,Tg, N, w, a)
+function s = gen_symbol(t, Tu, Tg, K, w, a)
     % ---------------------------------------------------------------------    
-    % gen_symbol: Applies freq and phase weights to subcarriers to create a
-    %                   the symbol
+    % gen_symbol: encapsulation of gen_all_sub_carriers for readability
     %                                    
     % ---------------------------------------------------------------------
     % Usage:
     %  Inputs
-    %   > t  - Array of time values for which to calculate the sinusoid
-    %   > l  - OFDM symbol number (within the broader frame) 
-    %   > Tu - Useful time period(not inlcuding crc)
+    %   > t  - Array of elemtary units (1:Ts) to generate  sinusoid
+    %           length of symbol time length(t) = Ts = Tg + Tu
+    %   > Tu - Integration period
     %   > Tg - Guard Inverval
-    %   > Ts - Symbol time period (Ts + Tg)
-    %   > N  - Total number of sub carriers in signal
-    %   > w  - Column vector of frequency weights
-    %   > a  - Column vector of phase codes
+    %   > K  - OFDM carriers per symbol ()
+    %   > w  - frequency weight vector (1xK)
+    %   > a  - complex phase value (1xK)
     %  Outputs
-    %   > s = Complex envelope corresponding to the symbol points within
-    %           the time domain
+    %   > (1 x Ts) array of complex time domain sinusoid values
     %
     % ---------------------------------------------------------------------
    
   
-   s = gen_all_sub_carriers(t,l , Tu , Ts ,Tg, N, w, a);
+   s = gen_all_sub_carriers(t, Tu, Tg, K, w, a);
     
 end

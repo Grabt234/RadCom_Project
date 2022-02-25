@@ -1,7 +1,8 @@
 function carriers = gen_all_sub_carriers(t, Tu, Tg, K, w, a)
     % ---------------------------------------------------------------------    
-    % gen_sub_carrier: generates an array of complex time domain
-    %                    sinusoid values according to dab params (incl CRC)
+    % gen_all_sub_carrier: generates an array of complex time domain
+    %                       values containing all sub carriers within
+    %                       single symbol
     %                           
     % ---------------------------------------------------------------------
     % Usage:
@@ -14,7 +15,7 @@ function carriers = gen_all_sub_carriers(t, Tu, Tg, K, w, a)
     %   > w  - frequency weight vector (1xK)
     %   > a  - complex phase value (1xK)
     %  Outputs
-    %   > (N x t) array of complex time domain sinusoid values
+    %   > (1 x Ts) array of complex time domain sinusoid values
     %
     % ---------------------------------------------------------------------
    
