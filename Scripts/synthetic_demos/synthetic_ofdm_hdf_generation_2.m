@@ -68,7 +68,7 @@ Tg = dab_mode.Tg;
 
 %% ENCODING BITS
 % 
-[F, A_pulses] = bits_to_phase_cube(bits,n,dab_mode);
+[F, A_cube] = bits_to_phase_cube(bits,n,dab_mode);
 
 %Frequency weights 
 W_cube = ones(F,L_0,K_0);
@@ -85,7 +85,7 @@ symbol_time = 1:1:Ts;
 %% GENERATING WAVEFORM
 
 %generating all envelopes of framestx = tx(1:4096);
-S = gen_all_pulses(symbol_time, F, L_0, Tu, Ts, Tg, K,W_cube,A_pulses);
+S = gen_all_frames(Ts , Tu ,Tg, K, W_cube, A_cube, L, F);
 % 
 % p = S(2049:2*2048);
 % plot(((1:1:length(p))-length(p)/2 -1)*f0/(length(p)*1000), abs(fftshift(fft(p))));

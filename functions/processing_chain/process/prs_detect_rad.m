@@ -35,12 +35,12 @@ function prs_idx = prs_detect_rad(iq_data, prs, dab_mode)
 
         % Check if a peak truly exists by comparing the max to the mean
         % AND if it is in the first half of the window
-        if ( peak_val > 50*mean(abs(mf_out)) )
+        if ( peak_val > 10*mean(abs(mf_out)) )
             % If so, the phase reference index may have been found
             
              % if gaurd interval then need to check if in first half
              if ( (dab_mode.Tg > 0) && (peak_idx <= dab_mode.Tu/2) )
-                prs_idx = ii + peak_idx - 1;
+                prs_idx = ii + peak_idx - 1
                 break
                 
              % otherwise found
