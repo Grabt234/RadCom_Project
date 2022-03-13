@@ -98,7 +98,10 @@ for i = 1:size(dab_data_raw,1)
 end
 
 %% Demodulation - FREQ DEINTERLEAVE   (Not yet implemented)
-dab_data_deinterleaved = dab_data_raw; 
+Tu = dab_mode.Tu;
+K = dab_mode.K;
+
+dab_data_deinterleaved = dab_data_raw(:, Tu/2 - K/2: Tu/2 +K/2); 
 
 %% Demodulation - DQPSK SNAP
 dab_data_snapped = dqpsk_snap(dab_data_deinterleaved);

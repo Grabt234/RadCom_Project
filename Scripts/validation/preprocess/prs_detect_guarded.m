@@ -98,36 +98,26 @@ prs = gen_symbol(Ts, Tu, Tg, K, ones(1,K+1),prs);
 mf = flip(conj(prs));
 
 figure
-subplot(4,1,1)
+subplot(3,1,1)
 plot(1:1:length(mf), real(mf))
 xlim tight
 ylim padded
 xlabel("Sample [n]", "FontSize", 16)
 ylabel("Magnitude [Arb]", "FontSize", 16)
 
-subplot(4,1,2)
+subplot(3,1,2)
 plot(1:1:length(s), real(s))       
 xlim tight
 ylim padded
 xlabel("Sample [n]", "FontSize", 16)
 ylabel("Magnitude [Arb]", "FontSize", 16)
 
-%% Adding noise
-
-s = awgn(s,0, "measured");
-
-subplot(4,1,3)
-plot(1:1:length(s), real(s))       
-xlim tight
-ylim padded
-xlabel("Sample [n]", "FontSize", 16)
-ylabel("Magnitude [Arb]", "FontSize", 16)
 
 %% Demonstrating multi match
 
 mf_resp = conv(s, mf);
 
-subplot(4,1,4)
+subplot(3,1,3)
 plot(1:1:length(mf_resp), (mf_resp))
 xlim tight
 ylim padded
