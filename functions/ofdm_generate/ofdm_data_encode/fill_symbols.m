@@ -13,8 +13,8 @@ function L_encode = fill_symbols(L_encode,dab_mode)
     %
     % --------------------------------------------------------------------- 
     
-    %L excludes null)
-    number_pulses = size(L_encode,1)/(dab_mode.L);
+    %L includes null
+    number_pulses = (size(L_encode,1)+1)/(dab_mode.L);
     
     %additional symbols requires to make integer number of frames
     %only single prs per frame

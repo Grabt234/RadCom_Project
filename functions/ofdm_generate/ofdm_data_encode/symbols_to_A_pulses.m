@@ -15,9 +15,8 @@ function A_pulses = symbols_to_A_pulses(L_dpsk,dab_mode)
     %
     % --------------------------------------------------------------------- 
     
-    %not including null symbol
+    %including null symbol
     %each pulse must consistently have same number of symbols 
-    %(even if filled with noise)
     
     %should be integer at this point
     number_pulses = size(L_dpsk,1)/dab_mode.L;

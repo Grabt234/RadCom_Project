@@ -1,4 +1,4 @@
-function A_cube = add_null(A_cube)
+function L_dpsk = add_null(L_dpsk)
     % ---------------------------------------------------------------------    
     % add_null: Adding in first null symbols to phase cube
     %                           
@@ -13,10 +13,10 @@ function A_cube = add_null(A_cube)
     % ---------------------------------------------------------------------
     
     %generating null phase codes
-    null_symbols = zeros(size(A_cube,1), 1, size(A_cube,3));
+    null_symbol = zeros(1, size(L_dpsk,2));
     
     %oncatnating null symbol
-    A_cube = cat(2,null_symbols, A_cube);
+    L_dpsk = [null_symbol; L_dpsk];
     
 end
 
